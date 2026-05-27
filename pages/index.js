@@ -21,7 +21,7 @@ const C = {
 const HERO_PHOTOS = [
   { url: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1920&q=90', place: 'Bali, Indonesia', credit: 'Niklas Weiss' },
   { url: 'https://images.unsplash.com/photo-1526315337991-2ea805e212a8?auto=format&fit=crop&w=1920&q=90', place: 'Santorini, Greece', credit: 'Charlie M' },
-  { url: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1920&q=90', place: 'Tokyo, Japan', credit: 'Jezael Melgoza' },
+  { url: 'https://images.unsplash.com/photo-1741850826368-12d515927617?auto=format&fit=crop&w=1920&q=90', place: 'Tokyo, Japan', credit: 'Unsplash' },
   { url: 'https://images.unsplash.com/photo-1561956021-947f09ae0101?auto=format&fit=crop&w=1920&q=90', place: 'Positano, Italy', credit: 'Jordan Steranka' },
   { url: 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?auto=format&fit=crop&w=1920&q=90', place: 'Lisbon, Portugal', credit: 'Aayush Gupta' },
   { url: 'https://images.unsplash.com/photo-1538475711279-0373b6bc754e?auto=format&fit=crop&w=1920&q=90', place: 'Krabi, Thailand', credit: 'Unsplash' },
@@ -30,9 +30,9 @@ const HERO_PHOTOS = [
 /* ── Destination photo grid ───────────────────────────────── */
 /* All photos verified free under Unsplash License — real photographers, no AI */
 const DEST_GRID = [
-  { name: 'Bali', country: 'Indonesia', photo: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Bali', country: 'Indonesia', photo: 'https://images.unsplash.com/photo-1523539693385-e5e891eb4465?auto=format&fit=crop&w=700&q=88' },
   { name: 'Santorini', country: 'Greece', photo: 'https://images.unsplash.com/photo-1526315337991-2ea805e212a8?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Tokyo', country: 'Japan', photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Tokyo', country: 'Japan', photo: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=700&q=88' },
   { name: 'Lisbon', country: 'Portugal', photo: 'https://images.unsplash.com/photo-1536663815808-535e2280d2c2?auto=format&fit=crop&w=700&q=88' },
   { name: 'Krabi', country: 'Thailand', photo: 'https://images.unsplash.com/photo-1538475711279-0373b6bc754e?auto=format&fit=crop&w=700&q=88' },
   { name: 'Positano', country: 'Italy', photo: 'https://images.unsplash.com/photo-1561956021-947f09ae0101?auto=format&fit=crop&w=700&q=88' },
@@ -69,7 +69,7 @@ const SAMPLE_TRIPS = [
     budget: 2200,
     socialScore: 8,
     highlights: ['Shibuya crossing at midnight', 'Tsukiji market breakfast', 'Capsule hotel experience'],
-    photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=900&q=88',
+    photo: 'https://images.unsplash.com/photo-1741850826368-12d515927617?auto=format&fit=crop&w=900&q=88',
     tag: '🌟 Trending',
   },
 ];
