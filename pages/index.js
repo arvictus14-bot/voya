@@ -17,25 +17,27 @@ const C = {
 };
 
 /* ── Rotating hero photos ─────────────────────────────────── */
+/* All photos verified free under Unsplash License — real photographers, no AI */
 const HERO_PHOTOS = [
-  { url: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=85', place: 'Bali, Indonesia' },
-  { url: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1800&q=85', place: 'Santorini, Greece' },
-  { url: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1800&q=85', place: 'Tokyo, Japan' },
-  { url: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1800&q=85', place: 'Amalfi Coast, Italy' },
-  { url: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1800&q=85', place: 'Lisbon, Portugal' },
-  { url: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1800&q=85', place: 'Phuket, Thailand' },
+  { url: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1920&q=90', place: 'Bali, Indonesia', credit: 'Niklas Weiss' },
+  { url: 'https://images.unsplash.com/photo-1526315337991-2ea805e212a8?auto=format&fit=crop&w=1920&q=90', place: 'Santorini, Greece', credit: 'Charlie M' },
+  { url: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1920&q=90', place: 'Tokyo, Japan', credit: 'Jezael Melgoza' },
+  { url: 'https://images.unsplash.com/photo-1561956021-947f09ae0101?auto=format&fit=crop&w=1920&q=90', place: 'Positano, Italy', credit: 'Jordan Steranka' },
+  { url: 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?auto=format&fit=crop&w=1920&q=90', place: 'Lisbon, Portugal', credit: 'Aayush Gupta' },
+  { url: 'https://images.unsplash.com/photo-1538475711279-0373b6bc754e?auto=format&fit=crop&w=1920&q=90', place: 'Krabi, Thailand', credit: 'Unsplash' },
 ];
 
 /* ── Destination photo grid ───────────────────────────────── */
+/* All photos verified free under Unsplash License — real photographers, no AI */
 const DEST_GRID = [
-  { name: 'Bali', country: 'Indonesia', photo: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Santorini', country: 'Greece', photo: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Tokyo', country: 'Japan', photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Lisbon', country: 'Portugal', photo: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Phuket', country: 'Thailand', photo: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Amalfi', country: 'Italy', photo: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Marrakech', country: 'Morocco', photo: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73d0e?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Medellín', country: 'Colombia', photo: 'https://images.unsplash.com/photo-1598715685267-a4b41740ade7?auto=format&fit=crop&w=600&q=80' },
+  { name: 'Bali', country: 'Indonesia', photo: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Santorini', country: 'Greece', photo: 'https://images.unsplash.com/photo-1526315337991-2ea805e212a8?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Tokyo', country: 'Japan', photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Lisbon', country: 'Portugal', photo: 'https://images.unsplash.com/photo-1536663815808-535e2280d2c2?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Krabi', country: 'Thailand', photo: 'https://images.unsplash.com/photo-1538475711279-0373b6bc754e?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Positano', country: 'Italy', photo: 'https://images.unsplash.com/photo-1561956021-947f09ae0101?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Marrakech', country: 'Morocco', photo: 'https://images.unsplash.com/photo-1580746738099-1cb74f972feb?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Medellín', country: 'Colombia', photo: 'https://images.unsplash.com/photo-1512250431446-d0b4b57b27ec?auto=format&fit=crop&w=700&q=88' },
 ];
 
 /* ── Sample trips ─────────────────────────────────────────── */
@@ -47,7 +49,7 @@ const SAMPLE_TRIPS = [
     budget: 1800,
     socialScore: 9,
     highlights: ['Canggu surf & café scene', 'Ubud rice terraces & temples', 'Full moon parties in Kuta'],
-    photo: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80',
+    photo: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=900&q=88',
     tag: '🔥 Most Popular',
   },
   {
@@ -57,7 +59,7 @@ const SAMPLE_TRIPS = [
     budget: 1500,
     socialScore: 8,
     highlights: ['Alfama neighbourhood at golden hour', 'LX Factory weekend market', 'Day trip to Sintra'],
-    photo: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80',
+    photo: 'https://images.unsplash.com/photo-1536663815808-535e2280d2c2?auto=format&fit=crop&w=900&q=88',
     tag: '⭐ Editor\'s Pick',
   },
   {
@@ -67,7 +69,7 @@ const SAMPLE_TRIPS = [
     budget: 2200,
     socialScore: 8,
     highlights: ['Shibuya crossing at midnight', 'Tsukiji market breakfast', 'Capsule hotel experience'],
-    photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80',
+    photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=900&q=88',
     tag: '🌟 Trending',
   },
 ];
@@ -813,8 +815,12 @@ export default function Home() {
         <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.3)', marginTop: '10px', marginBottom: '20px' }}>
           Built for the generation that actually travels
         </p>
-        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.15)' }}>
-          Photos by <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.25)' }}>Unsplash</a>
+        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)' }}>
+          Photos by{' '}
+          {['Niklas Weiss', 'Charlie M', 'Jezael Melgoza', 'Jordan Steranka', 'Aayush Gupta'].map((name, i, arr) => (
+            <span key={name}>{name}{i < arr.length - 1 ? ', ' : ''}</span>
+          ))}{' '}& more — via{' '}
+          <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'underline' }}>Unsplash</a>
         </p>
       </footer>
     </>
