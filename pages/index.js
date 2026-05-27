@@ -2,41 +2,11 @@ import { useState } from 'react';
 import Head from 'next/head';
 
 const VIBES = [
-  { id: 'party', label: '🎉 Party', desc: 'Nightlife & social scenes' },
-  { id: 'culture', label: '🏛️ Culture', desc: 'History & local life' },
-  { id: 'adventure', label: '🏔️ Adventure', desc: 'Outdoors & thrills' },
-  { id: 'mix', label: '✨ Mix It All', desc: 'A bit of everything' },
+  { id: 'party', emoji: '🎉', label: 'Party', desc: 'Nightlife & social scenes' },
+  { id: 'culture', emoji: '🏛️', label: 'Culture', desc: 'History & local life' },
+  { id: 'adventure', emoji: '🏔️', label: 'Adventure', desc: 'Outdoors & thrills' },
+  { id: 'mix', emoji: '✨', label: 'Mix It All', desc: 'A bit of everything' },
 ];
-
-const inputStyle = {
-  width: '100%',
-  background: '#080810',
-  border: '1px solid #1f1f35',
-  borderRadius: '12px',
-  padding: '14px 16px',
-  fontSize: '16px',
-  color: '#fff',
-  outline: 'none',
-  fontFamily: 'Inter, sans-serif',
-};
-
-const cardStyle = {
-  background: '#0f0f1a',
-  border: '1px solid #1f1f35',
-  borderRadius: '20px',
-  padding: '24px',
-  marginBottom: '16px',
-};
-
-const labelStyle = {
-  display: 'block',
-  fontSize: '12px',
-  fontWeight: '600',
-  color: '#888',
-  textTransform: 'uppercase',
-  letterSpacing: '1px',
-  marginBottom: '8px',
-};
 
 export default function Home() {
   const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: '' });
@@ -79,98 +49,212 @@ export default function Home() {
         <title>Voya — Plan Your Trip</title>
         <meta name="description" content="Trip planning built for 18-30 travelers" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </Head>
 
       <style jsx global>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: #080810; color: #fff; min-height: 100vh; }
+        body {
+          font-family: 'Inter', sans-serif;
+          background: #FFFDF7;
+          color: #1C1917;
+          min-height: 100vh;
+        }
+        input:focus { outline: none; }
         input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #FF6B35; border-radius: 2px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+        }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 2px; }
       `}</style>
 
-      <div style={{ maxWidth: '660px', margin: '0 auto', padding: '0 20px' }}>
+      {/* Top nav bar */}
+      <nav style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '20px 24px',
+        borderBottom: '1px solid #F5F0E8',
+        background: '#FFFDF7',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+      }}>
+        <span style={{
+          fontFamily: 'Playfair Display, serif',
+          fontSize: '24px',
+          fontWeight: '900',
+          color: '#0D9488',
+          letterSpacing: '-0.5px',
+        }}>
+          voya
+        </span>
+      </nav>
 
-        {/* Header */}
-        <header style={{ textAlign: 'center', padding: '56px 0 40px' }}>
-          <div style={{
-            display: 'inline-block',
-            background: 'linear-gradient(135deg, #FF6B35, #FF8C5A)',
-            borderRadius: '10px',
-            padding: '7px 18px',
-            marginBottom: '24px',
-          }}>
-            <span style={{ fontSize: '20px', fontWeight: '900', letterSpacing: '-0.5px' }}>voya</span>
+      <div style={{ maxWidth: '640px', margin: '0 auto', padding: '0 20px' }}>
+
+        {/* Hero */}
+        <header style={{ textAlign: 'center', padding: '52px 0 44px' }}>
+          <div style={{ fontSize: '42px', marginBottom: '16px', animation: 'float 3s ease-in-out infinite' }}>
+            🌍
           </div>
           <h1 style={{
-            fontSize: 'clamp(30px, 8vw, 50px)',
+            fontFamily: 'Playfair Display, serif',
+            fontSize: 'clamp(36px, 8vw, 56px)',
             fontWeight: '900',
-            lineHeight: '1.05',
-            letterSpacing: '-2px',
-            marginBottom: '14px',
+            lineHeight: '1.1',
+            color: '#1C1917',
+            marginBottom: '16px',
+            letterSpacing: '-1px',
           }}>
-            Your trip.<br />
-            <span style={{ color: '#FF6B35' }}>Built for you.</span>
+            Where are you<br />
+            <span style={{ color: '#0D9488' }}>going next?</span>
           </h1>
-          <p style={{ color: '#666', fontSize: '15px' }}>
-            Tell us where. We handle the rest.
+          <p style={{
+            color: '#78716C',
+            fontSize: '17px',
+            lineHeight: '1.6',
+            maxWidth: '380px',
+            margin: '0 auto',
+          }}>
+            Tell us your destination and budget. We'll build you a real trip plan in seconds.
           </p>
         </header>
 
         {/* Form */}
         {!trip && !loading && (
-          <form onSubmit={handleSubmit} style={{ animation: 'fadeUp 0.4s ease' }}>
-            <div style={cardStyle}>
+          <form onSubmit={handleSubmit} style={{ animation: 'fadeUp 0.5s ease' }}>
+            <div style={{
+              background: '#fff',
+              borderRadius: '24px',
+              padding: '28px',
+              marginBottom: '16px',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
+              border: '1px solid #F5F0E8',
+            }}>
 
               {/* Destination */}
-              <div style={{ marginBottom: '20px' }}>
-                <label style={labelStyle}>Where to?</label>
+              <div style={{ marginBottom: '22px' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  color: '#A8A29E',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1.2px',
+                  marginBottom: '8px',
+                }}>
+                  ✈️  Destination
+                </label>
                 <input
-                  style={inputStyle}
                   type="text"
-                  placeholder="Bali, Tokyo, Lisbon..."
+                  placeholder="Bali, Tokyo, Lisbon, anywhere..."
                   value={form.destination}
                   onChange={e => setForm({ ...form, destination: e.target.value })}
-                  onFocus={e => e.target.style.borderColor = '#FF6B35'}
-                  onBlur={e => e.target.style.borderColor = '#1f1f35'}
+                  style={{
+                    width: '100%',
+                    background: '#FAFAF9',
+                    border: '1.5px solid #E7E5E4',
+                    borderRadius: '14px',
+                    padding: '14px 18px',
+                    fontSize: '16px',
+                    color: '#1C1917',
+                    fontFamily: 'Inter, sans-serif',
+                    transition: 'border-color 0.2s',
+                  }}
+                  onFocus={e => e.target.style.borderColor = '#0D9488'}
+                  onBlur={e => e.target.style.borderColor = '#E7E5E4'}
                 />
               </div>
 
               {/* Budget + Days */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '22px' }}>
                 <div>
-                  <label style={labelStyle}>Total Budget (USD)</label>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#A8A29E',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1.2px',
+                    marginBottom: '8px',
+                  }}>
+                    💰  Budget (USD)
+                  </label>
                   <input
-                    style={inputStyle}
                     type="number"
-                    placeholder="2000"
+                    placeholder="2,000"
                     value={form.budget}
                     onChange={e => setForm({ ...form, budget: e.target.value })}
-                    onFocus={e => e.target.style.borderColor = '#FF6B35'}
-                    onBlur={e => e.target.style.borderColor = '#1f1f35'}
+                    style={{
+                      width: '100%',
+                      background: '#FAFAF9',
+                      border: '1.5px solid #E7E5E4',
+                      borderRadius: '14px',
+                      padding: '14px 18px',
+                      fontSize: '16px',
+                      color: '#1C1917',
+                      fontFamily: 'Inter, sans-serif',
+                      transition: 'border-color 0.2s',
+                    }}
+                    onFocus={e => e.target.style.borderColor = '#0D9488'}
+                    onBlur={e => e.target.style.borderColor = '#E7E5E4'}
                   />
                 </div>
                 <div>
-                  <label style={labelStyle}>Days</label>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#A8A29E',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1.2px',
+                    marginBottom: '8px',
+                  }}>
+                    📅  Days
+                  </label>
                   <input
-                    style={inputStyle}
                     type="number"
                     placeholder="14"
                     value={form.days}
                     onChange={e => setForm({ ...form, days: e.target.value })}
-                    onFocus={e => e.target.style.borderColor = '#FF6B35'}
-                    onBlur={e => e.target.style.borderColor = '#1f1f35'}
+                    style={{
+                      width: '100%',
+                      background: '#FAFAF9',
+                      border: '1.5px solid #E7E5E4',
+                      borderRadius: '14px',
+                      padding: '14px 18px',
+                      fontSize: '16px',
+                      color: '#1C1917',
+                      fontFamily: 'Inter, sans-serif',
+                      transition: 'border-color 0.2s',
+                    }}
+                    onFocus={e => e.target.style.borderColor = '#0D9488'}
+                    onBlur={e => e.target.style.borderColor = '#E7E5E4'}
                   />
                 </div>
               </div>
 
               {/* Vibe */}
               <div>
-                <label style={labelStyle}>Your Vibe</label>
+                <label style={{
+                  display: 'block',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  color: '#A8A29E',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1.2px',
+                  marginBottom: '10px',
+                }}>
+                  🎯  Your Vibe
+                </label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                   {VIBES.map(v => (
                     <button
@@ -178,44 +262,55 @@ export default function Home() {
                       type="button"
                       onClick={() => setForm({ ...form, vibe: v.id })}
                       style={{
-                        background: form.vibe === v.id ? 'rgba(255,107,53,0.12)' : '#080810',
-                        border: `1px solid ${form.vibe === v.id ? '#FF6B35' : '#1f1f35'}`,
-                        borderRadius: '12px',
-                        padding: '14px',
+                        background: form.vibe === v.id ? '#F0FDFA' : '#FAFAF9',
+                        border: `1.5px solid ${form.vibe === v.id ? '#0D9488' : '#E7E5E4'}`,
+                        borderRadius: '14px',
+                        padding: '14px 16px',
                         cursor: 'pointer',
                         textAlign: 'left',
                         transition: 'all 0.15s',
                         fontFamily: 'Inter, sans-serif',
                       }}
                     >
-                      <div style={{ fontSize: '14px', fontWeight: '700', color: '#fff', marginBottom: '3px' }}>{v.label}</div>
-                      <div style={{ fontSize: '12px', color: '#555' }}>{v.desc}</div>
+                      <div style={{ fontSize: '20px', marginBottom: '5px' }}>{v.emoji}</div>
+                      <div style={{ fontSize: '14px', fontWeight: '700', color: form.vibe === v.id ? '#0D9488' : '#1C1917', marginBottom: '2px' }}>
+                        {v.label}
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#A8A29E' }}>{v.desc}</div>
                     </button>
                   ))}
                 </div>
               </div>
             </div>
 
-            {error && <p style={{ color: '#ff5555', fontSize: '14px', marginBottom: '12px', textAlign: 'center' }}>{error}</p>}
+            {error && (
+              <p style={{ color: '#DC2626', fontSize: '14px', marginBottom: '12px', textAlign: 'center', fontWeight: '500' }}>
+                {error}
+              </p>
+            )}
 
             <button
               type="submit"
               style={{
                 width: '100%',
-                background: 'linear-gradient(135deg, #FF6B35, #FF8C5A)',
+                background: 'linear-gradient(135deg, #0D9488, #0F766E)',
                 border: 'none',
-                borderRadius: '14px',
-                padding: '18px',
-                fontSize: '16px',
+                borderRadius: '16px',
+                padding: '20px',
+                fontSize: '17px',
                 fontWeight: '800',
                 color: '#fff',
                 cursor: 'pointer',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.3px',
                 marginBottom: '60px',
+                boxShadow: '0 8px 24px rgba(13,148,136,0.3)',
+                transition: 'transform 0.1s, box-shadow 0.1s',
               }}
+              onMouseEnter={e => { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 12px 28px rgba(13,148,136,0.35)'; }}
+              onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 8px 24px rgba(13,148,136,0.3)'; }}
             >
-              Build My Trip →
+              Build My Trip ✈️
             </button>
           </form>
         )}
@@ -223,15 +318,15 @@ export default function Home() {
         {/* Loading */}
         {loading && (
           <div style={{ textAlign: 'center', padding: '80px 0', animation: 'fadeUp 0.3s ease' }}>
-            <div style={{
-              width: '44px', height: '44px',
-              border: '3px solid #1f1f35',
-              borderTop: '3px solid #FF6B35',
-              borderRadius: '50%',
-              animation: 'spin 0.7s linear infinite',
-              margin: '0 auto 20px',
-            }} />
-            <p style={{ color: '#555', fontSize: '15px' }}>Building your trip...</p>
+            <div style={{ fontSize: '48px', marginBottom: '20px', animation: 'float 1.5s ease-in-out infinite' }}>
+              🌍
+            </div>
+            <p style={{ color: '#78716C', fontSize: '16px', fontWeight: '500' }}>
+              Building your perfect trip...
+            </p>
+            <p style={{ color: '#A8A29E', fontSize: '14px', marginTop: '6px' }}>
+              This takes about 10 seconds
+            </p>
           </div>
         )}
 
@@ -239,101 +334,156 @@ export default function Home() {
         {trip && (
           <div style={{ animation: 'fadeUp 0.5s ease', paddingBottom: '60px' }}>
 
-            {/* Trip Hero */}
+            {/* Hero Card */}
             <div style={{
-              background: 'linear-gradient(135deg, rgba(255,107,53,0.12), rgba(255,107,53,0.04))',
-              border: '1px solid rgba(255,107,53,0.25)',
-              borderRadius: '20px',
-              padding: '28px',
+              background: 'linear-gradient(135deg, #0D9488 0%, #0F766E 100%)',
+              borderRadius: '24px',
+              padding: '32px',
               marginBottom: '16px',
+              color: '#fff',
+              position: 'relative',
+              overflow: 'hidden',
             }}>
-              <span style={{
+              <div style={{
+                position: 'absolute', top: '-20px', right: '-20px',
+                fontSize: '120px', opacity: '0.1', lineHeight: 1,
+              }}>✈️</div>
+              <div style={{
                 display: 'inline-block',
-                background: '#FF6B35',
-                borderRadius: '6px',
-                padding: '3px 10px',
-                fontSize: '11px',
-                fontWeight: '800',
+                background: 'rgba(255,255,255,0.2)',
+                borderRadius: '8px',
+                padding: '4px 12px',
+                fontSize: '12px',
+                fontWeight: '700',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
                 marginBottom: '14px',
               }}>
                 {form.days} Days · ${Number(form.budget).toLocaleString()}
-              </span>
-              <h2 style={{ fontSize: 'clamp(22px, 5vw, 28px)', fontWeight: '900', letterSpacing: '-1px', marginBottom: '8px', lineHeight: '1.2' }}>
+              </div>
+              <h2 style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: 'clamp(22px, 5vw, 30px)',
+                fontWeight: '900',
+                lineHeight: '1.2',
+                marginBottom: '8px',
+              }}>
                 {trip.title}
               </h2>
-              <p style={{ color: '#999', fontSize: '15px', marginBottom: '20px' }}>{trip.tagline}</p>
+              <p style={{ opacity: '0.85', fontSize: '15px', marginBottom: '22px' }}>{trip.tagline}</p>
 
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '14px',
-                padding: '14px 16px',
-                background: 'rgba(0,0,0,0.3)',
-                borderRadius: '12px',
+                gap: '12px',
+                background: 'rgba(255,255,255,0.15)',
+                borderRadius: '14px',
+                padding: '14px 18px',
+                backdropFilter: 'blur(10px)',
               }}>
                 <div style={{
-                  width: '48px', height: '48px',
-                  background: 'linear-gradient(135deg, #FF6B35, #FF8C5A)',
+                  width: '44px', height: '44px',
+                  background: '#fff',
                   borderRadius: '12px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '18px',
                   fontWeight: '900',
+                  color: '#0D9488',
                   flexShrink: 0,
                 }}>
                   {trip.socialScore}
                 </div>
                 <div>
-                  <div style={{ fontSize: '13px', fontWeight: '700', marginBottom: '2px' }}>Social Score</div>
-                  <div style={{ fontSize: '12px', color: '#666' }}>{trip.socialScoreLabel}</div>
+                  <div style={{ fontSize: '13px', fontWeight: '700' }}>Social Score</div>
+                  <div style={{ fontSize: '12px', opacity: '0.8' }}>{trip.socialScoreLabel}</div>
                 </div>
               </div>
             </div>
 
             {/* Budget */}
-            <div style={cardStyle}>
-              <h3 style={labelStyle}>Budget Breakdown</h3>
+            <div style={{
+              background: '#fff',
+              borderRadius: '24px',
+              padding: '24px',
+              marginBottom: '16px',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
+              border: '1px solid #F5F0E8',
+            }}>
+              <h3 style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: '18px',
+                fontWeight: '700',
+                color: '#1C1917',
+                marginBottom: '20px',
+              }}>
+                💰 Budget Breakdown
+              </h3>
               {Object.entries(trip.budgetBreakdown).map(([key, val]) => {
                 const pct = Math.round((val / totalSpend) * 100);
                 return (
                   <div key={key} style={{ marginBottom: '14px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <span style={{ fontSize: '14px', textTransform: 'capitalize', color: '#bbb' }}>{key}</span>
-                      <span style={{ fontSize: '14px', fontWeight: '700' }}>${val}</span>
+                      <span style={{ fontSize: '14px', textTransform: 'capitalize', color: '#57534E', fontWeight: '500' }}>{key}</span>
+                      <span style={{ fontSize: '14px', fontWeight: '700', color: '#1C1917' }}>${val}</span>
                     </div>
-                    <div style={{ height: '3px', background: '#1a1a2e', borderRadius: '2px' }}>
-                      <div style={{ height: '100%', width: `${pct}%`, background: 'linear-gradient(90deg, #FF6B35, #FF8C5A)', borderRadius: '2px' }} />
+                    <div style={{ height: '5px', background: '#F5F0E8', borderRadius: '3px' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${pct}%`,
+                        background: 'linear-gradient(90deg, #0D9488, #14B8A6)',
+                        borderRadius: '3px',
+                      }} />
                     </div>
                   </div>
                 );
               })}
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #1f1f35' }}>
-                <span style={{ fontSize: '14px', color: '#666' }}>Total Estimated</span>
-                <span style={{ fontSize: '20px', fontWeight: '900', color: '#FF6B35' }}>${totalSpend}</span>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: '20px',
+                paddingTop: '16px',
+                borderTop: '1px solid #F5F0E8',
+              }}>
+                <span style={{ fontSize: '14px', color: '#78716C', fontWeight: '500' }}>Total Estimated</span>
+                <span style={{ fontSize: '22px', fontWeight: '800', color: '#0D9488', fontFamily: 'Playfair Display, serif' }}>${totalSpend}</span>
               </div>
             </div>
 
             {/* Days */}
-            <div style={cardStyle}>
-              <h3 style={{ ...labelStyle, marginBottom: '14px' }}>Day by Day</h3>
+            <div style={{
+              background: '#fff',
+              borderRadius: '24px',
+              padding: '24px',
+              marginBottom: '16px',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
+              border: '1px solid #F5F0E8',
+            }}>
+              <h3 style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: '18px',
+                fontWeight: '700',
+                color: '#1C1917',
+                marginBottom: '16px',
+              }}>
+                🗺️ Day by Day
+              </h3>
 
-              <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '14px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '14px', marginBottom: '18px' }}>
                 {trip.days.map((d, i) => (
                   <button
                     key={i}
                     onClick={() => setActiveDay(i)}
                     style={{
                       flexShrink: 0,
-                      padding: '7px 14px',
-                      borderRadius: '8px',
-                      border: `1px solid ${activeDay === i ? '#FF6B35' : '#1f1f35'}`,
-                      background: activeDay === i ? 'rgba(255,107,53,0.12)' : 'transparent',
-                      color: activeDay === i ? '#FF6B35' : '#555',
+                      padding: '8px 16px',
+                      borderRadius: '10px',
+                      border: `1.5px solid ${activeDay === i ? '#0D9488' : '#E7E5E4'}`,
+                      background: activeDay === i ? '#F0FDFA' : '#FAFAF9',
+                      color: activeDay === i ? '#0D9488' : '#78716C',
                       fontSize: '13px',
-                      fontWeight: '600',
+                      fontWeight: '700',
                       cursor: 'pointer',
                       fontFamily: 'Inter, sans-serif',
                       transition: 'all 0.15s',
@@ -346,7 +496,13 @@ export default function Home() {
 
               {trip.days[activeDay] && (
                 <div>
-                  <h4 style={{ fontSize: '17px', fontWeight: '800', marginBottom: '14px', letterSpacing: '-0.5px' }}>
+                  <h4 style={{
+                    fontFamily: 'Playfair Display, serif',
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    marginBottom: '16px',
+                    color: '#1C1917',
+                  }}>
                     {trip.days[activeDay].title}
                   </h4>
                   {[
@@ -354,77 +510,154 @@ export default function Home() {
                     { label: '☀️ Afternoon', content: trip.days[activeDay].afternoon },
                     { label: '🌙 Evening', content: trip.days[activeDay].evening },
                   ].map(({ label, content }) => (
-                    <div key={label} style={{ padding: '14px', background: '#080810', borderRadius: '10px', marginBottom: '8px' }}>
-                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#FF6B35', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                    <div key={label} style={{
+                      padding: '16px',
+                      background: '#FAFAF9',
+                      borderRadius: '14px',
+                      marginBottom: '10px',
+                      border: '1px solid #F5F0E8',
+                    }}>
+                      <div style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: '#0D9488',
+                        marginBottom: '7px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.8px',
+                      }}>
                         {label}
                       </div>
-                      <p style={{ fontSize: '14px', color: '#bbb', lineHeight: '1.65' }}>{content}</p>
+                      <p style={{ fontSize: '14px', color: '#57534E', lineHeight: '1.7' }}>{content}</p>
                     </div>
                   ))}
-                  <div style={{ textAlign: 'right', fontSize: '13px', color: '#555', marginTop: '8px' }}>
-                    Est. daily spend: <span style={{ color: '#FF6B35', fontWeight: '700' }}>${trip.days[activeDay].cost}</span>
+                  <div style={{ textAlign: 'right', fontSize: '13px', color: '#A8A29E', marginTop: '10px' }}>
+                    Est. daily spend: <span style={{ color: '#0D9488', fontWeight: '700' }}>${trip.days[activeDay].cost}</span>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Hostels */}
-            <div style={cardStyle}>
-              <h3 style={labelStyle}>Top Hostels for Meeting People</h3>
+            <div style={{
+              background: '#fff',
+              borderRadius: '24px',
+              padding: '24px',
+              marginBottom: '16px',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
+              border: '1px solid #F5F0E8',
+            }}>
+              <h3 style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: '18px',
+                fontWeight: '700',
+                color: '#1C1917',
+                marginBottom: '16px',
+              }}>
+                🏠 Best Places to Stay
+              </h3>
               {trip.topHostels?.map((h, i) => (
                 <div key={i} style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'flex-start',
-                  gap: '12px',
-                  padding: '14px',
-                  background: '#080810',
-                  borderRadius: '12px',
+                  gap: '14px',
+                  padding: '16px',
+                  background: '#FAFAF9',
+                  borderRadius: '14px',
                   marginBottom: '10px',
+                  border: '1px solid #F5F0E8',
                 }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '15px', fontWeight: '700', marginBottom: '4px' }}>{h.name}</div>
-                    <div style={{ fontSize: '12px', color: '#555', marginBottom: '4px' }}>{h.vibe}</div>
-                    <div style={{ fontSize: '13px', color: '#888', lineHeight: '1.5' }}>{h.why}</div>
+                    <div style={{ fontSize: '15px', fontWeight: '700', color: '#1C1917', marginBottom: '4px' }}>{h.name}</div>
+                    <div style={{ fontSize: '12px', color: '#A8A29E', marginBottom: '5px', fontWeight: '500' }}>{h.vibe}</div>
+                    <div style={{ fontSize: '13px', color: '#78716C', lineHeight: '1.5' }}>{h.why}</div>
                   </div>
                   <div style={{
                     flexShrink: 0,
-                    border: '1px solid rgba(255,107,53,0.25)',
-                    borderRadius: '10px',
-                    padding: '8px 12px',
+                    background: '#F0FDFA',
+                    border: '1.5px solid #99F6E4',
+                    borderRadius: '12px',
+                    padding: '10px 14px',
                     textAlign: 'center',
-                    background: 'rgba(255,107,53,0.06)',
                   }}>
-                    <div style={{ fontSize: '17px', fontWeight: '900', color: '#FF6B35' }}>${h.pricePerNight}</div>
-                    <div style={{ fontSize: '10px', color: '#555' }}>/ night</div>
+                    <div style={{ fontSize: '17px', fontWeight: '900', color: '#0D9488' }}>${h.pricePerNight}</div>
+                    <div style={{ fontSize: '10px', color: '#78716C', fontWeight: '500' }}>/ night</div>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Pro Tips */}
-            <div style={cardStyle}>
-              <h3 style={labelStyle}>Pro Tips</h3>
+            <div style={{
+              background: '#fff',
+              borderRadius: '24px',
+              padding: '24px',
+              marginBottom: '16px',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
+              border: '1px solid #F5F0E8',
+            }}>
+              <h3 style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: '18px',
+                fontWeight: '700',
+                color: '#1C1917',
+                marginBottom: '16px',
+              }}>
+                💡 Insider Tips
+              </h3>
               {trip.proTips?.map((tip, i) => (
-                <div key={i} style={{ display: 'flex', gap: '12px', padding: '12px 14px', background: '#080810', borderRadius: '10px', marginBottom: '8px' }}>
-                  <span style={{ color: '#FF6B35', fontWeight: '900', fontSize: '13px', flexShrink: 0, marginTop: '1px' }}>0{i + 1}</span>
-                  <p style={{ fontSize: '14px', color: '#bbb', lineHeight: '1.6' }}>{tip}</p>
+                <div key={i} style={{
+                  display: 'flex',
+                  gap: '14px',
+                  padding: '14px 16px',
+                  background: '#FAFAF9',
+                  borderRadius: '12px',
+                  marginBottom: '8px',
+                  border: '1px solid #F5F0E8',
+                  alignItems: 'flex-start',
+                }}>
+                  <span style={{
+                    background: '#0D9488',
+                    color: '#fff',
+                    fontWeight: '800',
+                    fontSize: '11px',
+                    width: '24px', height: '24px',
+                    borderRadius: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    marginTop: '1px',
+                  }}>
+                    {i + 1}
+                  </span>
+                  <p style={{ fontSize: '14px', color: '#57534E', lineHeight: '1.65' }}>{tip}</p>
                 </div>
               ))}
             </div>
 
             {/* Share */}
             <div style={{
-              background: 'rgba(255,107,53,0.06)',
-              border: '1px solid rgba(255,107,53,0.2)',
-              borderRadius: '16px',
-              padding: '20px',
+              background: 'linear-gradient(135deg, #FFF7ED, #FEF3C7)',
+              border: '1.5px solid #FED7AA',
+              borderRadius: '20px',
+              padding: '24px',
               textAlign: 'center',
               marginBottom: '16px',
             }}>
-              <div style={{ fontSize: '22px', marginBottom: '8px' }}>📱</div>
-              <div style={{ fontSize: '14px', fontWeight: '700', marginBottom: '4px' }}>Share your trip</div>
-              <div style={{ fontSize: '13px', color: '#666' }}>Screenshot this and post it — let people know where you are going</div>
+              <div style={{ fontSize: '28px', marginBottom: '10px' }}>📸</div>
+              <div style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: '17px',
+                fontWeight: '700',
+                color: '#92400E',
+                marginBottom: '6px',
+              }}>
+                Share your trip
+              </div>
+              <div style={{ fontSize: '13px', color: '#B45309', lineHeight: '1.5' }}>
+                Screenshot this and post it — let people know where you are headed
+              </div>
             </div>
 
             {/* Plan Another */}
@@ -432,17 +665,20 @@ export default function Home() {
               onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: '' }); }}
               style={{
                 width: '100%',
-                background: 'transparent',
-                border: '1px solid #1f1f35',
-                borderRadius: '14px',
+                background: '#fff',
+                border: '1.5px solid #E7E5E4',
+                borderRadius: '16px',
                 padding: '16px',
                 fontSize: '15px',
                 fontWeight: '600',
-                color: '#555',
+                color: '#78716C',
                 cursor: 'pointer',
                 fontFamily: 'Inter, sans-serif',
                 marginBottom: '60px',
+                transition: 'border-color 0.15s',
               }}
+              onMouseEnter={e => e.target.style.borderColor = '#0D9488'}
+              onMouseLeave={e => e.target.style.borderColor = '#E7E5E4'}
             >
               ← Plan Another Trip
             </button>
