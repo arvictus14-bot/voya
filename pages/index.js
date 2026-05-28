@@ -135,6 +135,41 @@ const POPULAR_DESTINATIONS = [
   'Queenstown, New Zealand', 'Auckland, New Zealand', 'Sydney, Australia', 'Melbourne, Australia', 'Bali, Indonesia',
 ];
 
+const DEPARTURE_CITIES = [
+  // North America
+  'New York, USA', 'Los Angeles, USA', 'Chicago, USA', 'Miami, USA', 'San Francisco, USA',
+  'Seattle, USA', 'Boston, USA', 'Atlanta, USA', 'Dallas, USA', 'Denver, USA',
+  'Toronto, Canada', 'Vancouver, Canada', 'Montreal, Canada',
+  // Europe
+  'London, UK', 'Manchester, UK', 'Edinburgh, UK', 'Dublin, Ireland',
+  'Amsterdam, Netherlands', 'Paris, France', 'Berlin, Germany', 'Frankfurt, Germany',
+  'Madrid, Spain', 'Barcelona, Spain', 'Lisbon, Portugal', 'Rome, Italy', 'Milan, Italy',
+  'Zurich, Switzerland', 'Vienna, Austria', 'Stockholm, Sweden', 'Copenhagen, Denmark',
+  // Asia-Pacific
+  'Sydney, Australia', 'Melbourne, Australia', 'Auckland, New Zealand',
+  'Tokyo, Japan', 'Singapore', 'Hong Kong', 'Dubai, UAE',
+  // Other
+  'São Paulo, Brazil', 'Mexico City, Mexico', 'Johannesburg, South Africa',
+];
+
+/* ── Link helpers ─────────────────────────────────────────── */
+const links = {
+  googleFlights: (from, to) =>
+    `https://www.google.com/travel/flights?q=flights+from+${encodeURIComponent(from)}+to+${encodeURIComponent(to)}`,
+  skyscanner: (from, to) =>
+    `https://www.skyscanner.com/flights/${encodeURIComponent(from)}/${encodeURIComponent(to)}/`,
+  bookingCom: (name, destination) =>
+    `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name + ' ' + destination)}`,
+  hostelworld: (name, destination) =>
+    `https://www.hostelworld.com/search?search_keywords=${encodeURIComponent(name)}&search_location_sub=${encodeURIComponent(destination.split(',')[0])}`,
+  googleMaps: (place, destination) =>
+    `https://maps.google.com/?q=${encodeURIComponent(place + ' ' + destination)}`,
+  getYourGuide: (activity, destination) =>
+    `https://www.getyourguide.com/s/?q=${encodeURIComponent(activity + ' ' + destination)}`,
+  viator: (activity, destination) =>
+    `https://www.viator.com/search?q=${encodeURIComponent(activity + ' ' + destination)}`,
+};
+
 const FAQS = [
   { q: 'Is Voya free?', a: 'Yes — the trip planner is completely free. We earn a small commission when you book accommodation or flights through our links, at zero extra cost to you.' },
   { q: 'Are the prices accurate?', a: 'Prices vary by season and availability. Treat estimates as a solid baseline — they reflect real-world costs for 18-30 travelers and are updated regularly.' },
@@ -149,7 +184,7 @@ const HOW_IT_WORKS = [
 ];
 
 export default function Home() {
-  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '' });
+  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '' });
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
@@ -161,8 +196,10 @@ export default function Home() {
   const [heroIdx, setHeroIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showDepSuggestions, setShowDepSuggestions] = useState(false);
   const plannerRef = useRef(null);
   const destRef = useRef(null);
+  const depRef = useRef(null);
 
   /* Rotating hero every 5.5s */
   useEffect(() => {
@@ -176,12 +213,11 @@ export default function Home() {
     return () => clearInterval(id);
   }, []);
 
-  /* Close autocomplete on outside click */
+  /* Close autocompletes on outside click */
   useEffect(() => {
     const handler = (e) => {
-      if (destRef.current && !destRef.current.contains(e.target)) {
-        setShowSuggestions(false);
-      }
+      if (destRef.current && !destRef.current.contains(e.target)) setShowSuggestions(false);
+      if (depRef.current && !depRef.current.contains(e.target)) setShowDepSuggestions(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
@@ -199,6 +235,10 @@ export default function Home() {
 
   const filteredDests = form.destination.length > 0
     ? [...new Set(POPULAR_DESTINATIONS.filter(d => d.toLowerCase().includes(form.destination.toLowerCase())))].slice(0, 7)
+    : [];
+
+  const filteredDep = form.departureCity.length > 0
+    ? DEPARTURE_CITIES.filter(d => d.toLowerCase().includes(form.departureCity.toLowerCase())).slice(0, 6)
     : [];
 
   const perDay = form.budget && form.days ? Math.round(Number(form.budget) / Number(form.days)) : null;
@@ -744,6 +784,45 @@ export default function Home() {
                   )}
                 </div>
 
+                {/* Departure city autocomplete */}
+                <div style={{ marginBottom: '16px', position: 'relative' }} ref={depRef}>
+                  <label style={label}>🛫  Flying From <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0, color: C.subtle }}>(optional — for flight estimates)</span></label>
+                  <input
+                    type="text"
+                    placeholder="New York, London, Sydney..."
+                    value={form.departureCity}
+                    onChange={e => { setForm({ ...form, departureCity: e.target.value }); setShowDepSuggestions(true); }}
+                    onFocus={() => setShowDepSuggestions(true)}
+                    style={inputBase}
+                    autoComplete="off"
+                  />
+                  {showDepSuggestions && filteredDep.length > 0 && (
+                    <div style={{
+                      position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+                      background: '#fff', borderRadius: '14px', border: `1.5px solid ${C.border}`,
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.1)', zIndex: 50, overflow: 'hidden',
+                    }}>
+                      {filteredDep.map(d => (
+                        <button
+                          key={d}
+                          type="button"
+                          onMouseDown={() => { setForm(f => ({ ...f, departureCity: d })); setShowDepSuggestions(false); }}
+                          style={{
+                            width: '100%', padding: '12px 16px', background: 'transparent',
+                            border: 'none', borderBottom: `1px solid ${C.border}`, cursor: 'pointer',
+                            textAlign: 'left', fontSize: '14px', color: C.text, fontFamily: 'Inter, sans-serif',
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = C.brandBg}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <span>🛫</span><span>{d}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 {/* Days quick-select */}
                 <div>
                   <label style={label}>📅  How Many Days?</label>
@@ -981,42 +1060,159 @@ export default function Home() {
                         <p style={{ fontSize: '14px', color: C.muted, lineHeight: '1.7' }}>{content}</p>
                       </div>
                     ))}
-                    <div style={{ textAlign: 'right', fontSize: '13px', color: C.subtle, marginTop: '8px' }}>
+                    {/* Key places as Maps links */}
+                    {trip.days[activeDay].keyPlaces?.length > 0 && (
+                      <div style={{ marginTop: '12px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {trip.days[activeDay].keyPlaces.map((place, pi) => (
+                          <a
+                            key={pi}
+                            href={links.googleMaps(place, form.destination)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '4px',
+                              fontSize: '12px', fontWeight: '600', color: C.brand,
+                              background: C.brandBg, border: `1px solid ${C.border}`,
+                              borderRadius: '8px', padding: '4px 10px', textDecoration: 'none',
+                              transition: 'all 0.15s',
+                            }}
+                          >
+                            📍 {place}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                    <div style={{ textAlign: 'right', fontSize: '13px', color: C.subtle, marginTop: '10px' }}>
                       Est. daily spend: <span style={{ color: C.brand, fontWeight: '700' }}>${trip.days[activeDay].cost}</span>
                     </div>
                   </div>
                 )}
               </div>
 
+              {/* Flights */}
+              {trip.flightNote && (
+                <div style={card}>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', marginBottom: '14px' }}>✈️ Flights</h3>
+                  <p style={{ fontSize: '14px', color: C.muted, lineHeight: '1.7', marginBottom: '16px' }}>{trip.flightNote}</p>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <a
+                      href={links.googleFlights(form.departureCity || 'your city', form.destination)}
+                      target="_blank" rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 18px',
+                        background: C.brand, color: '#fff', borderRadius: '10px', textDecoration: 'none',
+                        fontSize: '13px', fontWeight: '700', fontFamily: 'Inter, sans-serif',
+                      }}
+                    >
+                      🔍 Search Google Flights
+                    </a>
+                    <a
+                      href={links.skyscanner(form.departureCity || '', form.destination)}
+                      target="_blank" rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 18px',
+                        background: C.brandBg, color: C.brand, border: `1.5px solid ${C.border}`,
+                        borderRadius: '10px', textDecoration: 'none',
+                        fontSize: '13px', fontWeight: '700', fontFamily: 'Inter, sans-serif',
+                      }}
+                    >
+                      🌐 Skyscanner
+                    </a>
+                  </div>
+                </div>
+              )}
+
               {/* Places to Stay */}
               <div style={card}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>🏠 Best Places to Stay</h3>
                 {(trip.topStays || trip.topHostels)?.map((h, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '14px', padding: '14px 16px', background: C.cream, borderRadius: '12px', marginBottom: '10px', border: `1px solid ${C.border}` }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                        <div style={{ fontSize: '15px', fontWeight: '700' }}>{h.name}</div>
-                        {h.type && <span style={{ fontSize: '10px', fontWeight: '700', color: C.brand, background: C.brandBg, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '2px 6px' }}>{h.type}</span>}
+                  <div key={i} style={{ padding: '14px 16px', background: C.cream, borderRadius: '12px', marginBottom: '10px', border: `1px solid ${C.border}` }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '14px', marginBottom: '10px' }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <div style={{ fontSize: '15px', fontWeight: '700' }}>{h.name}</div>
+                          {h.type && <span style={{ fontSize: '10px', fontWeight: '700', color: C.brand, background: C.brandBg, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '2px 6px' }}>{h.type}</span>}
+                        </div>
+                        <div style={{ fontSize: '12px', color: C.subtle, marginBottom: '4px', fontWeight: '500' }}>{h.vibe}</div>
+                        <div style={{ fontSize: '13px', color: C.muted, lineHeight: '1.5' }}>{h.why}</div>
                       </div>
-                      <div style={{ fontSize: '12px', color: C.subtle, marginBottom: '4px', fontWeight: '500' }}>{h.vibe}</div>
-                      <div style={{ fontSize: '13px', color: C.muted, lineHeight: '1.5' }}>{h.why}</div>
+                      <div style={{ flexShrink: 0, background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '12px', padding: '10px 14px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '17px', fontWeight: '900', color: C.brand }}>${h.pricePerNight}</div>
+                        <div style={{ fontSize: '10px', color: C.muted }}>/ night</div>
+                      </div>
                     </div>
-                    <div style={{ flexShrink: 0, background: C.brandBg, border: `1.5px solid ${C.border}`, borderRadius: '12px', padding: '10px 14px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '17px', fontWeight: '900', color: C.brand }}>${h.pricePerNight}</div>
-                      <div style={{ fontSize: '10px', color: C.muted }}>/ night</div>
+                    {/* Booking links */}
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                      <a
+                        href={links.bookingCom(h.name, form.destination)}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: '12px', fontWeight: '700', color: '#003580', background: '#EEF3FF', border: '1px solid #C7D6F7', borderRadius: '7px', padding: '5px 10px', textDecoration: 'none' }}
+                      >
+                        Book on Booking.com →
+                      </a>
+                      {(h.type?.toLowerCase().includes('hostel') || !h.type) && (
+                        <a
+                          href={links.hostelworld(h.name, form.destination)}
+                          target="_blank" rel="noopener noreferrer"
+                          style={{ fontSize: '12px', fontWeight: '700', color: '#CC4400', background: '#FFF0E8', border: '1px solid #FFD0B0', borderRadius: '7px', padding: '5px 10px', textDecoration: 'none' }}
+                        >
+                          Check Hostelworld →
+                        </a>
+                      )}
+                      <a
+                        href={links.googleMaps(h.name, form.destination)}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: '12px', fontWeight: '700', color: C.muted, background: '#fff', border: `1px solid ${C.border}`, borderRadius: '7px', padding: '5px 10px', textDecoration: 'none' }}
+                      >
+                        📍 View on Maps
+                      </a>
                     </div>
                   </div>
                 ))}
-                {trip.flightNote && (
-                  <div style={{ marginTop: '8px', padding: '12px 14px', background: '#F0F9FF', borderRadius: '10px', border: '1px solid #BAE6FD', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '16px', flexShrink: 0 }}>✈️</span>
-                    <div>
-                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#0369A1', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '3px' }}>Flights</div>
-                      <p style={{ fontSize: '13px', color: '#0C4A6E', lineHeight: '1.6' }}>{trip.flightNote}</p>
-                    </div>
-                  </div>
-                )}
               </div>
+
+              {/* Must-Do Activities */}
+              {trip.mustDoActivities?.length > 0 && (
+                <div style={card}>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>🎯 Must-Do Experiences</h3>
+                  {trip.mustDoActivities.map((act, i) => (
+                    <div key={i} style={{ padding: '14px 16px', background: C.cream, borderRadius: '12px', marginBottom: '10px', border: `1px solid ${C.border}` }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '8px' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '15px', fontWeight: '700', marginBottom: '3px' }}>{act.name}</div>
+                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                            {act.category && <span style={{ fontSize: '11px', fontWeight: '600', color: C.brand, background: C.brandBg, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '2px 7px' }}>{act.category}</span>}
+                            {act.duration && <span style={{ fontSize: '11px', color: C.muted, fontWeight: '500' }}>⏱ {act.duration}</span>}
+                          </div>
+                          <div style={{ fontSize: '13px', color: C.muted, lineHeight: '1.5' }}>{act.why}</div>
+                        </div>
+                        {act.price > 0 && (
+                          <div style={{ flexShrink: 0, background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '10px', padding: '8px 12px', textAlign: 'center' }}>
+                            <div style={{ fontSize: '15px', fontWeight: '900', color: C.brand }}>${act.price}</div>
+                            <div style={{ fontSize: '10px', color: C.muted }}>per person</div>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        <a
+                          href={links.getYourGuide(act.name, form.destination)}
+                          target="_blank" rel="noopener noreferrer"
+                          style={{ fontSize: '12px', fontWeight: '700', color: '#1A6B3C', background: '#EDFBF3', border: '1px solid #A7DFC0', borderRadius: '7px', padding: '5px 10px', textDecoration: 'none' }}
+                        >
+                          Book on GetYourGuide →
+                        </a>
+                        <a
+                          href={links.viator(act.name, form.destination)}
+                          target="_blank" rel="noopener noreferrer"
+                          style={{ fontSize: '12px', fontWeight: '700', color: '#7C3AED', background: '#F5F0FF', border: '1px solid #DDD6FE', borderRadius: '7px', padding: '5px 10px', textDecoration: 'none' }}
+                        >
+                          Try Viator →
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Tips */}
               <div style={card}>
@@ -1044,7 +1240,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
+                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
                 style={{ width: '100%', background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: '600', color: C.muted, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}
               >
                 ← Plan Another Trip

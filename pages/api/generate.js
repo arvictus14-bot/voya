@@ -18,20 +18,20 @@ const GROUP_LABELS = {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { destination, budget, days, vibe, accommodation, group } = req.body;
+  const { destination, budget, days, vibe, accommodation, group, departureCity } = req.body;
   if (!destination || !budget || !days || !vibe) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
   const perDay = Math.round(Number(budget) / Number(days));
-
-  // vibe and accommodation can be arrays (multi-select) or legacy strings
   const vibeArr = Array.isArray(vibe) ? vibe : [vibe];
   const accomArr = Array.isArray(accommodation) ? accommodation : (accommodation ? [accommodation] : ['mix']);
-
   const vibeLabel = vibeArr.join(' + ');
   const accomLabel = accomArr.map(a => ACCOMMODATION_LABELS[a] || a).join('; or ');
   const groupLabel = GROUP_LABELS[group] || GROUP_LABELS.solo;
+  const flightContext = departureCity
+    ? `Traveler is flying from ${departureCity} — factor in realistic round-trip flight cost.`
+    : `Departure city unknown — give a rough flight cost range based on typical origin cities.`;
 
   const prompt = `You are a travel expert for 18-30 travelers. Create a detailed, real travel itinerary.
 
@@ -40,57 +40,70 @@ Trip details:
 - Duration: ${days} days
 - Total budget: $${budget} USD (~$${perDay}/day)
 - Vibe: ${vibeLabel}
-- Accommodation preference: ${accomLabel}
+- Accommodation: ${accomLabel}
 - Traveling as: ${groupLabel}
+- Flights: ${flightContext}
 
-Tailor ALL recommendations to the accommodation preference and group type above.
-If accommodation is hostel, recommend real hostels. If hotel, recommend real budget hotels. If private, recommend guesthouses.
-If traveling as a couple or group, adjust activities and social tips accordingly.
+IMPORTANT RULES:
+- Use REAL place names everywhere — real hostels, real hotels, real restaurants, real attractions
+- For keyPlaces: extract 2-4 real named places from each day's plan (specific enough to search on Google Maps)
+- For mustDoActivities: list 4-6 bookable experiences (tours, classes, excursions) with GetYourGuide-style names
+- For topStays: use real property names that exist on Booking.com or Hostelworld
+- Write like a friend, not a guidebook
 
 Respond ONLY with valid JSON in this exact format:
 {
   "title": "exciting trip title",
   "tagline": "short punchy tagline under 10 words",
   "budgetBreakdown": {
-    "flights": estimated round-trip flight cost as number (0 if local/unknown),
-    "accommodation": total accommodation cost for trip as number,
-    "food": total food cost for trip as number,
-    "activities": total activities cost for trip as number,
-    "transport": local transport cost for trip as number,
-    "misc": miscellaneous spending as number
+    "flights": estimated round-trip flight cost as number,
+    "accommodation": total accommodation cost as number,
+    "food": total food cost as number,
+    "activities": total activities cost as number,
+    "transport": local transport cost as number,
+    "misc": miscellaneous as number
   },
-  "flightNote": "brief note on flights — best time to book, rough cost range, airlines to use",
-  "socialScore": number between 1-10,
-  "socialScoreLabel": "e.g. Incredible for meeting people",
+  "flightNote": "specific flight advice — airlines, booking timing, rough cost from departure city if known, layover cities",
+  "socialScore": number 1-10,
+  "socialScoreLabel": "short label e.g. Incredible for meeting people",
   "days": [
     {
       "day": 1,
       "title": "day title",
-      "morning": "specific morning plan with real place names",
-      "afternoon": "specific afternoon plan with real place names",
-      "evening": "specific evening/night plan with real place names",
-      "cost": estimated daily spend as number
+      "morning": "specific morning plan mentioning real place names",
+      "afternoon": "specific afternoon plan mentioning real place names",
+      "evening": "specific evening/night plan mentioning real place names",
+      "cost": estimated daily spend as number,
+      "keyPlaces": ["Real Place Name 1", "Real Place Name 2", "Real Place Name 3"]
     }
   ],
   "topStays": [
     {
-      "name": "real place name",
-      "type": "Hostel / Guesthouse / Budget Hotel / etc.",
+      "name": "exact real property name",
+      "type": "Hostel / Guesthouse / Budget Hotel / Boutique Hotel",
       "pricePerNight": number,
-      "vibe": "vibe in a few words",
-      "why": "why it suits this traveler"
+      "vibe": "vibe in 4-6 words",
+      "why": "why it suits this traveler specifically",
+      "bookOn": "Booking.com or Hostelworld or Airbnb"
+    }
+  ],
+  "mustDoActivities": [
+    {
+      "name": "specific bookable activity name",
+      "category": "Food & Drink / Adventure / Culture / Nightlife / Nature / Wellness",
+      "price": estimated price per person as number,
+      "duration": "e.g. 3 hours or Half day",
+      "why": "one sentence why this is unmissable"
     }
   ],
   "proTips": [
-    "specific tip 1 tailored to this traveler type and destination",
-    "specific tip 2",
-    "specific tip 3",
-    "specific tip 4"
+    "specific actionable tip 1",
+    "specific actionable tip 2",
+    "specific actionable tip 3",
+    "specific actionable tip 4"
   ],
-  "bestTimeToGo": "brief recommendation on best months and why"
-}
-
-Use REAL place names, REAL neighborhoods, REAL prices. Write like a friend who has been there.`;
+  "bestTimeToGo": "best months and why"
+}`;
 
   try {
     const completion = await client.chat.completions.create({
