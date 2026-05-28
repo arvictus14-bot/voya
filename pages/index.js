@@ -81,21 +81,52 @@ const VIBES = [
   { id: 'mix', emoji: '✨', label: 'Mix It All', desc: 'A bit of everything' },
 ];
 
+const ACCOMMODATION_TYPES = [
+  { id: 'hostel', emoji: '🛏️', label: 'Hostel', desc: 'Social dorms & common areas' },
+  { id: 'private', emoji: '🚪', label: 'Private Room', desc: 'Your own space, hostel or B&B' },
+  { id: 'hotel', emoji: '🏨', label: 'Budget Hotel', desc: 'More comfort, still affordable' },
+  { id: 'mix', emoji: '🎲', label: 'Mix It Up', desc: 'Whatever fits best' },
+];
+
+const GROUP_TYPES = [
+  { id: 'solo', emoji: '🎒', label: 'Solo', desc: 'Just me' },
+  { id: 'couple', emoji: '💑', label: 'Couple', desc: 'Me & a partner' },
+  { id: 'group', emoji: '👥', label: 'Group', desc: '3 or more' },
+];
+
+const DAY_PRESETS = [5, 7, 10, 14, 21];
+
+const POPULAR_DESTINATIONS = [
+  'Bali, Indonesia', 'Tokyo, Japan', 'Bangkok, Thailand', 'Chiang Mai, Thailand',
+  'Phuket, Thailand', 'Krabi, Thailand', 'Lisbon, Portugal', 'Porto, Portugal',
+  'Barcelona, Spain', 'Madrid, Spain', 'Seville, Spain', 'Prague, Czech Republic',
+  'Budapest, Hungary', 'Krakow, Poland', 'Amsterdam, Netherlands', 'Berlin, Germany',
+  'Rome, Italy', 'Florence, Italy', 'Positano, Italy', 'Amalfi Coast, Italy',
+  'Santorini, Greece', 'Athens, Greece', 'Dubrovnik, Croatia', 'Split, Croatia',
+  'Istanbul, Turkey', 'Tbilisi, Georgia', 'Marrakech, Morocco', 'Cape Town, South Africa',
+  'Zanzibar, Tanzania', 'Medellín, Colombia', 'Cartagena, Colombia', 'Bogotá, Colombia',
+  'Mexico City, Mexico', 'Tulum, Mexico', 'Puerto Vallarta, Mexico', 'Oaxaca, Mexico',
+  'Buenos Aires, Argentina', 'Rio de Janeiro, Brazil', 'Lima, Peru', 'Cusco, Peru',
+  'Hanoi, Vietnam', 'Ho Chi Minh City, Vietnam', 'Hội An, Vietnam', 'Ubud, Bali',
+  'Canggu, Bali', 'Seoul, South Korea', 'Taipei, Taiwan', 'Singapore',
+  'Kuala Lumpur, Malaysia', 'Penang, Malaysia', 'Kathmandu, Nepal', 'Queenstown, New Zealand',
+];
+
 const FAQS = [
-  { q: 'Is Voya free?', a: 'Yes — the trip planner is completely free. We earn a small commission when you book hostels or flights through our links, at zero extra cost to you.' },
-  { q: 'Are the prices accurate?', a: 'We use live pricing data from hostel booking platforms. Prices vary by season, so treat estimates as a solid baseline and check live availability when you\'re ready to book.' },
-  { q: 'Can I use this for group trips?', a: 'Squad features are coming soon — find others heading to the same destination at the same time. For now, build your plan and share the screenshot with your travel crew.' },
+  { q: 'Is Voya free?', a: 'Yes — the trip planner is completely free. We earn a small commission when you book accommodation or flights through our links, at zero extra cost to you.' },
+  { q: 'Are the prices accurate?', a: 'Prices vary by season and availability. Treat estimates as a solid baseline — they reflect real-world costs for 18-30 travelers and are updated regularly.' },
+  { q: 'Can I use this for group trips?', a: 'Squad features are coming soon — find others heading to the same destination at the same time. For now, build your plan and share the screenshot with your crew.' },
   { q: 'What if I want to change my itinerary?', a: 'Hit "Plan Another Trip," tweak your inputs, and regenerate. You can run as many plans as you want — totally free.' },
 ];
 
 const HOW_IT_WORKS = [
-  { step: '01', emoji: '📍', title: 'Tell us where', desc: 'Drop your destination, budget, how long you have, and the vibe you\'re going for.' },
-  { step: '02', emoji: '✨', title: 'We build your trip', desc: 'Real day-by-day itinerary. Real hostel prices. What to skip. Where to actually go.' },
+  { step: '01', emoji: '📍', title: 'Tell us where', desc: 'Pick your destination, set your budget, and tell us your vibe and travel style.' },
+  { step: '02', emoji: '✨', title: 'We build your trip', desc: 'Real day-by-day itinerary. Real accommodation prices. Flights factored in. Zero tourist traps.' },
   { step: '03', emoji: '✈️', title: 'Go', desc: 'Screenshot your plan, pack your bag, and head out. Simple.' },
 ];
 
 export default function Home() {
-  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: '' });
+  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: '', accommodation: '', group: '' });
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
@@ -106,7 +137,9 @@ export default function Home() {
   const [shareMsg, setShareMsg] = useState('');
   const [heroIdx, setHeroIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const plannerRef = useRef(null);
+  const destRef = useRef(null);
 
   /* Rotating hero every 5.5s */
   useEffect(() => {
@@ -120,19 +153,37 @@ export default function Home() {
     return () => clearInterval(id);
   }, []);
 
+  /* Close autocomplete on outside click */
+  useEffect(() => {
+    const handler = (e) => {
+      if (destRef.current && !destRef.current.contains(e.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   const scrollToPlanner = () => {
     plannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const prefill = (dest) => {
     setForm(f => ({ ...f, destination: dest }));
+    setShowSuggestions(false);
     scrollToPlanner();
   };
+
+  const filteredDests = form.destination.length > 0
+    ? POPULAR_DESTINATIONS.filter(d => d.toLowerCase().includes(form.destination.toLowerCase())).slice(0, 6)
+    : [];
+
+  const perDay = form.budget && form.days ? Math.round(Number(form.budget) / Number(form.days)) : null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.destination || !form.budget || !form.days || !form.vibe) {
-      setError('Fill in all fields to build your trip.');
+      setError('Fill in destination, budget, days and vibe to continue.');
       return;
     }
     setError('');
@@ -274,13 +325,12 @@ export default function Home() {
 
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', padding: '0 24px', maxWidth: '780px' }}>
-          <div style={{
-            display: 'inline-block', background: 'rgba(184,150,46,0.25)', border: '1px solid rgba(184,150,46,0.5)',
-            backdropFilter: 'blur(8px)', borderRadius: '100px', padding: '6px 20px',
-            fontSize: '13px', fontWeight: '700', color: C.brandLt, marginBottom: '28px', letterSpacing: '0.5px',
+          <p style={{
+            fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.55)',
+            letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px',
           }}>
-            For the generation that actually goes 🌍
-          </div>
+            For the generation that actually goes
+          </p>
 
           <h1 style={{
             fontFamily: 'Playfair Display, serif',
@@ -409,7 +459,7 @@ export default function Home() {
               key={t.destination}
               className="sample-card"
               onClick={() => {
-                setForm({ destination: t.destination, budget: String(t.budget), days: String(t.days), vibe: 'mix' });
+                setForm({ destination: t.destination, budget: String(t.budget), days: String(t.days), vibe: 'mix', accommodation: 'mix', group: 'solo' });
                 scrollToPlanner();
               }}
               style={{
@@ -616,48 +666,182 @@ export default function Home() {
 
           {!trip && !loading && (
             <form onSubmit={handleSubmit} style={{ animation: 'fadeUp 0.4s ease' }}>
-              <div style={{ background: C.cream, borderRadius: '24px', padding: '28px', marginBottom: '16px', border: `1px solid ${C.border}` }}>
-                <div style={{ marginBottom: '20px' }}>
+
+              {/* ── Section 1: Where & How Long ── */}
+              <div style={{ background: C.cream, borderRadius: '20px', padding: '24px', marginBottom: '12px', border: `1px solid ${C.border}` }}>
+                <div style={{ fontSize: '11px', fontWeight: '800', color: C.brand, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '16px' }}>Where & How Long</div>
+
+                {/* Destination autocomplete */}
+                <div style={{ marginBottom: '16px', position: 'relative' }} ref={destRef}>
                   <label style={label}>✈️  Destination</label>
-                  <input type="text" placeholder="Bali, Tokyo, Lisbon, anywhere..." value={form.destination}
-                    onChange={e => setForm({ ...form, destination: e.target.value })} style={inputBase}
-                    onFocus={e => e.target.style.borderColor = C.brand}
-                    onBlur={e => e.target.style.borderColor = '#E7E5E4'} />
+                  <input
+                    type="text"
+                    placeholder="Search destinations..."
+                    value={form.destination}
+                    onChange={e => { setForm({ ...form, destination: e.target.value }); setShowSuggestions(true); }}
+                    onFocus={() => setShowSuggestions(true)}
+                    style={inputBase}
+                    autoComplete="off"
+                  />
+                  {showSuggestions && filteredDests.length > 0 && (
+                    <div style={{
+                      position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+                      background: '#fff', borderRadius: '14px', border: `1.5px solid ${C.border}`,
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.1)', zIndex: 50, overflow: 'hidden',
+                    }}>
+                      {filteredDests.map(d => (
+                        <button
+                          key={d}
+                          type="button"
+                          onMouseDown={() => { setForm(f => ({ ...f, destination: d })); setShowSuggestions(false); }}
+                          style={{
+                            width: '100%', padding: '12px 16px', background: 'transparent',
+                            border: 'none', borderBottom: `1px solid ${C.border}`, cursor: 'pointer',
+                            textAlign: 'left', fontSize: '14px', color: C.text, fontFamily: 'Inter, sans-serif',
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = C.brandBg}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <span style={{ fontSize: '16px' }}>📍</span>
+                          <span>{d}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
-                  <div>
-                    <label style={label}>💰  Budget (USD)</label>
-                    <input type="number" placeholder="2,000" value={form.budget}
-                      onChange={e => setForm({ ...form, budget: e.target.value })} style={inputBase}
-                      onFocus={e => e.target.style.borderColor = C.brand}
-                      onBlur={e => e.target.style.borderColor = '#E7E5E4'} />
-                  </div>
-                  <div>
-                    <label style={label}>📅  Days</label>
-                    <input type="number" placeholder="14" value={form.days}
-                      onChange={e => setForm({ ...form, days: e.target.value })} style={inputBase}
-                      onFocus={e => e.target.style.borderColor = C.brand}
-                      onBlur={e => e.target.style.borderColor = '#E7E5E4'} />
-                  </div>
-                </div>
+
+                {/* Days quick-select */}
                 <div>
+                  <label style={label}>📅  How Many Days?</label>
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                    {DAY_PRESETS.map(d => (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => setForm({ ...form, days: String(d) })}
+                        style={{
+                          padding: '8px 16px', borderRadius: '10px', border: `1.5px solid ${form.days === String(d) ? C.brand : '#E7E5E4'}`,
+                          background: form.days === String(d) ? C.brandBg : '#fff',
+                          color: form.days === String(d) ? C.brand : C.muted,
+                          fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                          transition: 'all 0.15s',
+                        }}
+                      >
+                        {d}d
+                      </button>
+                    ))}
+                    <input
+                      type="number"
+                      placeholder="Custom"
+                      value={DAY_PRESETS.includes(Number(form.days)) ? '' : form.days}
+                      onChange={e => setForm({ ...form, days: e.target.value })}
+                      style={{ ...inputBase, width: '90px', padding: '8px 12px', fontSize: '14px' }}
+                      min="1" max="90"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* ── Section 2: Budget ── */}
+              <div style={{ background: C.cream, borderRadius: '20px', padding: '24px', marginBottom: '12px', border: `1px solid ${C.border}` }}>
+                <div style={{ fontSize: '11px', fontWeight: '800', color: C.brand, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '16px' }}>Your Budget</div>
+                <label style={label}>💰  Total Budget (USD)</label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="number"
+                    placeholder="2000"
+                    value={form.budget}
+                    onChange={e => setForm({ ...form, budget: e.target.value })}
+                    style={{ ...inputBase, paddingRight: perDay ? '110px' : '18px' }}
+                  />
+                  {perDay && (
+                    <span style={{
+                      position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)',
+                      fontSize: '13px', fontWeight: '600', color: C.brand,
+                    }}>
+                      ≈ ${perDay}/day
+                    </span>
+                  )}
+                </div>
+                <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                  {[['🎒', 'Backpacker', '1000'], ['🏨', 'Standard', '2000'], ['✨', 'Comfort', '3500']].map(([emoji, label2, val]) => (
+                    <button key={val} type="button" onClick={() => setForm({ ...form, budget: val })} style={{
+                      flex: 1, padding: '8px 6px', borderRadius: '10px',
+                      border: `1.5px solid ${form.budget === val ? C.brand : '#E7E5E4'}`,
+                      background: form.budget === val ? C.brandBg : '#fff',
+                      color: form.budget === val ? C.brand : C.muted,
+                      fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                      textAlign: 'center', transition: 'all 0.15s',
+                    }}>
+                      {emoji} {label2}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* ── Section 3: Trip Style ── */}
+              <div style={{ background: C.cream, borderRadius: '20px', padding: '24px', marginBottom: '12px', border: `1px solid ${C.border}` }}>
+                <div style={{ fontSize: '11px', fontWeight: '800', color: C.brand, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '20px' }}>Trip Style</div>
+
+                {/* Vibe */}
+                <div style={{ marginBottom: '20px' }}>
                   <label style={label}>🎯  Your Vibe</label>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                     {VIBES.map(v => (
                       <button key={v.id} type="button" onClick={() => setForm({ ...form, vibe: v.id })} style={{
                         background: form.vibe === v.id ? C.brandBg : '#fff',
                         border: `1.5px solid ${form.vibe === v.id ? C.brand : '#E7E5E4'}`,
-                        borderRadius: '14px', padding: '14px 16px', cursor: 'pointer',
+                        borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
                         textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
                       }}>
-                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>{v.emoji}</div>
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: form.vibe === v.id ? C.brand : C.text, marginBottom: '2px' }}>{v.label}</div>
-                        <div style={{ fontSize: '12px', color: C.muted }}>{v.desc}</div>
+                        <div style={{ fontSize: '18px', marginBottom: '3px' }}>{v.emoji}</div>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: form.vibe === v.id ? C.brand : C.text, marginBottom: '2px' }}>{v.label}</div>
+                        <div style={{ fontSize: '11px', color: C.muted }}>{v.desc}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Accommodation */}
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={label}>🏠  Where I'm Staying</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    {ACCOMMODATION_TYPES.map(a => (
+                      <button key={a.id} type="button" onClick={() => setForm({ ...form, accommodation: a.id })} style={{
+                        background: form.accommodation === a.id ? C.brandBg : '#fff',
+                        border: `1.5px solid ${form.accommodation === a.id ? C.brand : '#E7E5E4'}`,
+                        borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
+                        textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
+                      }}>
+                        <div style={{ fontSize: '18px', marginBottom: '3px' }}>{a.emoji}</div>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: form.accommodation === a.id ? C.brand : C.text, marginBottom: '2px' }}>{a.label}</div>
+                        <div style={{ fontSize: '11px', color: C.muted }}>{a.desc}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Traveling as */}
+                <div>
+                  <label style={label}>👤  Traveling As</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {GROUP_TYPES.map(g => (
+                      <button key={g.id} type="button" onClick={() => setForm({ ...form, group: g.id })} style={{
+                        flex: 1, background: form.group === g.id ? C.brandBg : '#fff',
+                        border: `1.5px solid ${form.group === g.id ? C.brand : '#E7E5E4'}`,
+                        borderRadius: '14px', padding: '12px 10px', cursor: 'pointer',
+                        textAlign: 'center', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
+                      }}>
+                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>{g.emoji}</div>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: form.group === g.id ? C.brand : C.text }}>{g.label}</div>
+                        <div style={{ fontSize: '11px', color: C.muted }}>{g.desc}</div>
                       </button>
                     ))}
                   </div>
                 </div>
               </div>
+
               {error && <p style={{ color: '#DC2626', fontSize: '14px', marginBottom: '12px', textAlign: 'center', fontWeight: '500' }}>{error}</p>}
               <button type="submit" style={{
                 width: '100%', background: C.brand, border: 'none',
@@ -755,13 +939,16 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Hostels */}
+              {/* Places to Stay */}
               <div style={card}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>🏠 Best Places to Stay</h3>
-                {trip.topHostels?.map((h, i) => (
+                {(trip.topStays || trip.topHostels)?.map((h, i) => (
                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '14px', padding: '14px 16px', background: C.cream, borderRadius: '12px', marginBottom: '10px', border: `1px solid ${C.border}` }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '15px', fontWeight: '700', marginBottom: '4px' }}>{h.name}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                        <div style={{ fontSize: '15px', fontWeight: '700' }}>{h.name}</div>
+                        {h.type && <span style={{ fontSize: '10px', fontWeight: '700', color: C.brand, background: C.brandBg, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '2px 6px' }}>{h.type}</span>}
+                      </div>
                       <div style={{ fontSize: '12px', color: C.subtle, marginBottom: '4px', fontWeight: '500' }}>{h.vibe}</div>
                       <div style={{ fontSize: '13px', color: C.muted, lineHeight: '1.5' }}>{h.why}</div>
                     </div>
@@ -771,6 +958,15 @@ export default function Home() {
                     </div>
                   </div>
                 ))}
+                {trip.flightNote && (
+                  <div style={{ marginTop: '8px', padding: '12px 14px', background: '#F0F9FF', borderRadius: '10px', border: '1px solid #BAE6FD', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                    <span style={{ fontSize: '16px', flexShrink: 0 }}>✈️</span>
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#0369A1', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '3px' }}>Flights</div>
+                      <p style={{ fontSize: '13px', color: '#0C4A6E', lineHeight: '1.6' }}>{trip.flightNote}</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Tips */}
@@ -799,7 +995,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
+                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: '', accommodation: '', group: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
                 style={{ width: '100%', background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: '600', color: C.muted, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}
               >
                 ← Plan Another Trip
