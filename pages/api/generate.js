@@ -24,7 +24,13 @@ export default async function handler(req, res) {
   }
 
   const perDay = Math.round(Number(budget) / Number(days));
-  const accomLabel = ACCOMMODATION_LABELS[accommodation] || ACCOMMODATION_LABELS.mix;
+
+  // vibe and accommodation can be arrays (multi-select) or legacy strings
+  const vibeArr = Array.isArray(vibe) ? vibe : [vibe];
+  const accomArr = Array.isArray(accommodation) ? accommodation : (accommodation ? [accommodation] : ['mix']);
+
+  const vibeLabel = vibeArr.join(' + ');
+  const accomLabel = accomArr.map(a => ACCOMMODATION_LABELS[a] || a).join('; or ');
   const groupLabel = GROUP_LABELS[group] || GROUP_LABELS.solo;
 
   const prompt = `You are a travel expert for 18-30 travelers. Create a detailed, real travel itinerary.
@@ -33,7 +39,7 @@ Trip details:
 - Destination: ${destination}
 - Duration: ${days} days
 - Total budget: $${budget} USD (~$${perDay}/day)
-- Vibe: ${vibe}
+- Vibe: ${vibeLabel}
 - Accommodation preference: ${accomLabel}
 - Traveling as: ${groupLabel}
 

@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 
 /* ── Brand tokens ─────────────────────────────────────────── */
+/* Deep terracotta — earthy, adventurous, warm. Best performing warm tone
+   for 18-30 travel demographic based on color psychology research. */
 const C = {
-  brand:   '#B8962E',   // warm gold
-  brandLt: '#D4AE4A',   // lighter gold
-  brandBg: '#FBF6EA',   // soft cream
+  brand:   '#D4522A',   // deep terracotta
+  brandLt: '#E06B42',   // lighter terracotta
+  brandBg: '#FBF0EB',   // warm peach cream
   dark:    '#0F0B06',   // near-black warm
   dark2:   '#1C1409',
   text:    '#1E1208',
@@ -13,7 +15,7 @@ const C = {
   subtle:  '#B5A898',
   border:  '#EDE5D8',
   card:    '#FFFFFF',
-  cream:   '#FFFDF7',
+  cream:   '#FFFCFA',
 };
 
 /* ── Rotating hero photos ─────────────────────────────────── */
@@ -97,19 +99,40 @@ const GROUP_TYPES = [
 const DAY_PRESETS = [5, 7, 10, 14, 21];
 
 const POPULAR_DESTINATIONS = [
-  'Bali, Indonesia', 'Tokyo, Japan', 'Bangkok, Thailand', 'Chiang Mai, Thailand',
-  'Phuket, Thailand', 'Krabi, Thailand', 'Lisbon, Portugal', 'Porto, Portugal',
-  'Barcelona, Spain', 'Madrid, Spain', 'Seville, Spain', 'Prague, Czech Republic',
-  'Budapest, Hungary', 'Krakow, Poland', 'Amsterdam, Netherlands', 'Berlin, Germany',
-  'Rome, Italy', 'Florence, Italy', 'Positano, Italy', 'Amalfi Coast, Italy',
-  'Santorini, Greece', 'Athens, Greece', 'Dubrovnik, Croatia', 'Split, Croatia',
-  'Istanbul, Turkey', 'Tbilisi, Georgia', 'Marrakech, Morocco', 'Cape Town, South Africa',
-  'Zanzibar, Tanzania', 'Medellín, Colombia', 'Cartagena, Colombia', 'Bogotá, Colombia',
+  // Southeast Asia
+  'Bali, Indonesia', 'Ubud, Bali', 'Canggu, Bali', 'Nusa Penida, Indonesia',
+  'Bangkok, Thailand', 'Chiang Mai, Thailand', 'Phuket, Thailand', 'Krabi, Thailand', 'Koh Phangan, Thailand',
+  'Hanoi, Vietnam', 'Ho Chi Minh City, Vietnam', 'Hội An, Vietnam', 'Da Nang, Vietnam',
+  'Phnom Penh, Cambodia', 'Siem Reap, Cambodia', 'Vang Vieng, Laos',
+  'Singapore', 'Kuala Lumpur, Malaysia', 'Penang, Malaysia', 'Kota Kinabalu, Malaysia',
+  'Boracay, Philippines', 'Palawan, Philippines', 'Manila, Philippines',
+  // East Asia
+  'Tokyo, Japan', 'Osaka, Japan', 'Kyoto, Japan', 'Seoul, South Korea', 'Taipei, Taiwan',
+  // South Asia
+  'Kathmandu, Nepal', 'Colombo, Sri Lanka', 'Galle, Sri Lanka', 'Ella, Sri Lanka',
+  'Goa, India', 'Jaipur, India', 'Delhi, India',
+  // Europe — Western
+  'Lisbon, Portugal', 'Porto, Portugal', 'Barcelona, Spain', 'Madrid, Spain', 'Seville, Spain',
+  'Rome, Italy', 'Florence, Italy', 'Positano, Italy', 'Amalfi Coast, Italy', 'Milan, Italy',
+  'Amsterdam, Netherlands', 'Berlin, Germany', 'Paris, France',
+  // Europe — Eastern (value picks)
+  'Prague, Czech Republic', 'Budapest, Hungary', 'Krakow, Poland', 'Warsaw, Poland',
+  'Dubrovnik, Croatia', 'Split, Croatia', 'Kotor, Montenegro', 'Tirana, Albania',
+  'Tbilisi, Georgia', 'Yerevan, Armenia', 'Lviv, Ukraine',
+  // Mediterranean & Middle East
+  'Santorini, Greece', 'Athens, Greece', 'Mykonos, Greece',
+  'Istanbul, Turkey', 'Cappadocia, Turkey', 'Tel Aviv, Israel',
+  // Africa
+  'Marrakech, Morocco', 'Fes, Morocco', 'Cape Town, South Africa', 'Zanzibar, Tanzania',
+  'Nairobi, Kenya', 'Accra, Ghana',
+  // Latin America
+  'Medellín, Colombia', 'Cartagena, Colombia', 'Bogotá, Colombia',
   'Mexico City, Mexico', 'Tulum, Mexico', 'Puerto Vallarta, Mexico', 'Oaxaca, Mexico',
-  'Buenos Aires, Argentina', 'Rio de Janeiro, Brazil', 'Lima, Peru', 'Cusco, Peru',
-  'Hanoi, Vietnam', 'Ho Chi Minh City, Vietnam', 'Hội An, Vietnam', 'Ubud, Bali',
-  'Canggu, Bali', 'Seoul, South Korea', 'Taipei, Taiwan', 'Singapore',
-  'Kuala Lumpur, Malaysia', 'Penang, Malaysia', 'Kathmandu, Nepal', 'Queenstown, New Zealand',
+  'Antigua, Guatemala', 'San José, Costa Rica', 'Panama City, Panama',
+  'Buenos Aires, Argentina', 'Rio de Janeiro, Brazil', 'São Paulo, Brazil',
+  'Lima, Peru', 'Cusco, Peru', 'Cartagena, Colombia',
+  // Oceania & Pacific
+  'Queenstown, New Zealand', 'Auckland, New Zealand', 'Sydney, Australia', 'Melbourne, Australia', 'Bali, Indonesia',
 ];
 
 const FAQS = [
@@ -126,7 +149,7 @@ const HOW_IT_WORKS = [
 ];
 
 export default function Home() {
-  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: '', accommodation: '', group: '' });
+  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '' });
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
@@ -175,15 +198,22 @@ export default function Home() {
   };
 
   const filteredDests = form.destination.length > 0
-    ? POPULAR_DESTINATIONS.filter(d => d.toLowerCase().includes(form.destination.toLowerCase())).slice(0, 6)
+    ? [...new Set(POPULAR_DESTINATIONS.filter(d => d.toLowerCase().includes(form.destination.toLowerCase())))].slice(0, 7)
     : [];
 
   const perDay = form.budget && form.days ? Math.round(Number(form.budget) / Number(form.days)) : null;
 
+  const toggleMulti = (field, id) => {
+    setForm(f => ({
+      ...f,
+      [field]: f[field].includes(id) ? f[field].filter(v => v !== id) : [...f[field], id],
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.destination || !form.budget || !form.days || !form.vibe) {
-      setError('Fill in destination, budget, days and vibe to continue.');
+    if (!form.destination || !form.budget || !form.days || form.vibe.length === 0) {
+      setError('Fill in destination, budget, days and at least one vibe to continue.');
       return;
     }
     setError('');
@@ -277,6 +307,9 @@ export default function Home() {
         ::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 2px; }
         .dest-tile:hover .dest-overlay { opacity: 1 !important; }
         .dest-tile:hover { transform: scale(1.03); }
+        @media (max-width: 600px) {
+          .dest-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
         .sample-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.18) !important; }
         .faq-item { border-bottom: 1px solid #F0EAE0; }
         .faq-item:last-child { border-bottom: none; }
@@ -406,7 +439,7 @@ export default function Home() {
           <p style={{ color: C.muted, fontSize: '16px' }}>Tap any destination to start planning</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '14px' }}>
           {DEST_GRID.map((d) => (
             <div
               key={d.name}
@@ -459,7 +492,7 @@ export default function Home() {
               key={t.destination}
               className="sample-card"
               onClick={() => {
-                setForm({ destination: t.destination, budget: String(t.budget), days: String(t.days), vibe: 'mix', accommodation: 'mix', group: 'solo' });
+                setForm({ destination: t.destination, budget: String(t.budget), days: String(t.days), vibe: ['mix'], accommodation: ['mix'], group: 'solo' });
                 scrollToPlanner();
               }}
               style={{
@@ -784,41 +817,57 @@ export default function Home() {
               <div style={{ background: C.cream, borderRadius: '20px', padding: '24px', marginBottom: '12px', border: `1px solid ${C.border}` }}>
                 <div style={{ fontSize: '11px', fontWeight: '800', color: C.brand, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '20px' }}>Trip Style</div>
 
-                {/* Vibe */}
+                {/* Vibe — multi-select */}
                 <div style={{ marginBottom: '20px' }}>
-                  <label style={label}>🎯  Your Vibe</label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label style={{ ...label, marginBottom: 0 }}>🎯  Your Vibe</label>
+                    <span style={{ fontSize: '11px', color: C.muted, fontWeight: '500' }}>Pick one or more</span>
+                  </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                    {VIBES.map(v => (
-                      <button key={v.id} type="button" onClick={() => setForm({ ...form, vibe: v.id })} style={{
-                        background: form.vibe === v.id ? C.brandBg : '#fff',
-                        border: `1.5px solid ${form.vibe === v.id ? C.brand : '#E7E5E4'}`,
-                        borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
-                        textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
-                      }}>
-                        <div style={{ fontSize: '18px', marginBottom: '3px' }}>{v.emoji}</div>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: form.vibe === v.id ? C.brand : C.text, marginBottom: '2px' }}>{v.label}</div>
-                        <div style={{ fontSize: '11px', color: C.muted }}>{v.desc}</div>
-                      </button>
-                    ))}
+                    {VIBES.map(v => {
+                      const on = form.vibe.includes(v.id);
+                      return (
+                        <button key={v.id} type="button" onClick={() => toggleMulti('vibe', v.id)} style={{
+                          background: on ? C.brandBg : '#fff',
+                          border: `1.5px solid ${on ? C.brand : '#E7E5E4'}`,
+                          borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
+                          textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
+                          position: 'relative',
+                        }}>
+                          {on && <span style={{ position: 'absolute', top: '8px', right: '10px', fontSize: '11px', color: C.brand, fontWeight: '800' }}>✓</span>}
+                          <div style={{ fontSize: '18px', marginBottom: '3px' }}>{v.emoji}</div>
+                          <div style={{ fontSize: '13px', fontWeight: '700', color: on ? C.brand : C.text, marginBottom: '2px' }}>{v.label}</div>
+                          <div style={{ fontSize: '11px', color: C.muted }}>{v.desc}</div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Accommodation */}
+                {/* Accommodation — multi-select */}
                 <div style={{ marginBottom: '20px' }}>
-                  <label style={label}>🏠  Where I'm Staying</label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label style={{ ...label, marginBottom: 0 }}>🏠  Where I'm Staying</label>
+                    <span style={{ fontSize: '11px', color: C.muted, fontWeight: '500' }}>Pick one or more</span>
+                  </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                    {ACCOMMODATION_TYPES.map(a => (
-                      <button key={a.id} type="button" onClick={() => setForm({ ...form, accommodation: a.id })} style={{
-                        background: form.accommodation === a.id ? C.brandBg : '#fff',
-                        border: `1.5px solid ${form.accommodation === a.id ? C.brand : '#E7E5E4'}`,
-                        borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
-                        textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
-                      }}>
-                        <div style={{ fontSize: '18px', marginBottom: '3px' }}>{a.emoji}</div>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: form.accommodation === a.id ? C.brand : C.text, marginBottom: '2px' }}>{a.label}</div>
-                        <div style={{ fontSize: '11px', color: C.muted }}>{a.desc}</div>
-                      </button>
-                    ))}
+                    {ACCOMMODATION_TYPES.map(a => {
+                      const on = form.accommodation.includes(a.id);
+                      return (
+                        <button key={a.id} type="button" onClick={() => toggleMulti('accommodation', a.id)} style={{
+                          background: on ? C.brandBg : '#fff',
+                          border: `1.5px solid ${on ? C.brand : '#E7E5E4'}`,
+                          borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
+                          textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
+                          position: 'relative',
+                        }}>
+                          {on && <span style={{ position: 'absolute', top: '8px', right: '10px', fontSize: '11px', color: C.brand, fontWeight: '800' }}>✓</span>}
+                          <div style={{ fontSize: '18px', marginBottom: '3px' }}>{a.emoji}</div>
+                          <div style={{ fontSize: '13px', fontWeight: '700', color: on ? C.brand : C.text, marginBottom: '2px' }}>{a.label}</div>
+                          <div style={{ fontSize: '11px', color: C.muted }}>{a.desc}</div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -995,7 +1044,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: '', accommodation: '', group: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
+                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
                 style={{ width: '100%', background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: '600', color: C.muted, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}
               >
                 ← Plan Another Trip
