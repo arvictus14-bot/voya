@@ -99,65 +99,186 @@ const GROUP_TYPES = [
 const DAY_PRESETS = [5, 7, 10, 14, 21];
 
 const POPULAR_DESTINATIONS = [
-  // Southeast Asia
-  'Bali, Indonesia', 'Ubud, Bali', 'Canggu, Bali', 'Nusa Penida, Indonesia',
-  'Bangkok, Thailand', 'Chiang Mai, Thailand', 'Phuket, Thailand', 'Krabi, Thailand', 'Koh Phangan, Thailand',
+  // ── Southeast Asia ──
+  'Bali, Indonesia', 'Ubud, Bali', 'Canggu, Bali', 'Seminyak, Bali', 'Nusa Penida, Indonesia',
+  'Lombok, Indonesia', 'Gili Islands, Indonesia', 'Yogyakarta, Indonesia', 'Jakarta, Indonesia',
+  'Bangkok, Thailand', 'Chiang Mai, Thailand', 'Chiang Rai, Thailand',
+  'Phuket, Thailand', 'Krabi, Thailand', 'Koh Samui, Thailand', 'Koh Phangan, Thailand',
+  'Koh Tao, Thailand', 'Pai, Thailand', 'Hua Hin, Thailand', 'Ayutthaya, Thailand',
   'Hanoi, Vietnam', 'Ho Chi Minh City, Vietnam', 'Hội An, Vietnam', 'Da Nang, Vietnam',
-  'Phnom Penh, Cambodia', 'Siem Reap, Cambodia', 'Vang Vieng, Laos',
-  'Singapore', 'Kuala Lumpur, Malaysia', 'Penang, Malaysia', 'Kota Kinabalu, Malaysia',
-  'Boracay, Philippines', 'Palawan, Philippines', 'Manila, Philippines',
-  // East Asia
-  'Tokyo, Japan', 'Osaka, Japan', 'Kyoto, Japan', 'Seoul, South Korea', 'Taipei, Taiwan',
-  // South Asia
-  'Kathmandu, Nepal', 'Colombo, Sri Lanka', 'Galle, Sri Lanka', 'Ella, Sri Lanka',
-  'Goa, India', 'Jaipur, India', 'Delhi, India',
-  // Europe — Western
-  'Lisbon, Portugal', 'Porto, Portugal', 'Barcelona, Spain', 'Madrid, Spain', 'Seville, Spain',
-  'Rome, Italy', 'Florence, Italy', 'Positano, Italy', 'Amalfi Coast, Italy', 'Milan, Italy',
-  'Amsterdam, Netherlands', 'Berlin, Germany', 'Paris, France',
-  // Europe — Eastern (value picks)
-  'Prague, Czech Republic', 'Budapest, Hungary', 'Krakow, Poland', 'Warsaw, Poland',
-  'Dubrovnik, Croatia', 'Split, Croatia', 'Kotor, Montenegro', 'Tirana, Albania',
-  'Tbilisi, Georgia', 'Yerevan, Armenia', 'Lviv, Ukraine',
-  // Mediterranean & Middle East
-  'Santorini, Greece', 'Athens, Greece', 'Mykonos, Greece',
-  'Istanbul, Turkey', 'Cappadocia, Turkey', 'Tel Aviv, Israel',
-  // Africa
-  'Marrakech, Morocco', 'Fes, Morocco', 'Cape Town, South Africa', 'Zanzibar, Tanzania',
-  'Nairobi, Kenya', 'Accra, Ghana',
-  // Latin America
-  'Medellín, Colombia', 'Cartagena, Colombia', 'Bogotá, Colombia',
+  'Hạ Long Bay, Vietnam', 'Nha Trang, Vietnam', 'Phú Quốc, Vietnam', 'Huế, Vietnam',
+  'Phnom Penh, Cambodia', 'Siem Reap, Cambodia', 'Sihanoukville, Cambodia',
+  'Vang Vieng, Laos', 'Luang Prabang, Laos', 'Vientiane, Laos',
+  'Singapore', 'Kuala Lumpur, Malaysia', 'Penang, Malaysia', 'Langkawi, Malaysia',
+  'Kota Kinabalu, Malaysia', 'Kuching, Malaysia',
+  'Boracay, Philippines', 'Palawan, Philippines', 'El Nido, Philippines',
+  'Manila, Philippines', 'Cebu, Philippines', 'Siargao, Philippines',
+  'Yangon, Myanmar', 'Bagan, Myanmar', 'Inle Lake, Myanmar',
+  'Dhaka, Bangladesh', 'Colombo, Sri Lanka',
+  // ── East Asia ──
+  'Tokyo, Japan', 'Osaka, Japan', 'Kyoto, Japan', 'Hiroshima, Japan',
+  'Nara, Japan', 'Hokkaido, Japan', 'Okinawa, Japan', 'Fukuoka, Japan',
+  'Seoul, South Korea', 'Busan, South Korea', 'Jeju Island, South Korea',
+  'Taipei, Taiwan', 'Taichung, Taiwan', 'Tainan, Taiwan',
+  'Shanghai, China', 'Beijing, China', 'Chengdu, China', 'Guilin, China',
+  'Xi\'an, China', 'Hong Kong', 'Macau',
+  'Ulaanbaatar, Mongolia',
+  // ── South Asia ──
+  'Kathmandu, Nepal', 'Pokhara, Nepal', 'Chitwan, Nepal',
+  'Galle, Sri Lanka', 'Ella, Sri Lanka', 'Kandy, Sri Lanka', 'Mirissa, Sri Lanka',
+  'Goa, India', 'Mumbai, India', 'Delhi, India', 'Jaipur, India', 'Agra, India',
+  'Rishikesh, India', 'Udaipur, India', 'Varanasi, India', 'Kerala, India',
+  'Hampi, India', 'Pushkar, India', 'McLeod Ganj, India',
+  'Lahore, Pakistan', 'Islamabad, Pakistan',
+  // ── Central Asia ──
+  'Tbilisi, Georgia', 'Batumi, Georgia', 'Yerevan, Armenia',
+  'Almaty, Kazakhstan', 'Tashkent, Uzbekistan', 'Samarkand, Uzbekistan', 'Bukhara, Uzbekistan',
+  'Bishkek, Kyrgyzstan',
+  // ── Middle East ──
+  'Tel Aviv, Israel', 'Jerusalem, Israel', 'Dubai, UAE', 'Abu Dhabi, UAE',
+  'Muscat, Oman', 'Doha, Qatar', 'Amman, Jordan', 'Petra, Jordan',
+  'Beirut, Lebanon', 'Istanbul, Turkey', 'Cappadocia, Turkey',
+  'Bodrum, Turkey', 'Antalya, Turkey', 'Izmir, Turkey',
+  // ── Europe — Southern & Western ──
+  'Lisbon, Portugal', 'Porto, Portugal', 'Algarve, Portugal', 'Madeira, Portugal',
+  'Barcelona, Spain', 'Madrid, Spain', 'Seville, Spain', 'Valencia, Spain',
+  'Granada, Spain', 'San Sebastián, Spain', 'Ibiza, Spain', 'Mallorca, Spain',
+  'Canary Islands, Spain',
+  'Rome, Italy', 'Florence, Italy', 'Venice, Italy', 'Milan, Italy',
+  'Naples, Italy', 'Positano, Italy', 'Amalfi Coast, Italy', 'Cinque Terre, Italy',
+  'Sicily, Italy', 'Sardinia, Italy', 'Bologna, Italy',
+  'Athens, Greece', 'Santorini, Greece', 'Mykonos, Greece', 'Crete, Greece',
+  'Corfu, Greece', 'Rhodes, Greece', 'Thessaloniki, Greece',
+  'Paris, France', 'Nice, France', 'Lyon, France', 'Bordeaux, France', 'Marseille, France',
+  'Amsterdam, Netherlands', 'Brussels, Belgium', 'Luxembourg City, Luxembourg',
+  // ── Europe — Northern ──
+  'London, UK', 'Edinburgh, UK', 'Dublin, Ireland', 'Galway, Ireland',
+  'Reykjavik, Iceland', 'Bergen, Norway', 'Oslo, Norway', 'Tromsø, Norway',
+  'Stockholm, Sweden', 'Gothenburg, Sweden', 'Copenhagen, Denmark',
+  'Helsinki, Finland', 'Tallinn, Estonia', 'Riga, Latvia', 'Vilnius, Lithuania',
+  // ── Europe — Central & Eastern ──
+  'Berlin, Germany', 'Munich, Germany', 'Hamburg, Germany', 'Cologne, Germany',
+  'Vienna, Austria', 'Salzburg, Austria', 'Innsbruck, Austria',
+  'Zurich, Switzerland', 'Geneva, Switzerland', 'Interlaken, Switzerland',
+  'Prague, Czech Republic', 'Brno, Czech Republic', 'Český Krumlov, Czech Republic',
+  'Budapest, Hungary', 'Krakow, Poland', 'Warsaw, Poland', 'Gdansk, Poland',
+  'Bratislava, Slovakia', 'Ljubljana, Slovenia', 'Bled, Slovenia',
+  'Zagreb, Croatia', 'Split, Croatia', 'Dubrovnik, Croatia', 'Hvar, Croatia',
+  'Kotor, Montenegro', 'Budva, Montenegro', 'Tirana, Albania', 'Ohrid, North Macedonia',
+  'Sofia, Bulgaria', 'Plovdiv, Bulgaria', 'Bucharest, Romania', 'Cluj-Napoca, Romania',
+  'Belgrade, Serbia', 'Novi Sad, Serbia', 'Sarajevo, Bosnia', 'Mostar, Bosnia',
+  'Lviv, Ukraine', 'Kyiv, Ukraine',
+  // ── Africa — North ──
+  'Marrakech, Morocco', 'Fes, Morocco', 'Chefchaouen, Morocco', 'Essaouira, Morocco',
+  'Casablanca, Morocco', 'Cairo, Egypt', 'Luxor, Egypt', 'Hurghada, Egypt',
+  'Tunis, Tunisia', 'Djerba, Tunisia', 'Algiers, Algeria',
+  // ── Africa — Sub-Saharan ──
+  'Cape Town, South Africa', 'Johannesburg, South Africa', 'Durban, South Africa',
+  'Zanzibar, Tanzania', 'Dar es Salaam, Tanzania', 'Arusha, Tanzania',
+  'Nairobi, Kenya', 'Mombasa, Kenya', 'Kampala, Uganda', 'Kigali, Rwanda',
+  'Accra, Ghana', 'Lagos, Nigeria', 'Dakar, Senegal', 'Addis Ababa, Ethiopia',
+  'Victoria Falls, Zimbabwe', 'Livingstone, Zambia', 'Windhoek, Namibia',
+  'Maputo, Mozambique', 'Antananarivo, Madagascar', 'Mauritius',
+  // ── Latin America — Mexico & Central America ──
   'Mexico City, Mexico', 'Tulum, Mexico', 'Puerto Vallarta, Mexico', 'Oaxaca, Mexico',
-  'Antigua, Guatemala', 'San José, Costa Rica', 'Panama City, Panama',
-  'Buenos Aires, Argentina', 'Rio de Janeiro, Brazil', 'São Paulo, Brazil',
-  'Lima, Peru', 'Cusco, Peru', 'Cartagena, Colombia',
-  // Oceania & Pacific
-  'Queenstown, New Zealand', 'Auckland, New Zealand', 'Sydney, Australia', 'Melbourne, Australia', 'Bali, Indonesia',
+  'Cancún, Mexico', 'Playa del Carmen, Mexico', 'San Cristóbal, Mexico',
+  'Guadalajara, Mexico', 'Mérida, Mexico', 'Mazatlán, Mexico',
+  'Antigua, Guatemala', 'Flores, Guatemala', 'Guatemala City, Guatemala',
+  'San Pedro Sula, Honduras', 'Roatán, Honduras',
+  'San José, Costa Rica', 'Manuel Antonio, Costa Rica', 'Monteverde, Costa Rica',
+  'Panama City, Panama', 'Bocas del Toro, Panama', 'San Juan del Sur, Nicaragua',
+  'San Salvador, El Salvador', 'Belize City, Belize', 'Caye Caulker, Belize',
+  'Havana, Cuba', 'Trinidad, Cuba',
+  // ── Latin America — South America ──
+  'Medellín, Colombia', 'Cartagena, Colombia', 'Bogotá, Colombia', 'Santa Marta, Colombia',
+  'Quito, Ecuador', 'Galápagos Islands, Ecuador', 'Cuenca, Ecuador',
+  'Lima, Peru', 'Cusco, Peru', 'Machu Picchu, Peru', 'Arequipa, Peru', 'Iquitos, Peru',
+  'La Paz, Bolivia', 'Sucre, Bolivia', 'Uyuni, Bolivia',
+  'Buenos Aires, Argentina', 'Mendoza, Argentina', 'Bariloche, Argentina',
+  'Santiago, Chile', 'Valparaíso, Chile', 'Torres del Paine, Chile',
+  'Rio de Janeiro, Brazil', 'São Paulo, Brazil', 'Florianópolis, Brazil',
+  'Salvador, Brazil', 'Manaus, Brazil',
+  'Montevideo, Uruguay', 'Punta del Este, Uruguay',
+  'Asunción, Paraguay', 'Caracas, Venezuela', 'Georgetown, Guyana',
+  // ── Caribbean ──
+  'San Juan, Puerto Rico', 'Santo Domingo, Dominican Republic', 'Punta Cana, Dominican Republic',
+  'Kingston, Jamaica', 'Nassau, Bahamas', 'Bridgetown, Barbados',
+  'Port of Spain, Trinidad', 'Willemstad, Curaçao', 'Philipsburg, Sint Maarten',
+  // ── Oceania & Pacific ──
+  'Sydney, Australia', 'Melbourne, Australia', 'Brisbane, Australia',
+  'Cairns, Australia', 'Gold Coast, Australia', 'Perth, Australia',
+  'Adelaide, Australia', 'Darwin, Australia', 'Alice Springs, Australia',
+  'Auckland, New Zealand', 'Queenstown, New Zealand', 'Wellington, New Zealand',
+  'Christchurch, New Zealand', 'Rotorua, New Zealand',
+  'Fiji Islands', 'Bora Bora, French Polynesia', 'Papeete, French Polynesia',
+  'Port Vila, Vanuatu', 'Apia, Samoa',
 ];
 
 const DEPARTURE_CITIES = [
-  // North America
-  'New York, USA', 'Los Angeles, USA', 'Chicago, USA', 'Miami, USA', 'San Francisco, USA',
-  'Seattle, USA', 'Boston, USA', 'Atlanta, USA', 'Dallas, USA', 'Denver, USA',
-  'Toronto, Canada', 'Vancouver, Canada', 'Montreal, Canada',
-  // Europe
-  'London, UK', 'Manchester, UK', 'Edinburgh, UK', 'Dublin, Ireland',
-  'Amsterdam, Netherlands', 'Paris, France', 'Berlin, Germany', 'Frankfurt, Germany',
-  'Madrid, Spain', 'Barcelona, Spain', 'Lisbon, Portugal', 'Rome, Italy', 'Milan, Italy',
-  'Zurich, Switzerland', 'Vienna, Austria', 'Stockholm, Sweden', 'Copenhagen, Denmark',
-  // Asia-Pacific
-  'Sydney, Australia', 'Melbourne, Australia', 'Auckland, New Zealand',
-  'Tokyo, Japan', 'Singapore', 'Hong Kong', 'Dubai, UAE',
-  // Other
-  'São Paulo, Brazil', 'Mexico City, Mexico', 'Johannesburg, South Africa',
+  // USA — major hubs
+  'New York (JFK), USA', 'New York (Newark), USA', 'Los Angeles (LAX), USA',
+  'Chicago (O\'Hare), USA', 'Chicago (Midway), USA', 'Miami, USA', 'Fort Lauderdale, USA',
+  'San Francisco, USA', 'Seattle, USA', 'Boston, USA', 'Atlanta, USA',
+  'Dallas (DFW), USA', 'Houston, USA', 'Denver, USA', 'Phoenix, USA',
+  'Las Vegas, USA', 'Orlando, USA', 'Washington DC (Dulles), USA', 'Washington DC (Reagan), USA',
+  'Philadelphia, USA', 'Detroit, USA', 'Minneapolis, USA', 'Portland, USA',
+  'Charlotte, USA', 'Salt Lake City, USA', 'San Diego, USA', 'New Orleans, USA',
+  // Canada
+  'Toronto (Pearson), Canada', 'Vancouver, Canada', 'Montreal, Canada',
+  'Calgary, Canada', 'Ottawa, Canada', 'Edmonton, Canada',
+  // UK & Ireland
+  'London (Heathrow), UK', 'London (Gatwick), UK', 'London (Stansted), UK',
+  'Manchester, UK', 'Edinburgh, UK', 'Birmingham, UK', 'Bristol, UK',
+  'Glasgow, UK', 'Dublin, Ireland',
+  // Western Europe
+  'Amsterdam, Netherlands', 'Paris (CDG), France', 'Paris (Orly), France',
+  'Berlin, Germany', 'Frankfurt, Germany', 'Munich, Germany', 'Düsseldorf, Germany',
+  'Hamburg, Germany', 'Madrid, Spain', 'Barcelona, Spain', 'Malaga, Spain',
+  'Lisbon, Portugal', 'Porto, Portugal', 'Rome (Fiumicino), Italy', 'Milan (Malpensa), Italy',
+  'Venice, Italy', 'Naples, Italy', 'Zurich, Switzerland', 'Geneva, Switzerland',
+  'Vienna, Austria', 'Brussels, Belgium', 'Zurich, Switzerland',
+  // Scandinavia & Nordics
+  'Stockholm, Sweden', 'Copenhagen, Denmark', 'Oslo, Norway', 'Helsinki, Finland',
+  'Reykjavik, Iceland',
+  // Eastern Europe
+  'Warsaw, Poland', 'Prague, Czech Republic', 'Budapest, Hungary', 'Bucharest, Romania',
+  'Athens, Greece', 'Istanbul, Turkey', 'Kyiv, Ukraine',
+  // Middle East & Africa
+  'Dubai (DXB), UAE', 'Abu Dhabi, UAE', 'Doha, Qatar', 'Riyadh, Saudi Arabia',
+  'Tel Aviv, Israel', 'Cairo, Egypt', 'Casablanca, Morocco',
+  'Johannesburg, South Africa', 'Cape Town, South Africa', 'Nairobi, Kenya',
+  'Lagos, Nigeria', 'Accra, Ghana', 'Addis Ababa, Ethiopia', 'Tunis, Tunisia',
+  // Asia — East
+  'Tokyo (Narita), Japan', 'Tokyo (Haneda), Japan', 'Osaka, Japan',
+  'Seoul (Incheon), South Korea', 'Beijing, China', 'Shanghai, China',
+  'Hong Kong', 'Taipei, Taiwan', 'Guangzhou, China',
+  // Asia — Southeast
+  'Singapore', 'Bangkok (Suvarnabhumi), Thailand', 'Bangkok (Don Mueang), Thailand',
+  'Kuala Lumpur, Malaysia', 'Jakarta, Indonesia', 'Bali (Denpasar), Indonesia',
+  'Manila, Philippines', 'Ho Chi Minh City, Vietnam', 'Hanoi, Vietnam',
+  // Asia — South
+  'Mumbai, India', 'Delhi, India', 'Bangalore, India', 'Chennai, India',
+  'Colombo, Sri Lanka', 'Kathmandu, Nepal', 'Dhaka, Bangladesh', 'Karachi, Pakistan',
+  // Oceania
+  'Sydney, Australia', 'Melbourne, Australia', 'Brisbane, Australia',
+  'Perth, Australia', 'Auckland, New Zealand', 'Christchurch, New Zealand',
+  // Latin America
+  'Mexico City, Mexico', 'Cancún, Mexico', 'São Paulo, Brazil', 'Rio de Janeiro, Brazil',
+  'Bogotá, Colombia', 'Buenos Aires, Argentina', 'Santiago, Chile', 'Lima, Peru',
+  'Panama City, Panama', 'San José, Costa Rica', 'Medellín, Colombia',
+  'Quito, Ecuador', 'Caracas, Venezuela', 'Havana, Cuba',
+  // Caribbean
+  'Kingston, Jamaica', 'Nassau, Bahamas', 'Santo Domingo, Dominican Republic',
 ];
 
 /* ── Link helpers ─────────────────────────────────────────── */
 const links = {
-  googleFlights: (from, to) =>
-    `https://www.google.com/travel/flights?q=flights+from+${encodeURIComponent(from)}+to+${encodeURIComponent(to)}`,
+  googleFlights: (from, to, month, year) => {
+    const base = `https://www.google.com/travel/flights?q=flights+from+${encodeURIComponent(from || 'anywhere')}+to+${encodeURIComponent(to)}`;
+    return month && year ? `${base}+in+${encodeURIComponent(month + ' ' + year)}` : base;
+  },
   skyscanner: (from, to) =>
-    `https://www.skyscanner.com/flights/${encodeURIComponent(from)}/${encodeURIComponent(to)}/`,
+    `https://www.skyscanner.com/flights/${encodeURIComponent(from || '')}/${encodeURIComponent(to)}/`,
   bookingCom: (name, destination) =>
     `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name + ' ' + destination)}`,
   hostelworld: (name, destination) =>
@@ -184,7 +305,7 @@ const HOW_IT_WORKS = [
 ];
 
 export default function Home() {
-  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '' });
+  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '' });
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
@@ -823,9 +944,36 @@ export default function Home() {
                   )}
                 </div>
 
+                {/* Travel dates — month + year */}
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={label}>📅  When Are You Going? <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0, color: C.subtle }}>(optional)</span></label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <select
+                      value={form.travelMonth}
+                      onChange={e => setForm({ ...form, travelMonth: e.target.value })}
+                      style={{ ...inputBase, color: form.travelMonth ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}
+                    >
+                      <option value="">Month</option>
+                      {['January','February','March','April','May','June','July','August','September','October','November','December'].map(m => (
+                        <option key={m} value={m}>{m}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={form.travelYear}
+                      onChange={e => setForm({ ...form, travelYear: e.target.value })}
+                      style={{ ...inputBase, color: form.travelYear ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}
+                    >
+                      <option value="">Year</option>
+                      {[2025, 2026, 2027].map(y => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
                 {/* Days quick-select */}
                 <div>
-                  <label style={label}>📅  How Many Days?</label>
+                  <label style={label}>🔢  How Many Days?</label>
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
                     {DAY_PRESETS.map(d => (
                       <button
@@ -996,8 +1144,8 @@ export default function Home() {
               {/* Trip Hero */}
               <div style={{ background: `linear-gradient(135deg, ${C.dark} 0%, ${C.dark2} 100%)`, borderRadius: '24px', padding: '32px', marginBottom: '14px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: '-10px', right: '-10px', fontSize: '110px', opacity: '0.06', lineHeight: 1 }}>✈️</div>
-                <span style={{ display: 'inline-block', background: `rgba(184,150,46,0.2)`, border: `1px solid rgba(184,150,46,0.4)`, borderRadius: '8px', padding: '4px 12px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px', color: C.brandLt }}>
-                  {form.days} Days · ${Number(form.budget).toLocaleString()}
+                <span style={{ display: 'inline-block', background: `rgba(212,82,42,0.2)`, border: `1px solid rgba(212,82,42,0.4)`, borderRadius: '8px', padding: '4px 12px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px', color: '#F4A07A' }}>
+                  {form.days} Days · ${Number(form.budget).toLocaleString()}{form.travelMonth && form.travelYear ? ` · ${form.travelMonth} ${form.travelYear}` : ''}
                 </span>
                 <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 5vw, 30px)', fontWeight: '900', lineHeight: '1.2', marginBottom: '8px' }}>{trip.title}</h2>
                 <p style={{ opacity: '0.65', fontSize: '15px', marginBottom: '22px' }}>{trip.tagline}</p>
@@ -1096,7 +1244,7 @@ export default function Home() {
                   <p style={{ fontSize: '14px', color: C.muted, lineHeight: '1.7', marginBottom: '16px' }}>{trip.flightNote}</p>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     <a
-                      href={links.googleFlights(form.departureCity || 'your city', form.destination)}
+                      href={links.googleFlights(form.departureCity, form.destination, form.travelMonth, form.travelYear)}
                       target="_blank" rel="noopener noreferrer"
                       style={{
                         display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 18px',
@@ -1240,7 +1388,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
+                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
                 style={{ width: '100%', background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: '600', color: C.muted, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}
               >
                 ← Plan Another Trip
