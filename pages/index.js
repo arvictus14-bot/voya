@@ -36,15 +36,15 @@ const DEST_GRID = [
   { name: 'Santorini', country: 'Greece', badge: '✨ Bucket List', vibe: 'Romance', photo: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=700&q=88' },
   { name: 'Tokyo', country: 'Japan', badge: '🌟 Most Booked', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=700&q=88' },
   { name: 'Lisbon', country: 'Portugal', badge: '⭐ Editor\'s Pick', vibe: 'Foodie', photo: 'https://images.unsplash.com/photo-1536663815808-535e2280d2c2?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Krabi', country: 'Thailand', badge: '🏖️ Beach Vibes', vibe: 'Adventure', photo: 'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Positano', country: 'Italy', badge: '📸 Photogenic', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1575599763567-b0e2c2a65be2?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Marrakech', country: 'Morocco', badge: '🌿 Hidden Gem', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1597212618440-806262de4f0b?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Medellín', country: 'Colombia', badge: '🎭 Underrated', vibe: 'Party', photo: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Barcelona', country: 'Spain', badge: '🎉 Party Hub', vibe: 'Party', photo: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Kyoto', country: 'Japan', badge: '🌸 Dreamy', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Krabi', country: 'Thailand', badge: '🏖️ Beach Vibes', vibe: 'Adventure', photo: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Positano', country: 'Italy', badge: '📸 Photogenic', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Marrakech', country: 'Morocco', badge: '🌿 Hidden Gem', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1531967862476-0c8e50a3d1cb?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Medellín', country: 'Colombia', badge: '🎭 Underrated', vibe: 'Party', photo: 'https://images.unsplash.com/photo-1564213625-fb3e3c70e83c?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Barcelona', country: 'Spain', badge: '🎉 Party Hub', vibe: 'Party', photo: 'https://images.unsplash.com/photo-1464790719320-516ecd75af6c?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Kyoto', country: 'Japan', badge: '🌸 Dreamy', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=700&q=88' },
   { name: 'Cape Town', country: 'South Africa', badge: '🦁 Wild Side', vibe: 'Adventure', photo: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Tulum', country: 'Mexico', badge: '🌴 Boho Vibes', vibe: 'Beach', photo: 'https://images.unsplash.com/photo-1518638150340-f706e86654de?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Chiang Mai', country: 'Thailand', badge: '🏔️ Offbeat', vibe: 'Nature', photo: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Tulum', country: 'Mexico', badge: '🌴 Boho Vibes', vibe: 'Beach', photo: 'https://images.unsplash.com/photo-1510097467424-192d713fd8b2?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Chiang Mai', country: 'Thailand', badge: '🏔️ Offbeat', vibe: 'Nature', photo: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=700&q=88' },
 ];
 
 /* ── Sample trips ─────────────────────────────────────────── */
@@ -510,7 +510,7 @@ const HOW_IT_WORKS = [
 ];
 
 export default function Home() {
-  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '' });
+  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '' });
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
@@ -1471,6 +1471,35 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* ── Anything else? ── */}
+              <div style={{ marginBottom: '28px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', marginBottom: '6px' }}>
+                  Anything specific?
+                </h3>
+                <p style={{ fontSize: '13px', color: C.muted, marginBottom: '12px' }}>Tell us what you actually want to do — we'll build around it.</p>
+                <textarea
+                  rows={3}
+                  placeholder="e.g. I want to try scuba diving, avoid tourist traps, hit the best local street food spots, and find good nightlife..."
+                  value={form.tripNotes}
+                  onChange={e => setForm(f => ({ ...f, tripNotes: e.target.value }))}
+                  maxLength={400}
+                  style={{
+                    ...inputBase,
+                    resize: 'none',
+                    lineHeight: '1.6',
+                    fontSize: '15px',
+                    padding: '16px 18px',
+                    fontFamily: 'Inter, sans-serif',
+                    color: C.text,
+                  }}
+                />
+                {form.tripNotes.length > 0 && (
+                  <div style={{ fontSize: '11px', color: C.subtle, textAlign: 'right', marginTop: '4px' }}>
+                    {400 - form.tripNotes.length} characters left
+                  </div>
+                )}
+              </div>
+
               {error && <p style={{ color: '#DC2626', fontSize: '14px', marginBottom: '12px', textAlign: 'center', fontWeight: '500' }}>{error}</p>}
               <button type="submit" style={{
                 width: '100%', background: C.brand, border: 'none',
@@ -1741,7 +1770,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
+                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
                 style={{ width: '100%', background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: '600', color: C.muted, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}
               >
                 ← Plan Another Trip

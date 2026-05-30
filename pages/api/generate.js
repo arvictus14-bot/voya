@@ -18,7 +18,7 @@ const GROUP_LABELS = {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { destination, budget, days, vibe, accommodation, group, departureCity, travelMonth, travelYear } = req.body;
+  const { destination, budget, days, vibe, accommodation, group, departureCity, travelMonth, travelYear, tripNotes } = req.body;
   if (!destination || !budget || !days || !vibe) {
     return res.status(400).json({ error: 'Missing fields' });
   }
@@ -38,6 +38,10 @@ export default async function handler(req, res) {
     ? `Travel is planned for ${travelDate}. Factor in: seasonal weather, peak vs off-peak prices, local festivals or events happening that month, and any relevant warnings (monsoon, extreme heat, etc.).`
     : `No travel dates provided — give general seasonal advice.`;
 
+  const notesContext = tripNotes && tripNotes.trim().length > 0
+    ? `\n- Traveler's specific requests: "${tripNotes.trim()}" — incorporate these directly into the itinerary.`
+    : '';
+
   const prompt = `You are a travel expert for 18-30 travelers. Create a detailed, real travel itinerary.
 
 Trip details:
@@ -48,7 +52,7 @@ Trip details:
 - Accommodation: ${accomLabel}
 - Traveling as: ${groupLabel}
 - Flights: ${flightContext}
-- Season: ${seasonContext}
+- Season: ${seasonContext}${notesContext}
 
 IMPORTANT RULES:
 - Use REAL place names everywhere — real hostels, real hotels, real restaurants, real attractions
