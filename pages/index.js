@@ -32,14 +32,19 @@ const HERO_PHOTOS = [
 /* ── Destination photo grid ───────────────────────────────── */
 /* All photos verified free under Unsplash License — real photographers, no AI */
 const DEST_GRID = [
-  { name: 'Bali', country: 'Indonesia', photo: 'https://images.unsplash.com/photo-1523539693385-e5e891eb4465?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Santorini', country: 'Greece', photo: 'https://images.unsplash.com/photo-1526315337991-2ea805e212a8?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Tokyo', country: 'Japan', photo: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Lisbon', country: 'Portugal', photo: 'https://images.unsplash.com/photo-1536663815808-535e2280d2c2?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Krabi', country: 'Thailand', photo: 'https://images.unsplash.com/photo-1538475711279-0373b6bc754e?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Positano', country: 'Italy', photo: 'https://images.unsplash.com/photo-1561956021-947f09ae0101?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Marrakech', country: 'Morocco', photo: 'https://images.unsplash.com/photo-1580746738099-1cb74f972feb?auto=format&fit=crop&w=700&q=88' },
-  { name: 'Medellín', country: 'Colombia', photo: 'https://images.unsplash.com/photo-1512250431446-d0b4b57b27ec?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Bali', country: 'Indonesia', badge: '🔥 Trending Now', vibe: 'Beach', photo: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=90' },
+  { name: 'Santorini', country: 'Greece', badge: '✨ Bucket List', vibe: 'Romance', photo: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Tokyo', country: 'Japan', badge: '🌟 Most Booked', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Lisbon', country: 'Portugal', badge: '⭐ Editor\'s Pick', vibe: 'Foodie', photo: 'https://images.unsplash.com/photo-1536663815808-535e2280d2c2?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Krabi', country: 'Thailand', badge: '🏖️ Beach Vibes', vibe: 'Adventure', photo: 'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Positano', country: 'Italy', badge: '📸 Photogenic', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1575599763567-b0e2c2a65be2?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Marrakech', country: 'Morocco', badge: '🌿 Hidden Gem', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1597212618440-806262de4f0b?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Medellín', country: 'Colombia', badge: '🎭 Underrated', vibe: 'Party', photo: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Barcelona', country: 'Spain', badge: '🎉 Party Hub', vibe: 'Party', photo: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Kyoto', country: 'Japan', badge: '🌸 Dreamy', vibe: 'Culture', photo: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Cape Town', country: 'South Africa', badge: '🦁 Wild Side', vibe: 'Adventure', photo: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Tulum', country: 'Mexico', badge: '🌴 Boho Vibes', vibe: 'Beach', photo: 'https://images.unsplash.com/photo-1518638150340-f706e86654de?auto=format&fit=crop&w=700&q=88' },
+  { name: 'Chiang Mai', country: 'Thailand', badge: '🏔️ Offbeat', vibe: 'Nature', photo: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=700&q=88' },
 ];
 
 /* ── Sample trips ─────────────────────────────────────────── */
@@ -673,11 +678,19 @@ export default function Home() {
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 2px; }
         .dest-tile:hover .dest-overlay { opacity: 1 !important; }
-        .dest-tile:hover { transform: scale(1.03); }
-        @media (max-width: 600px) {
-          .dest-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        .dest-tile:hover { transform: scale(1.025); box-shadow: 0 16px 48px rgba(0,0,0,0.32) !important; }
+        .dest-tile:hover .dest-photo { transform: scale(1.07); }
+        .dest-tile:hover .dest-cta { opacity: 1 !important; transform: translateY(0) !important; }
+        @media (max-width: 900px) {
+          .dest-bento { grid-template-columns: repeat(3, 1fr) !important; }
+          .dest-tile-feat { grid-column: span 2 !important; grid-row: span 1 !important; }
         }
-        .sample-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.18) !important; }
+        @media (max-width: 600px) {
+          .dest-bento { grid-template-columns: repeat(2, 1fr) !important; grid-auto-rows: 160px !important; }
+          .dest-tile-feat { grid-column: span 2 !important; grid-row: span 1 !important; }
+        }
+        .sample-card:hover { transform: translateY(-5px); box-shadow: 0 24px 56px rgba(0,0,0,0.2) !important; }
+        .sample-card:hover .sample-cta { background: #D4522A !important; color: #fff !important; border-color: #D4522A !important; }
         .faq-item { border-bottom: 1px solid #F0EAE0; }
         .faq-item:last-child { border-bottom: none; }
         .hero-photo { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 1.4s ease; }
@@ -798,46 +811,145 @@ export default function Home() {
       </div>
 
       {/* ── DESTINATION GRID ── */}
-      <section style={{ padding: '72px 24px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 4vw, 38px)', fontWeight: '900', color: C.text, marginBottom: '12px', letterSpacing: '-0.5px' }}>
-            Where do you want to go?
+      <section style={{ padding: '80px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{ fontSize: '12px', fontWeight: '800', color: C.brand, letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            ✦ Explore the world
+          </div>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: '900', color: C.text, marginBottom: '14px', letterSpacing: '-0.5px' }}>
+            Pick your next escape
           </h2>
-          <p style={{ color: C.muted, fontSize: '16px' }}>Tap any destination to start planning</p>
+          <p style={{ color: C.muted, fontSize: '16px', maxWidth: '360px', margin: '0 auto', lineHeight: '1.6' }}>
+            Tap any destination — we'll build your full trip in seconds
+          </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '14px' }}>
-          {DEST_GRID.map((d) => (
+        <div
+          className="dest-bento"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridAutoRows: '210px',
+            gap: '12px',
+          }}
+        >
+          {DEST_GRID.map((d, i) => (
             <div
               key={d.name}
-              className="dest-tile"
+              className={`dest-tile${i === 0 ? ' dest-tile-feat' : ''}`}
               onClick={() => prefill(`${d.name}, ${d.country}`)}
               style={{
-                position: 'relative', borderRadius: '18px', overflow: 'hidden',
-                aspectRatio: '3/4', cursor: 'pointer',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                position: 'relative',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                cursor: 'pointer',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.14)',
+                transition: 'transform 0.28s ease, box-shadow 0.28s ease',
+                ...(i === 0 ? { gridColumn: 'span 2', gridRow: 'span 2' } : {}),
               }}
             >
+              {/* Photo layer */}
+              <div
+                className="dest-photo"
+                style={{
+                  position: 'absolute', inset: 0,
+                  backgroundImage: `url(${d.photo})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  transition: 'transform 0.45s ease',
+                }}
+              />
+              {/* Dark gradient */}
               <div style={{
                 position: 'absolute', inset: 0,
-                backgroundImage: `url(${d.photo})`,
-                backgroundSize: 'cover', backgroundPosition: 'center',
+                background: i === 0
+                  ? 'linear-gradient(160deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.75) 100%)'
+                  : 'linear-gradient(to bottom, rgba(0,0,0,0.02) 20%, rgba(0,0,0,0.84) 100%)',
               }} />
+              {/* Terracotta hover overlay */}
+              <div
+                className="dest-overlay"
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: 'rgba(212,82,42,0.28)',
+                  opacity: 0,
+                  transition: 'opacity 0.25s ease',
+                }}
+              />
+
+              {/* Top-left badge */}
+              {d.badge && (
+                <div style={{
+                  position: 'absolute', top: '13px', left: '13px',
+                  background: 'rgba(10,6,2,0.55)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  borderRadius: '30px',
+                  padding: '4px 11px',
+                  fontSize: '11px', fontWeight: '700', color: '#fff',
+                  letterSpacing: '0.1px',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                }}>
+                  {d.badge}
+                </div>
+              )}
+
+              {/* Top-right vibe tag */}
+              {d.vibe && (
+                <div style={{
+                  position: 'absolute', top: '13px', right: '13px',
+                  background: 'rgba(212,82,42,0.88)',
+                  borderRadius: '30px',
+                  padding: '4px 11px',
+                  fontSize: '11px', fontWeight: '700', color: '#fff',
+                }}>
+                  {d.vibe}
+                </div>
+              )}
+
+              {/* Bottom content */}
               <div style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.78) 100%)',
-              }} />
-              <div className="dest-overlay" style={{
-                position: 'absolute', inset: 0,
-                background: `rgba(184,150,46,0.18)`,
-                opacity: 0, transition: 'opacity 0.25s ease',
-              }} />
-              <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px' }}>
-                <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '900', color: '#fff', lineHeight: '1.2', marginBottom: '3px' }}>
+                position: 'absolute', bottom: 0, left: 0, right: 0,
+                padding: i === 0 ? '28px' : '16px',
+              }}>
+                <div style={{
+                  fontFamily: 'Playfair Display, serif',
+                  fontSize: i === 0 ? '34px' : '20px',
+                  fontWeight: '900', color: '#fff',
+                  lineHeight: '1.15', marginBottom: '3px',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.4)',
+                }}>
                   {d.name}
                 </div>
-                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', fontWeight: '500' }}>{d.country}</div>
+                <div style={{
+                  fontSize: '12px',
+                  color: 'rgba(255,255,255,0.6)',
+                  fontWeight: '600',
+                  letterSpacing: '0.3px',
+                  marginBottom: i === 0 ? '14px' : '10px',
+                }}>
+                  {d.country}
+                </div>
+                {/* Hover CTA — slides up */}
+                <div
+                  className="dest-cta"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '5px',
+                    background: 'rgba(255,255,255,0.16)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    borderRadius: '22px',
+                    padding: i === 0 ? '8px 18px' : '6px 14px',
+                    fontSize: i === 0 ? '13px' : '12px',
+                    fontWeight: '700', color: '#fff',
+                    opacity: 0,
+                    transform: 'translateY(8px)',
+                    transition: 'opacity 0.22s ease, transform 0.22s ease',
+                  }}
+                >
+                  Plan this trip →
+                </div>
               </div>
             </div>
           ))}
@@ -845,15 +957,18 @@ export default function Home() {
       </section>
 
       {/* ── SAMPLE TRIPS ── */}
-      <section style={{ padding: '0 24px 80px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(24px, 4vw, 34px)', fontWeight: '900', color: C.text, marginBottom: '10px' }}>
+      <section style={{ padding: '0 24px 96px', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{ fontSize: '12px', fontWeight: '800', color: C.brand, letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            ✦ Real trip examples
+          </div>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: '900', color: C.text, marginBottom: '12px', letterSpacing: '-0.5px' }}>
             See what a Voya trip looks like
           </h2>
-          <p style={{ color: C.muted, fontSize: '15px' }}>Click any to generate your own version</p>
+          <p style={{ color: C.muted, fontSize: '16px', maxWidth: '360px', margin: '0 auto' }}>Tap any card to instantly generate your own version</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '22px' }}>
           {SAMPLE_TRIPS.map(t => (
             <div
               key={t.destination}
@@ -863,43 +978,89 @@ export default function Home() {
                 scrollToPlanner();
               }}
               style={{
-                borderRadius: '22px', overflow: 'hidden', cursor: 'pointer',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.08)', transition: 'all 0.25s',
+                borderRadius: '24px', overflow: 'hidden', cursor: 'pointer',
+                boxShadow: '0 6px 24px rgba(0,0,0,0.09)',
+                transition: 'all 0.28s ease',
                 background: '#fff',
               }}
             >
+              {/* Photo */}
               <div style={{
-                height: '210px',
-                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.6) 100%), url(${t.photo})`,
+                height: '240px',
+                backgroundImage: `url(${t.photo})`,
                 backgroundSize: 'cover', backgroundPosition: 'center',
-                position: 'relative', display: 'flex', flexDirection: 'column',
-                justifyContent: 'space-between', padding: '16px',
+                position: 'relative',
               }}>
-                <span style={{ alignSelf: 'flex-start', background: 'rgba(255,255,255,0.95)', borderRadius: '6px', padding: '3px 10px', fontSize: '11px', fontWeight: '700', color: C.text }}>
+                {/* Gradient overlay */}
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.65) 100%)',
+                }} />
+                {/* Tag badge */}
+                <span style={{
+                  position: 'absolute', top: '16px', left: '16px',
+                  background: 'rgba(255,255,255,0.96)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '8px', padding: '4px 11px',
+                  fontSize: '11px', fontWeight: '800', color: C.text,
+                  letterSpacing: '0.1px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                }}>
                   {t.tag}
                 </span>
-                <div>
-                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', fontWeight: '900', color: '#fff', marginBottom: '4px' }}>{t.destination}</h3>
-                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.75)', fontWeight: '500' }}>{t.country}</p>
+                {/* Social score pill */}
+                <span style={{
+                  position: 'absolute', top: '16px', right: '16px',
+                  background: 'rgba(212,82,42,0.9)',
+                  borderRadius: '8px', padding: '4px 11px',
+                  fontSize: '11px', fontWeight: '800', color: '#fff',
+                }}>
+                  Social {t.socialScore}/10
+                </span>
+                {/* Destination name */}
+                <div style={{ position: 'absolute', bottom: '18px', left: '20px', right: '20px' }}>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: '900', color: '#fff', marginBottom: '3px', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                    {t.destination}
+                  </h3>
+                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)', fontWeight: '600', letterSpacing: '0.3px' }}>{t.country}</p>
                 </div>
               </div>
-              <div style={{ padding: '18px 20px 20px' }}>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
-                  {[`${t.days} days`, `$${t.budget.toLocaleString()}`, `Social ${t.socialScore}/10`].map(tag => (
+
+              {/* Body */}
+              <div style={{ padding: '20px 22px 22px' }}>
+                {/* Stat chips */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '18px', flexWrap: 'wrap' }}>
+                  {[`📅 ${t.days} days`, `💰 $${t.budget.toLocaleString()}`].map(tag => (
                     <span key={tag} style={{
-                      fontSize: '12px', fontWeight: '600', color: C.brand,
-                      background: C.brandBg, borderRadius: '6px', padding: '3px 10px',
+                      fontSize: '12px', fontWeight: '700', color: C.brand,
+                      background: C.brandBg, borderRadius: '8px', padding: '5px 12px',
                       border: `1px solid ${C.border}`,
                     }}>{tag}</span>
                   ))}
                 </div>
+                {/* Highlights */}
                 {t.highlights.map((h, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'flex-start' }}>
-                    <span style={{ color: C.brand, fontWeight: '800', fontSize: '12px', flexShrink: 0, marginTop: '2px' }}>→</span>
-                    <span style={{ fontSize: '13px', color: C.muted, lineHeight: '1.5' }}>{h}</span>
+                  <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'flex-start' }}>
+                    <span style={{
+                      width: '6px', height: '6px', borderRadius: '50%',
+                      background: C.brand, flexShrink: 0, marginTop: '6px',
+                    }} />
+                    <span style={{ fontSize: '13px', color: C.muted, lineHeight: '1.55' }}>{h}</span>
                   </div>
                 ))}
-                <div style={{ marginTop: '16px', padding: '10px 14px', background: C.brandBg, borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: C.brand, textAlign: 'center', border: `1px solid ${C.border}` }}>
+                {/* CTA */}
+                <div
+                  className="sample-cta"
+                  style={{
+                    marginTop: '20px', padding: '12px 16px',
+                    background: C.brandBg,
+                    borderRadius: '12px', fontSize: '13px', fontWeight: '800',
+                    color: C.brand, textAlign: 'center',
+                    border: `1.5px solid ${C.border}`,
+                    transition: 'all 0.22s ease',
+                    letterSpacing: '0.2px',
+                  }}
+                >
                   Plan a similar trip →
                 </div>
               </div>
