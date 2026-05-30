@@ -212,6 +212,21 @@ const POPULAR_DESTINATIONS = [
   'Christchurch, New Zealand', 'Rotorua, New Zealand',
   'Fiji Islands', 'Bora Bora, French Polynesia', 'Papeete, French Polynesia',
   'Port Vila, Vanuatu', 'Apia, Samoa',
+  // ── Indian Ocean ──
+  'Maldives', 'Male, Maldives', 'Seychelles', 'Réunion Island', 'Mauritius',
+  // ── Atlantic Islands ──
+  'Azores, Portugal', 'Ponta Delgada, Azores', 'Faroe Islands', 'Malta', 'Valletta, Malta',
+  'Tenerife, Spain', 'Gran Canaria, Spain', 'Lanzarote, Spain',
+  // ── Balkans & Hidden Gems ──
+  'Pristina, Kosovo', 'Kazbegi, Georgia', 'Mestia, Georgia', 'Batumi, Georgia',
+  'Skopje, North Macedonia', 'Podgorica, Montenegro',
+  // ── USA Domestic ──
+  'New York City, USA', 'Las Vegas, USA', 'New Orleans, USA', 'Nashville, USA',
+  'Miami, USA', 'Los Angeles, USA', 'San Francisco, USA', 'Chicago, USA',
+  'Maui, Hawaii', 'Oahu, Hawaii', 'Kauai, Hawaii',
+  // ── Canada ──
+  'Vancouver, Canada', 'Toronto, Canada', 'Montreal, Canada', 'Banff, Canada',
+  'Whistler, Canada', 'Quebec City, Canada',
 ];
 
 const DEPARTURE_CITIES = [
@@ -355,8 +370,14 @@ export default function Home() {
   };
 
   const filteredDests = form.destination.length > 0
-    ? [...new Set(POPULAR_DESTINATIONS.filter(d => d.toLowerCase().includes(form.destination.toLowerCase())))].slice(0, 7)
+    ? [...new Set(POPULAR_DESTINATIONS.filter(d => d.toLowerCase().includes(form.destination.toLowerCase())))].slice(0, 10)
     : [];
+
+  const surpriseMe = () => {
+    const dest = POPULAR_DESTINATIONS[Math.floor(Math.random() * POPULAR_DESTINATIONS.length)];
+    setForm(f => ({ ...f, destination: dest }));
+    setShowSuggestions(false);
+  };
 
   const filteredDep = form.departureCity.length > 0
     ? DEPARTURE_CITIES.filter(d => d.toLowerCase().includes(form.departureCity.toLowerCase())).slice(0, 6)
@@ -867,7 +888,10 @@ export default function Home() {
 
                 {/* Destination autocomplete */}
                 <div style={{ marginBottom: '16px', position: 'relative' }} ref={destRef}>
-                  <label style={label}>✈️  Destination</label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ ...label, marginBottom: 0 }}>✈️  Destination</label>
+                    <button type="button" onClick={surpriseMe} style={{ background: 'none', border: `1px solid ${C.brand}`, borderRadius: '20px', padding: '3px 10px', fontSize: '11px', fontWeight: '700', color: C.brand, cursor: 'pointer', letterSpacing: '0.3px' }}>🎲 Surprise me</button>
+                  </div>
                   <input
                     type="text"
                     placeholder="Search destinations..."
