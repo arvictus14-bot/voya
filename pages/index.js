@@ -1292,20 +1292,11 @@ export default function Home() {
                 <div style={{ position: 'relative' }} ref={depRef}>
                   <input
                     type="text"
-                    placeholder="Your departure city (optional)"
-                    value={form.departureCity}
-                    onChange={e => { setForm({ ...form, departureCity: e.target.value }); setShowDepSuggestions(true); }}
-                    onFocus={() => setShowDepSuggestions(true)}
-                    style={{ ...inputBase, fontSize: '16px', padding: '16px 18px' }}
-                    autoComplete="off"
-                  />
-                  <input
-                    type="text"
                     placeholder="New York, London, Sydney..."
                     value={form.departureCity}
                     onChange={e => { setForm({ ...form, departureCity: e.target.value }); setShowDepSuggestions(true); }}
                     onFocus={() => setShowDepSuggestions(true)}
-                    style={inputBase}
+                    style={{ ...inputBase, fontSize: '16px', padding: '16px 18px' }}
                     autoComplete="off"
                   />
                   {showDepSuggestions && filteredDep.length > 0 && (
