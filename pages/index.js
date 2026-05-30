@@ -605,7 +605,7 @@ export default function Home() {
             <div
               key={d.name}
               className="dest-tile"
-              onClick={() => prefill(d.name)}
+              onClick={() => prefill(`${d.name}, ${d.country}`)}
               style={{
                 position: 'relative', borderRadius: '18px', overflow: 'hidden',
                 aspectRatio: '3/4', cursor: 'pointer',
