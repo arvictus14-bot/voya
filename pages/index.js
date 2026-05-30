@@ -288,7 +288,7 @@ const links = {
   getYourGuide: (activity, destination) =>
     `https://www.getyourguide.com/s/?q=${encodeURIComponent(activity + ' ' + destination)}`,
   viator: (activity, destination) =>
-    `https://www.viator.com/search?q=${encodeURIComponent(activity + ' ' + destination)}`,
+    `https://www.viator.com/searchResults/all?text=${encodeURIComponent(activity + ' ' + destination)}&pid=P00303477&mcid=42383&medium=link&campaign=voya-site`,
 };
 
 const FAQS = [
