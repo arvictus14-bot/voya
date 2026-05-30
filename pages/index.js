@@ -77,23 +77,44 @@ const SAMPLE_TRIPS = [
 ];
 
 const VIBES = [
-  { id: 'party', emoji: '🎉', label: 'Party', desc: 'Nightlife & social scenes' },
-  { id: 'culture', emoji: '🏛️', label: 'Culture', desc: 'History & local life' },
-  { id: 'adventure', emoji: '🏔️', label: 'Adventure', desc: 'Outdoors & thrills' },
-  { id: 'mix', emoji: '✨', label: 'Mix It All', desc: 'A bit of everything' },
+  { id: 'party', emoji: '🎉', label: 'Party' },
+  { id: 'adventure', emoji: '🏔️', label: 'Adventure' },
+  { id: 'beach', emoji: '🌊', label: 'Beach' },
+  { id: 'culture', emoji: '🏛️', label: 'Culture' },
+  { id: 'foodie', emoji: '🍜', label: 'Foodie' },
+  { id: 'wellness', emoji: '🧘', label: 'Wellness' },
+  { id: 'nature', emoji: '🌿', label: 'Nature' },
+  { id: 'art', emoji: '🎨', label: 'Art & Design' },
+  { id: 'mix', emoji: '✨', label: 'Mix It All' },
 ];
 
 const ACCOMMODATION_TYPES = [
-  { id: 'hostel', emoji: '🛏️', label: 'Hostel', desc: 'Social dorms & common areas' },
-  { id: 'private', emoji: '🚪', label: 'Private Room', desc: 'Your own space, hostel or B&B' },
-  { id: 'hotel', emoji: '🏨', label: 'Budget Hotel', desc: 'More comfort, still affordable' },
-  { id: 'mix', emoji: '🎲', label: 'Mix It Up', desc: 'Whatever fits best' },
+  { id: 'hostel', emoji: '🛏️', label: 'Hostel' },
+  { id: 'private', emoji: '🚪', label: 'Private Room' },
+  { id: 'hotel', emoji: '🏨', label: 'Hotel' },
+  { id: 'airbnb', emoji: '🏡', label: 'Airbnb' },
+  { id: 'camping', emoji: '🏕️', label: 'Camping' },
+  { id: 'mix', emoji: '🎲', label: 'Mix It Up' },
 ];
 
 const GROUP_TYPES = [
-  { id: 'solo', emoji: '🎒', label: 'Solo', desc: 'Just me' },
-  { id: 'couple', emoji: '💑', label: 'Couple', desc: 'Me & a partner' },
-  { id: 'group', emoji: '👥', label: 'Group', desc: '3 or more' },
+  { id: 'solo', emoji: '🎒', label: 'Solo' },
+  { id: 'couple', emoji: '💑', label: 'Couple' },
+  { id: 'friends', emoji: '🥂', label: 'Friends' },
+  { id: 'group', emoji: '👥', label: 'Group' },
+];
+
+const TRENDING_PICKS = [
+  { emoji: '🔥', label: 'Bali', dest: 'Bali, Indonesia' },
+  { emoji: '🌸', label: 'Japan', dest: 'Tokyo, Japan' },
+  { emoji: '🏖️', label: 'Thailand', dest: 'Bangkok, Thailand' },
+  { emoji: '🍕', label: 'Italy', dest: 'Rome, Italy' },
+  { emoji: '🌊', label: 'Greece', dest: 'Santorini, Greece' },
+  { emoji: '🇵🇹', label: 'Portugal', dest: 'Lisbon, Portugal' },
+  { emoji: '🦁', label: 'Morocco', dest: 'Marrakech, Morocco' },
+  { emoji: '🌴', label: 'Maldives', dest: 'Maldives' },
+  { emoji: '🎭', label: 'Colombia', dest: 'Medellín, Colombia' },
+  { emoji: '🗽', label: 'New York', dest: 'New York City, USA' },
 ];
 
 const DAY_PRESETS = [5, 7, 10, 14, 21];
@@ -1046,23 +1067,20 @@ export default function Home() {
           {!trip && !loading && (
             <form onSubmit={handleSubmit} style={{ animation: 'fadeUp 0.4s ease' }}>
 
-              {/* ── Section 1: Where & How Long ── */}
-              <div style={{ background: C.cream, borderRadius: '20px', padding: '24px', marginBottom: '12px', border: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: '11px', fontWeight: '800', color: C.brand, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '16px' }}>Where & How Long</div>
-
-                {/* Destination autocomplete */}
-                <div style={{ marginBottom: '16px', position: 'relative' }} ref={destRef}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                    <label style={{ ...label, marginBottom: 0 }}>✈️  Destination</label>
-                    <button type="button" onClick={surpriseMe} style={{ background: 'none', border: `1px solid ${C.brand}`, borderRadius: '20px', padding: '3px 10px', fontSize: '11px', fontWeight: '700', color: C.brand, cursor: 'pointer', letterSpacing: '0.3px' }}>🎲 Surprise me</button>
-                  </div>
+              {/* ── Destination ── */}
+              <div style={{ marginBottom: '36px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', margin: 0 }}>Where to?</h3>
+                  <button type="button" onClick={surpriseMe} style={{ background: 'none', border: `1.5px solid ${C.brand}`, borderRadius: '20px', padding: '4px 12px', fontSize: '12px', fontWeight: '700', color: C.brand, cursor: 'pointer' }}>🎲 Surprise me</button>
+                </div>
+                <div style={{ position: 'relative' }} ref={destRef}>
                   <input
                     type="text"
-                    placeholder="Search destinations..."
+                    placeholder="City, country or region..."
                     value={form.destination}
                     onChange={e => { setForm({ ...form, destination: e.target.value }); setShowSuggestions(true); }}
                     onFocus={() => setShowSuggestions(true)}
-                    style={inputBase}
+                    style={{ ...inputBase, fontSize: '16px', padding: '16px 18px' }}
                     autoComplete="off"
                   />
                   {showSuggestions && filteredDests.length > 0 && (
@@ -1093,9 +1111,33 @@ export default function Home() {
                   )}
                 </div>
 
-                {/* Departure city autocomplete */}
-                <div style={{ marginBottom: '16px', position: 'relative' }} ref={depRef}>
-                  <label style={label}>🛫  Flying From <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0, color: C.subtle }}>(optional — for flight estimates)</span></label>
+                {/* Trending quick-picks */}
+                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px', marginTop: '14px', scrollbarWidth: 'none' }}>
+                  {TRENDING_PICKS.map(t => (
+                    <button key={t.dest} type="button" onClick={() => { prefill(t.dest); }}
+                      style={{ flexShrink: 0, background: form.destination === t.dest ? C.brandBg : '#F5F5F4', border: `1.5px solid ${form.destination === t.dest ? C.brand : 'transparent'}`, borderRadius: '20px', padding: '7px 14px', fontSize: '13px', fontWeight: '600', color: form.destination === t.dest ? C.brand : C.muted, cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'Inter, sans-serif', transition: 'all 0.15s' }}>
+                      {t.emoji} {t.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* ── Divider ── */}
+              <div style={{ height: '1px', background: C.border, marginBottom: '36px' }} />
+
+              {/* ── Flying From ── */}
+              <div style={{ marginBottom: '36px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', marginBottom: '14px' }}>Flying from?</h3>
+                <div style={{ position: 'relative' }} ref={depRef}>
+                  <input
+                    type="text"
+                    placeholder="Your departure city (optional)"
+                    value={form.departureCity}
+                    onChange={e => { setForm({ ...form, departureCity: e.target.value }); setShowDepSuggestions(true); }}
+                    onFocus={() => setShowDepSuggestions(true)}
+                    style={{ ...inputBase, fontSize: '16px', padding: '16px 18px' }}
+                    autoComplete="off"
+                  />
                   <input
                     type="text"
                     placeholder="New York, London, Sydney..."
@@ -1134,175 +1176,146 @@ export default function Home() {
 
                 {/* Travel dates — month + year */}
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={label}>📅  When Are You Going? <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0, color: C.subtle }}>(optional)</span></label>
+                  <label style={label}>📅 When? <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0, color: C.subtle }}>(optional)</span></label>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <select
-                      value={form.travelMonth}
-                      onChange={e => setForm({ ...form, travelMonth: e.target.value })}
-                      style={{ ...inputBase, color: form.travelMonth ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}
-                    >
+                    <select value={form.travelMonth} onChange={e => setForm({ ...form, travelMonth: e.target.value })} style={{ ...inputBase, color: form.travelMonth ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}>
                       <option value="">Month</option>
-                      {['January','February','March','April','May','June','July','August','September','October','November','December'].map(m => (
-                        <option key={m} value={m}>{m}</option>
-                      ))}
+                      {['January','February','March','April','May','June','July','August','September','October','November','December'].map(m => <option key={m} value={m}>{m}</option>)}
                     </select>
-                    <select
-                      value={form.travelYear}
-                      onChange={e => setForm({ ...form, travelYear: e.target.value })}
-                      style={{ ...inputBase, color: form.travelYear ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}
-                    >
+                    <select value={form.travelYear} onChange={e => setForm({ ...form, travelYear: e.target.value })} style={{ ...inputBase, color: form.travelYear ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}>
                       <option value="">Year</option>
-                      {[2025, 2026, 2027].map(y => (
-                        <option key={y} value={y}>{y}</option>
-                      ))}
+                      {[2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
                     </select>
-                  </div>
-                </div>
-
-                {/* Days quick-select */}
-                <div>
-                  <label style={label}>🔢  How Many Days?</label>
-                  <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
-                    {DAY_PRESETS.map(d => (
-                      <button
-                        key={d}
-                        type="button"
-                        onClick={() => setForm({ ...form, days: String(d) })}
-                        style={{
-                          padding: '8px 16px', borderRadius: '10px', border: `1.5px solid ${form.days === String(d) ? C.brand : '#E7E5E4'}`,
-                          background: form.days === String(d) ? C.brandBg : '#fff',
-                          color: form.days === String(d) ? C.brand : C.muted,
-                          fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-                          transition: 'all 0.15s',
-                        }}
-                      >
-                        {d}d
-                      </button>
-                    ))}
-                    <input
-                      type="number"
-                      placeholder="Custom"
-                      value={DAY_PRESETS.includes(Number(form.days)) ? '' : form.days}
-                      onChange={e => setForm({ ...form, days: e.target.value })}
-                      style={{ ...inputBase, width: '90px', padding: '8px 12px', fontSize: '14px' }}
-                      min="1" max="90"
-                    />
                   </div>
                 </div>
               </div>
 
-              {/* ── Section 2: Budget ── */}
-              <div style={{ background: C.cream, borderRadius: '20px', padding: '24px', marginBottom: '12px', border: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: '11px', fontWeight: '800', color: C.brand, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '16px' }}>Your Budget</div>
-                <label style={label}>💰  Total Budget (USD)</label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="number"
-                    placeholder="2000"
-                    value={form.budget}
-                    onChange={e => setForm({ ...form, budget: e.target.value })}
-                    style={{ ...inputBase, paddingRight: perDay ? '110px' : '18px' }}
-                  />
-                  {perDay && (
-                    <span style={{
-                      position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)',
-                      fontSize: '13px', fontWeight: '600', color: C.brand,
-                    }}>
-                      ≈ ${perDay}/day
-                    </span>
-                  )}
+              {/* ── Divider ── */}
+              <div style={{ height: '1px', background: C.border, marginBottom: '36px' }} />
+
+              {/* ── How Long ── */}
+              <div style={{ marginBottom: '36px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', marginBottom: '14px' }}>How long?</h3>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {DAY_PRESETS.map(d => (
+                    <button key={d} type="button" onClick={() => setForm({ ...form, days: String(d) })} style={{
+                      padding: '10px 20px', borderRadius: '24px',
+                      border: `2px solid ${form.days === String(d) ? C.brand : '#E7E5E4'}`,
+                      background: form.days === String(d) ? C.brand : '#fff',
+                      color: form.days === String(d) ? '#fff' : C.muted,
+                      fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                      transition: 'all 0.15s',
+                    }}>{d} days</button>
+                  ))}
+                  <input type="number" placeholder="Other" value={DAY_PRESETS.includes(Number(form.days)) ? '' : form.days} onChange={e => setForm({ ...form, days: e.target.value })} style={{ ...inputBase, width: '90px', padding: '10px 14px', fontSize: '14px', borderRadius: '24px' }} min="1" max="90" />
                 </div>
-                <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                  {[['🎒', 'Backpacker', '1000'], ['🏨', 'Standard', '2000'], ['✨', 'Comfort', '3500']].map(([emoji, label2, val]) => (
+              </div>
+
+              {/* ── Divider ── */}
+              <div style={{ height: '1px', background: C.border, marginBottom: '36px' }} />
+
+              {/* ── Budget ── */}
+              <div style={{ marginBottom: '36px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', margin: 0 }}>What's your budget?</h3>
+                  {perDay && <span style={{ fontSize: '14px', fontWeight: '700', color: C.brand }}>≈ ${perDay}/day</span>}
+                </div>
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
+                  {[['🎒', 'Backpacker', '1000'], ['🏡', 'Standard', '2000'], ['✨', 'Comfort', '3500'], ['💎', 'Luxury', '6000']].map(([emoji, lbl, val]) => (
                     <button key={val} type="button" onClick={() => setForm({ ...form, budget: val })} style={{
-                      flex: 1, padding: '8px 6px', borderRadius: '10px',
-                      border: `1.5px solid ${form.budget === val ? C.brand : '#E7E5E4'}`,
-                      background: form.budget === val ? C.brandBg : '#fff',
-                      color: form.budget === val ? C.brand : C.muted,
-                      fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-                      textAlign: 'center', transition: 'all 0.15s',
+                      flex: 1, padding: '14px 8px', borderRadius: '16px',
+                      border: `2px solid ${form.budget === val ? C.brand : '#E7E5E4'}`,
+                      background: form.budget === val ? C.brand : '#fff',
+                      color: form.budget === val ? '#fff' : C.muted,
+                      fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                      textAlign: 'center', transition: 'all 0.15s', lineHeight: '1.4',
                     }}>
-                      {emoji} {label2}
+                      <div style={{ fontSize: '20px', marginBottom: '4px' }}>{emoji}</div>
+                      {lbl}
                     </button>
                   ))}
                 </div>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '15px', fontWeight: '700', color: C.muted }}>$</span>
+                  <input type="number" placeholder="Custom amount" value={form.budget} onChange={e => setForm({ ...form, budget: e.target.value })} style={{ ...inputBase, paddingLeft: '32px' }} />
+                </div>
               </div>
 
-              {/* ── Section 3: Trip Style ── */}
-              <div style={{ background: C.cream, borderRadius: '20px', padding: '24px', marginBottom: '12px', border: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: '11px', fontWeight: '800', color: C.brand, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '20px' }}>Trip Style</div>
+              {/* ── Divider ── */}
+              <div style={{ height: '1px', background: C.border, marginBottom: '36px' }} />
 
-                {/* Vibe — multi-select */}
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label style={{ ...label, marginBottom: 0 }}>🎯  Your Vibe</label>
-                    <span style={{ fontSize: '11px', color: C.muted, fontWeight: '500' }}>Pick one or more</span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                    {VIBES.map(v => {
-                      const on = form.vibe.includes(v.id);
-                      return (
-                        <button key={v.id} type="button" onClick={() => toggleMulti('vibe', v.id)} style={{
-                          background: on ? C.brandBg : '#fff',
-                          border: `1.5px solid ${on ? C.brand : '#E7E5E4'}`,
-                          borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
-                          textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
-                          position: 'relative',
-                        }}>
-                          {on && <span style={{ position: 'absolute', top: '8px', right: '10px', fontSize: '11px', color: C.brand, fontWeight: '800' }}>✓</span>}
-                          <div style={{ fontSize: '18px', marginBottom: '3px' }}>{v.emoji}</div>
-                          <div style={{ fontSize: '13px', fontWeight: '700', color: on ? C.brand : C.text, marginBottom: '2px' }}>{v.label}</div>
-                          <div style={{ fontSize: '11px', color: C.muted }}>{v.desc}</div>
-                        </button>
-                      );
-                    })}
-                  </div>
+              {/* ── Vibe ── */}
+              <div style={{ marginBottom: '36px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', margin: 0 }}>What's your vibe?</h3>
+                  <span style={{ fontSize: '12px', color: C.muted }}>Pick any</span>
                 </div>
-
-                {/* Accommodation — multi-select */}
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label style={{ ...label, marginBottom: 0 }}>🏠  Where I'm Staying</label>
-                    <span style={{ fontSize: '11px', color: C.muted, fontWeight: '500' }}>Pick one or more</span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                    {ACCOMMODATION_TYPES.map(a => {
-                      const on = form.accommodation.includes(a.id);
-                      return (
-                        <button key={a.id} type="button" onClick={() => toggleMulti('accommodation', a.id)} style={{
-                          background: on ? C.brandBg : '#fff',
-                          border: `1.5px solid ${on ? C.brand : '#E7E5E4'}`,
-                          borderRadius: '14px', padding: '12px 14px', cursor: 'pointer',
-                          textAlign: 'left', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
-                          position: 'relative',
-                        }}>
-                          {on && <span style={{ position: 'absolute', top: '8px', right: '10px', fontSize: '11px', color: C.brand, fontWeight: '800' }}>✓</span>}
-                          <div style={{ fontSize: '18px', marginBottom: '3px' }}>{a.emoji}</div>
-                          <div style={{ fontSize: '13px', fontWeight: '700', color: on ? C.brand : C.text, marginBottom: '2px' }}>{a.label}</div>
-                          <div style={{ fontSize: '11px', color: C.muted }}>{a.desc}</div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Traveling as */}
-                <div>
-                  <label style={label}>👤  Traveling As</label>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    {GROUP_TYPES.map(g => (
-                      <button key={g.id} type="button" onClick={() => setForm({ ...form, group: g.id })} style={{
-                        flex: 1, background: form.group === g.id ? C.brandBg : '#fff',
-                        border: `1.5px solid ${form.group === g.id ? C.brand : '#E7E5E4'}`,
-                        borderRadius: '14px', padding: '12px 10px', cursor: 'pointer',
-                        textAlign: 'center', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {VIBES.map(v => {
+                    const on = form.vibe.includes(v.id);
+                    return (
+                      <button key={v.id} type="button" onClick={() => toggleMulti('vibe', v.id)} style={{
+                        padding: '10px 18px', borderRadius: '24px', cursor: 'pointer',
+                        border: `2px solid ${on ? C.brand : '#E7E5E4'}`,
+                        background: on ? C.brand : '#fff',
+                        color: on ? '#fff' : C.muted,
+                        fontSize: '14px', fontWeight: '600', fontFamily: 'Inter, sans-serif',
+                        transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: '6px',
                       }}>
-                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>{g.emoji}</div>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: form.group === g.id ? C.brand : C.text }}>{g.label}</div>
-                        <div style={{ fontSize: '11px', color: C.muted }}>{g.desc}</div>
+                        <span>{v.emoji}</span><span>{v.label}</span>
                       </button>
-                    ))}
-                  </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* ── Divider ── */}
+              <div style={{ height: '1px', background: C.border, marginBottom: '36px' }} />
+
+              {/* ── Accommodation ── */}
+              <div style={{ marginBottom: '36px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', margin: 0 }}>Where are you staying?</h3>
+                  <span style={{ fontSize: '12px', color: C.muted }}>Pick any</span>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {ACCOMMODATION_TYPES.map(a => {
+                    const on = form.accommodation.includes(a.id);
+                    return (
+                      <button key={a.id} type="button" onClick={() => toggleMulti('accommodation', a.id)} style={{
+                        padding: '10px 18px', borderRadius: '24px', cursor: 'pointer',
+                        border: `2px solid ${on ? C.brand : '#E7E5E4'}`,
+                        background: on ? C.brand : '#fff',
+                        color: on ? '#fff' : C.muted,
+                        fontSize: '14px', fontWeight: '600', fontFamily: 'Inter, sans-serif',
+                        transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: '6px',
+                      }}>
+                        <span>{a.emoji}</span><span>{a.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* ── Divider ── */}
+              <div style={{ height: '1px', background: C.border, marginBottom: '36px' }} />
+
+              {/* ── Who's going ── */}
+              <div style={{ marginBottom: '36px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', marginBottom: '14px' }}>Who's going?</h3>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  {GROUP_TYPES.map(g => (
+                    <button key={g.id} type="button" onClick={() => setForm({ ...form, group: g.id })} style={{
+                      flex: 1, padding: '16px 10px', borderRadius: '16px', cursor: 'pointer',
+                      border: `2px solid ${form.group === g.id ? C.brand : '#E7E5E4'}`,
+                      background: form.group === g.id ? C.brand : '#fff',
+                      color: form.group === g.id ? '#fff' : C.muted,
+                      textAlign: 'center', transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
+                    }}>
+                      <div style={{ fontSize: '22px', marginBottom: '6px' }}>{g.emoji}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '700' }}>{g.label}</div>
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -1311,8 +1324,8 @@ export default function Home() {
                 width: '100%', background: C.brand, border: 'none',
                 borderRadius: '16px', padding: '20px', fontSize: '17px', fontWeight: '800',
                 color: '#fff', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-                boxShadow: `0 8px 28px rgba(184,150,46,0.4)`,
-                letterSpacing: '0.2px',
+                boxShadow: `0 8px 32px rgba(212,82,42,0.35)`,
+                letterSpacing: '0.2px', marginTop: '8px',
               }}>
                 Build My Trip ✈️
               </button>
