@@ -695,6 +695,8 @@ export default function Home() {
         @media (max-width: 700px) {
           .email-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .manifesto-cols { flex-direction: column !important; gap: 16px !important; }
+          .how-it-works-grid { grid-template-columns: 1fr !important; }
+          .how-it-works-grid > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 32px 0 !important; }
         }
       `}</style>
 
@@ -999,14 +1001,16 @@ export default function Home() {
 
       {/* ── SAMPLE TRIPS ── */}
       <section style={{ padding: '0 24px 96px', maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{ fontSize: '12px', fontWeight: '800', color: C.brand, letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
-            ✦ Real trip examples
+        <div style={{ marginBottom: '48px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <p style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '3px', color: C.brand, textTransform: 'uppercase', marginBottom: '10px' }}>Real trip examples</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(30px, 4vw, 48px)', fontWeight: '900', color: C.text, letterSpacing: '-1.5px', lineHeight: 1.05 }}>
+              What a Voya trip looks like
+            </h2>
           </div>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: '900', color: C.text, marginBottom: '12px', letterSpacing: '-0.5px' }}>
-            See what a Voya trip looks like
-          </h2>
-          <p style={{ color: C.muted, fontSize: '16px', maxWidth: '360px', margin: '0 auto' }}>Tap any card to instantly generate your own version</p>
+          <p style={{ color: C.muted, fontSize: '15px', maxWidth: '240px', lineHeight: '1.6', textAlign: 'right' }}>
+            Tap any card to generate your own version instantly
+          </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '22px' }}>
@@ -1111,30 +1115,34 @@ export default function Home() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section style={{ background: C.dark, padding: '80px 24px' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 4vw, 36px)', fontWeight: '900', color: '#fff', marginBottom: '12px', letterSpacing: '-0.5px' }}>
-              How it works
+      <section style={{ background: C.dark, padding: '96px 40px' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '56px' }}>
+            <h2 style={{
+              fontFamily: 'Playfair Display, serif',
+              fontSize: 'clamp(38px, 5vw, 62px)',
+              fontWeight: '900', color: '#fff',
+              letterSpacing: '-2px', lineHeight: 1,
+            }}>
+              How it works.
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px' }}>Three steps. Ten seconds. One real trip.</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px' }}>
-            {HOW_IT_WORKS.map(s => (
-              <div key={s.step} style={{ textAlign: 'center' }}>
+          <div className="how-it-works-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            {HOW_IT_WORKS.map((s, i) => (
+              <div key={s.step} style={{
+                padding: '40px 32px',
+                borderRight: i < 2 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+              }}>
                 <div style={{
-                  width: '64px', height: '64px', background: 'rgba(184,150,46,0.15)',
-                  borderRadius: '18px', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', fontSize: '30px', margin: '0 auto 18px',
-                  border: `1px solid rgba(184,150,46,0.3)`,
+                  fontFamily: 'Playfair Display, serif',
+                  fontSize: '88px', fontWeight: '900', fontStyle: 'italic',
+                  color: 'rgba(212,82,42,0.13)', lineHeight: 0.9,
+                  marginBottom: '28px', userSelect: 'none',
                 }}>
-                  {s.emoji}
+                  {s.step}
                 </div>
-                <div style={{ fontSize: '11px', fontWeight: '800', color: C.brandLt, textTransform: 'uppercase', letterSpacing: '1.4px', marginBottom: '8px' }}>
-                  Step {s.step}
-                </div>
-                <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#fff', marginBottom: '8px' }}>{s.title}</h3>
-                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: '1.65' }}>{s.desc}</p>
+                <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '10px', letterSpacing: '-0.2px' }}>{s.title}</h3>
+                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.42)', lineHeight: '1.75' }}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -1142,41 +1150,43 @@ export default function Home() {
       </section>
 
       {/* ── BUILT FOR YOU ── */}
-      <section style={{ padding: '80px 24px', maxWidth: '720px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '44px' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 4vw, 36px)', fontWeight: '900', color: C.text, marginBottom: '12px', letterSpacing: '-0.5px' }}>
-            Not your parents' travel guide
+      <section style={{ padding: '96px 40px', borderTop: `1px solid ${C.border}` }}>
+        <div style={{ maxWidth: '960px' }}>
+          <h2 style={{
+            fontFamily: 'Playfair Display, serif',
+            fontSize: 'clamp(36px, 5vw, 58px)',
+            fontWeight: '900', color: C.text,
+            letterSpacing: '-2px', lineHeight: 1.05,
+            marginBottom: '64px',
+          }}>
+            Not your parents'<br />
+            <span style={{ fontStyle: 'italic', color: C.brand }}>travel guide.</span>
           </h2>
-          <p style={{ color: C.muted, fontSize: '16px', maxWidth: '400px', margin: '0 auto' }}>
-            Built for the way 18–30 year olds actually travel
-          </p>
-        </div>
-        <div style={{ display: 'grid', gap: '14px' }}>
-          {[
-            { emoji: '💸', title: 'Real budgets, real plans', desc: "We don't suggest $400/night hotels. Every plan is built around what you actually have to spend — hostels, cheap eats, free activities included." },
-            { emoji: '🤝', title: 'The Social Score', desc: "Every trip gets a Social Score — how easy it is to meet other travelers at your destination. Know before you book whether you're headed somewhere electric or somewhere solo." },
-            { emoji: '📍', title: 'Peer intelligence, not tourist traps', desc: "Recommendations filtered through what 18-30 travelers actually rate. Not TripAdvisor reviews from families looking for quiet restaurants." },
-          ].map(item => (
-            <div key={item.title} style={{
-              display: 'flex', gap: '18px', padding: '22px 24px',
-              background: '#fff', borderRadius: '18px',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-              border: `1px solid ${C.border}`, alignItems: 'flex-start',
-            }}>
-              <div style={{
-                width: '50px', height: '50px', background: C.brandBg,
-                borderRadius: '14px', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', fontSize: '24px', flexShrink: 0,
-                border: `1px solid ${C.border}`,
+          <div style={{ borderTop: `1px solid ${C.border}` }}>
+            {[
+              { num: '01', title: 'Real budgets, real plans', desc: "We don't suggest $400/night hotels. Every plan is built around what you actually have to spend — hostels, cheap eats, free activities included." },
+              { num: '02', title: 'The Social Score', desc: "Every trip gets a Social Score — how easy it is to meet other travelers at your destination. Know before you book whether you're headed somewhere electric or somewhere solo." },
+              { num: '03', title: 'Peer intelligence, not tourist traps', desc: "Recommendations filtered through what 18–30 travelers actually rate. Not TripAdvisor reviews from families looking for quiet restaurants." },
+            ].map(item => (
+              <div key={item.num} style={{
+                display: 'grid', gridTemplateColumns: '72px 1fr',
+                gap: '32px', padding: '36px 0',
+                borderBottom: `1px solid ${C.border}`, alignItems: 'flex-start',
               }}>
-                {item.emoji}
+                <div style={{
+                  fontFamily: 'Playfair Display, serif', fontSize: '42px',
+                  fontWeight: '900', fontStyle: 'italic',
+                  color: C.border, lineHeight: 1, userSelect: 'none',
+                }}>
+                  {item.num}
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '19px', fontWeight: '800', color: C.text, marginBottom: '10px', letterSpacing: '-0.3px' }}>{item.title}</h3>
+                  <p style={{ fontSize: '15px', color: C.muted, lineHeight: '1.75', maxWidth: '540px' }}>{item.desc}</p>
+                </div>
               </div>
-              <div>
-                <h3 style={{ fontSize: '16px', fontWeight: '800', color: C.text, marginBottom: '6px' }}>{item.title}</h3>
-                <p style={{ fontSize: '14px', color: C.muted, lineHeight: '1.65' }}>{item.desc}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
