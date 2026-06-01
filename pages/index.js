@@ -1840,18 +1840,58 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: C.dark, padding: '48px 24px', textAlign: 'center' }}>
-        <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: '900', color: C.brandLt }}>voya</span>
-        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.3)', marginTop: '10px', marginBottom: '20px' }}>
-          Built for the generation that actually travels
-        </p>
-        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)' }}>
-          Photos by{' '}
-          {['Niklas Weiss', 'Charlie M', 'Jezael Melgoza', 'Jordan Steranka', 'Aayush Gupta'].map((name, i, arr) => (
-            <span key={name}>{name}{i < arr.length - 1 ? ', ' : ''}</span>
-          ))}{' '}& more — via{' '}
-          <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'underline' }}>Unsplash</a>
-        </p>
+      <footer style={{ background: C.dark, padding: '72px 40px 48px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          {/* Top row */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '40px', marginBottom: '56px' }}>
+            {/* Brand */}
+            <div>
+              <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: '900', fontStyle: 'italic', color: C.brandLt, lineHeight: 1, marginBottom: '10px' }}>voya</div>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.28)', lineHeight: '1.65', maxWidth: '220px' }}>
+                Trip planning for the generation that actually goes.
+              </p>
+            </div>
+            {/* Links */}
+            <div style={{ display: 'flex', gap: '64px', flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Explore</div>
+                {[
+                  { label: 'Plan a trip', action: scrollToPlanner },
+                ].map(l => (
+                  <div key={l.label} style={{ marginBottom: '10px' }}>
+                    <button onClick={l.action} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', color: 'rgba(255,255,255,0.45)', fontFamily: 'Inter, sans-serif', padding: 0 }}>
+                      {l.label}
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Follow</div>
+                {[
+                  { label: '@govoya on TikTok', href: 'https://tiktok.com/@govoya' },
+                  { label: '@govoya on Instagram', href: 'https://instagram.com/govoya' },
+                ].map(l => (
+                  <div key={l.label} style={{ marginBottom: '10px' }}>
+                    <a href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
+                      {l.label}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          {/* Bottom row */}
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.18)' }}>
+              © 2025 Voya. Free to use.
+            </p>
+            <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.16)' }}>
+              Photos via{' '}
+              <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.28)', textDecoration: 'underline' }}>Unsplash</a>
+              {' '}— Niklas Weiss, Charlie M, Jordan Steranka & more
+            </p>
+          </div>
+        </div>
       </footer>
     </>
   );
