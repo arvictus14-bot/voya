@@ -691,9 +691,11 @@ export default function Home() {
         }
         .sample-card:hover { transform: translateY(-5px); box-shadow: 0 24px 56px rgba(0,0,0,0.2) !important; }
         .sample-card:hover .sample-cta { background: #D4522A !important; color: #fff !important; border-color: #D4522A !important; }
-        .faq-item { border-bottom: 1px solid #F0EAE0; }
-        .faq-item:last-child { border-bottom: none; }
         .hero-photo { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 1.4s ease; }
+        @media (max-width: 700px) {
+          .email-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .manifesto-cols { flex-direction: column !important; gap: 16px !important; }
+        }
       `}</style>
 
       {/* ── NAV ── */}
@@ -765,7 +767,7 @@ export default function Home() {
               border: 'none', borderRadius: '14px', padding: '18px 44px',
               fontSize: '17px', fontWeight: '800', color: '#fff', cursor: 'pointer',
               fontFamily: 'Inter, sans-serif',
-              boxShadow: `0 8px 32px rgba(184,150,46,0.45)`,
+              boxShadow: `0 8px 32px rgba(212,82,42,0.4)`,
               letterSpacing: '0.2px',
             }}>
               Build my trip — it's free →
@@ -795,31 +797,69 @@ export default function Home() {
       </section>
 
       {/* ── STATS BAR ── */}
-      <div style={{ background: C.dark, padding: '24px' }}>
-        <div style={{ maxWidth: '680px', margin: '0 auto', display: 'flex', justifyContent: 'center', gap: '48px', flexWrap: 'wrap' }}>
+      <div style={{ background: C.dark, borderBottom: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', alignItems: 'stretch' }}>
           {[
             { num: '4,200+', label: 'Trips planned' },
-            { num: '60+', label: 'Countries covered' },
-            { num: '18–30', label: 'Built for you' },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: '900', color: C.brandLt }}>{s.num}</div>
-              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontWeight: '500', marginTop: '2px' }}>{s.label}</div>
+            { num: '60+', label: 'Countries' },
+            { num: '10s', label: 'To build your trip' },
+            { num: 'Free', label: 'Always' },
+          ].map((s, i) => (
+            <div key={s.label} style={{
+              flex: 1, padding: '28px 0', textAlign: 'center',
+              borderRight: i < 3 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+            }}>
+              <div style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: '900', fontStyle: 'italic', color: C.brandLt, lineHeight: 1 }}>{s.num}</div>
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontWeight: '600', marginTop: '6px', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* ── MANIFESTO ── */}
+      <section style={{ padding: '100px 40px 96px', borderBottom: `1px solid ${C.border}` }}>
+        <div style={{ maxWidth: '960px' }}>
+          <p style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '3px', color: C.brand, textTransform: 'uppercase', marginBottom: '28px' }}>
+            Our take
+          </p>
+          <h2 style={{
+            fontFamily: 'Playfair Display, serif',
+            fontSize: 'clamp(38px, 6vw, 72px)',
+            fontWeight: '900', lineHeight: '1.08',
+            letterSpacing: '-2.5px', color: C.text,
+            marginBottom: '0',
+          }}>
+            Travel isn't a reward.<br />
+            <span style={{ color: C.brand, fontStyle: 'italic' }}>It's the whole point.</span>
+          </h2>
+          <div style={{ marginTop: '36px', maxWidth: '500px' }}>
+            <p style={{ fontSize: '18px', color: C.muted, lineHeight: '1.75', marginBottom: '28px' }}>
+              You don't need to wait until you're 45 with a 2-week PTO window. The world is open right now — Voya builds your trip in 10 seconds, flat.
+            </p>
+            <div style={{ display: 'flex', gap: '32px' }}>
+              <div style={{ borderLeft: `3px solid ${C.brand}`, paddingLeft: '16px' }}>
+                <div style={{ fontSize: '13px', fontWeight: '700', color: C.text, marginBottom: '3px' }}>Real hostels & hotels</div>
+                <div style={{ fontSize: '13px', color: C.muted }}>Actual property names, not "budget hotel"</div>
+              </div>
+              <div style={{ borderLeft: `3px solid ${C.brand}`, paddingLeft: '16px' }}>
+                <div style={{ fontSize: '13px', fontWeight: '700', color: C.text, marginBottom: '3px' }}>Social scene ratings</div>
+                <div style={{ fontSize: '13px', color: C.muted }}>Know before you book if it's your crowd</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── DESTINATION GRID ── */}
       <section style={{ padding: '80px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{ fontSize: '12px', fontWeight: '800', color: C.brand, letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
-            ✦ Explore the world
+        <div style={{ marginBottom: '40px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <p style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '3px', color: C.brand, textTransform: 'uppercase', marginBottom: '10px' }}>Explore</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: '900', color: C.text, letterSpacing: '-1.5px', lineHeight: 1.05 }}>
+              Pick your next escape
+            </h2>
           </div>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: '900', color: C.text, marginBottom: '14px', letterSpacing: '-0.5px' }}>
-            Pick your next escape
-          </h2>
-          <p style={{ color: C.muted, fontSize: '16px', maxWidth: '360px', margin: '0 auto', lineHeight: '1.6' }}>
+          <p style={{ color: C.muted, fontSize: '15px', maxWidth: '260px', lineHeight: '1.6', textAlign: 'right' }}>
             Tap any destination — we'll build your full trip in seconds
           </p>
         </div>
@@ -1141,89 +1181,97 @@ export default function Home() {
       </section>
 
       {/* ── EMAIL CAPTURE ── */}
-      <section style={{ background: C.dark, padding: '80px 24px' }}>
-        <div style={{ maxWidth: '520px', margin: '0 auto', textAlign: 'center' }}>
-          {!emailSubmitted ? (
-            <>
-              <div style={{ fontSize: '38px', marginBottom: '18px', animation: 'float 3s ease-in-out infinite' }}>📬</div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 4vw, 32px)', fontWeight: '900', color: '#fff', marginBottom: '12px', letterSpacing: '-0.5px' }}>
-                Get weekly trip drops
+      <section style={{ background: C.dark, padding: '100px 40px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        {!emailSubmitted ? (
+          <div className="email-grid" style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+            <div>
+              <p style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '3px', color: 'rgba(212,82,42,0.7)', textTransform: 'uppercase', marginBottom: '20px' }}>Weekly drops</p>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(30px, 4vw, 54px)', fontWeight: '900', lineHeight: '1.08', color: '#fff', letterSpacing: '-1.5px', marginBottom: '20px' }}>
+                New trips in<br />your inbox.
               </h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px', marginBottom: '32px', lineHeight: '1.65' }}>
-                New destination guides for 18–30 travelers, every week. Real budgets. Real hostels. Zero fluff.
+              <p style={{ color: 'rgba(255,255,255,0.42)', fontSize: '16px', lineHeight: '1.7', borderLeft: '2px solid rgba(212,82,42,0.4)', paddingLeft: '16px' }}>
+                Real budgets. Real hostels. Zero fluff — every week for 18–30 travelers who actually go.
               </p>
-              <form onSubmit={handleEmail} style={{ display: 'flex', gap: '10px', maxWidth: '420px', margin: '0 auto' }}>
+            </div>
+            <div>
+              <form onSubmit={handleEmail} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <input
                   type="email"
                   placeholder="your@email.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   style={{
-                    flex: 1, background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.12)',
-                    borderRadius: '12px', padding: '14px 18px', fontSize: '15px',
+                    background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '12px', padding: '16px 20px', fontSize: '16px',
                     color: '#fff', fontFamily: 'Inter, sans-serif',
                   }}
                 />
                 <button type="submit" style={{
                   background: C.brand, border: 'none', borderRadius: '12px',
-                  padding: '14px 22px', fontSize: '14px', fontWeight: '800',
+                  padding: '16px', fontSize: '15px', fontWeight: '800',
                   color: '#fff', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.2px',
                 }}>
-                  Send me trips
+                  Send me trips →
                 </button>
               </form>
-              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', marginTop: '14px' }}>No spam. Unsubscribe any time.</p>
-            </>
-          ) : (
-            <div>
-              <div style={{ fontSize: '52px', marginBottom: '18px' }}>🎉</div>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', fontWeight: '900', color: '#fff', marginBottom: '10px' }}>You're in.</h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px' }}>First drop lands in your inbox this week.</p>
+              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)', marginTop: '12px' }}>No spam. Unsubscribe any time.</p>
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: '900', color: '#fff', letterSpacing: '-1.5px' }}>
+              You're in. 🌍
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '18px', marginTop: '12px' }}>First drop lands in your inbox this week.</p>
+          </div>
+        )}
       </section>
 
       {/* ── FAQ ── */}
-      <section style={{ padding: '80px 24px', maxWidth: '640px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '44px' }}>
-          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 4vw, 36px)', fontWeight: '900', color: C.text, letterSpacing: '-0.5px' }}>
-            Questions
+      <section style={{ padding: '100px 40px', maxWidth: '860px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '40px', marginBottom: '64px', flexWrap: 'wrap' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(38px, 5vw, 64px)', fontWeight: '900', color: C.text, letterSpacing: '-2px', lineHeight: 1, flexShrink: 0 }}>
+            Questions.
           </h2>
+          <p style={{ fontSize: '15px', color: C.muted, lineHeight: '1.65', maxWidth: '320px' }}>
+            Everything you want to know before you hit build.
+          </p>
         </div>
-        <div style={{ background: '#fff', borderRadius: '20px', border: `1px solid ${C.border}`, overflow: 'hidden', boxShadow: '0 2px 16px rgba(0,0,0,0.04)' }}>
+        <div>
           {FAQS.map((faq, i) => (
-            <div key={i} className="faq-item">
+            <div key={i} style={{ borderTop: `1px solid ${C.border}`, paddingTop: '28px', paddingBottom: '28px' }}>
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 style={{
                   width: '100%', display: 'flex', justifyContent: 'space-between',
-                  alignItems: 'center', padding: '20px 24px', background: 'transparent',
-                  border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'Inter, sans-serif',
+                  alignItems: 'flex-start', background: 'transparent',
+                  border: 'none', cursor: 'pointer', textAlign: 'left', padding: 0,
                 }}
               >
-                <span style={{ fontSize: '15px', fontWeight: '700', color: C.text }}>{faq.q}</span>
-                <span style={{ fontSize: '20px', color: C.brand, fontWeight: '800', flexShrink: 0, marginLeft: '12px', transition: 'transform 0.2s', transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0)' }}>+</span>
+                <span style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(17px, 2vw, 22px)', fontWeight: '700', color: C.text, lineHeight: '1.3', paddingRight: '32px' }}>{faq.q}</span>
+                <span style={{ fontSize: '22px', color: C.brand, fontWeight: '300', flexShrink: 0, transition: 'transform 0.2s', transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0)', marginTop: '2px' }}>+</span>
               </button>
               {openFaq === i && (
-                <div style={{ padding: '0 24px 20px', animation: 'fadeUp 0.2s ease' }}>
-                  <p style={{ fontSize: '14px', color: C.muted, lineHeight: '1.7' }}>{faq.a}</p>
+                <div style={{ marginTop: '16px', animation: 'fadeUp 0.2s ease' }}>
+                  <p style={{ fontSize: '15px', color: C.muted, lineHeight: '1.75', maxWidth: '620px' }}>{faq.a}</p>
                 </div>
               )}
             </div>
           ))}
+          <div style={{ borderTop: `1px solid ${C.border}` }} />
         </div>
       </section>
 
       {/* ── PLANNER ── */}
       <section ref={plannerRef} style={{ background: '#fff', borderTop: `1px solid ${C.border}`, padding: '80px 24px 100px' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: '900', color: C.text, marginBottom: '10px', letterSpacing: '-1.5px' }}>
+          <div style={{ marginBottom: '48px' }}>
+            <p style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '3px', color: C.brand, textTransform: 'uppercase', marginBottom: '14px' }}>Trip planner</p>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(34px, 5vw, 52px)', fontWeight: '900', color: C.text, letterSpacing: '-2px', lineHeight: '1.05', marginBottom: '12px' }}>
               Where are you going?
             </h2>
-            <p style={{ color: C.muted, fontSize: '16px' }}>Tell us your details — we handle the rest</p>
+            <p style={{ color: C.muted, fontSize: '16px', lineHeight: '1.6' }}>Give us the details — we handle everything else.</p>
           </div>
 
           {!trip && !loading && (

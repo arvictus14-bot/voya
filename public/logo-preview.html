@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 400px;
+      height: 400px;
+      background: #0F0B06;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-top: -16px;
+    }
+    .v-block {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+    }
+    .v-letter {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 248px;
+      color: #D4522A;
+      display: block;
+      line-height: 0.88;
+    }
+    .arc-svg {
+      position: absolute;
+      top: 14px;
+      right: -28px;
+      pointer-events: none;
+    }
+    .tagline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 22px;
+      color: rgba(212, 82, 42, 0.38);
+      letter-spacing: 10px;
+      text-transform: lowercase;
+      margin-top: 4px;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="v-block">
+      <span class="v-letter">V</span>
+      <svg class="arc-svg" width="72" height="68" viewBox="0 0 72 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- flight path arc -->
+        <path d="M 4 64 C 16 42 40 18 68 6" stroke="#D4522A" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+        <!-- plane dot -->
+        <circle cx="68" cy="6" r="3.8" fill="#D4522A" opacity="0.75"/>
+        <!-- small dash trail -->
+        <circle cx="56" cy="11" r="1.4" fill="#D4522A" opacity="0.35"/>
+        <circle cx="44" cy="19" r="1" fill="#D4522A" opacity="0.22"/>
+      </svg>
+    </div>
+    <div class="tagline">voya</div>
+  </div>
+</body>
+</html>

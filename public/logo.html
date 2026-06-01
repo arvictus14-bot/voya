@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; }
+    html, body { width: 100vw; height: 100vh; background: #0F0B06; overflow: hidden; }
+    svg { display: block; width: 100vw; height: 100vh; }
+  </style>
+</head>
+<body>
+  <svg id="logo" width="100%" height="100%" viewBox="0 0 980 980" xmlns="http://www.w3.org/2000/svg">
+    <rect width="980" height="980" fill="#0F0B06"/>
+
+    <!-- V — BBox confirmed: x=293, y=139, w=395, h=653, cx=490, cy=465 -->
+    <text id="vtext" x="446" y="698"
+      font-family="'Playfair Display', Georgia, serif"
+      font-style="italic"
+      font-weight="900"
+      font-size="490"
+      fill="#D4522A"
+      text-anchor="middle">V</text>
+
+    <!-- Flight arc — launches from V right-arm visual top (672,318) sweeping up-right -->
+    <path d="M 672 320 C 750 300 830 210 862 106"
+          stroke="#D4522A" stroke-width="5.5"
+          stroke-linecap="round" fill="none" opacity="0.56"/>
+    <!-- Plane dot at tip -->
+    <circle cx="865" cy="103" r="11" fill="#D4522A" opacity="0.9"/>
+    <!-- Trail dots -->
+    <circle cx="822" cy="140" r="4.5" fill="#D4522A" opacity="0.28"/>
+    <circle cx="778" cy="180" r="2.8" fill="#D4522A" opacity="0.17"/>
+
+    <!-- voya wordmark -->
+    <text x="490" y="852"
+      font-family="'Playfair Display', Georgia, serif"
+      font-style="italic"
+      font-weight="900"
+      font-size="48"
+      fill="#D4522A"
+      fill-opacity="0.36"
+      text-anchor="middle"
+      letter-spacing="22">voya</text>
+  </svg>
+
+  <script>
+    document.fonts.ready.then(() => {
+      const t = document.getElementById('vtext');
+      const bb = t.getBBox();
+      const dx = 490 - (bb.x + bb.width / 2);
+      const dy = 465 - (bb.y + bb.height / 2);
+      t.setAttribute('x', parseFloat(t.getAttribute('x')) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y')) + dy);
+    });
+  </script>
+</body>
+</html>
