@@ -18,11 +18,12 @@ const GROUP_LABELS = {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { destination, budget, days, vibe, accommodation, group, departureCity, travelMonth, travelYear, tripNotes } = req.body;
+  const { destination, budget, days, vibe, accommodation, group, departureCity, travelMonth, travelYear, tripNotes, currency } = req.body;
   if (!destination || !budget || !days || !vibe) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
+  const currencyCode = currency || 'USD';
   const perDay = Math.round(Number(budget) / Number(days));
   const vibeArr = Array.isArray(vibe) ? vibe : [vibe];
   const accomArr = Array.isArray(accommodation) ? accommodation : (accommodation ? [accommodation] : ['mix']);
@@ -47,7 +48,7 @@ export default async function handler(req, res) {
 Trip details:
 - Destination: ${destination}
 - Duration: ${days} days
-- Total budget: $${budget} USD (~$${perDay}/day)
+- Total budget: ${budget} ${currencyCode} (~${perDay} ${currencyCode}/day)
 - Vibe: ${vibeLabel}
 - Accommodation: ${accomLabel}
 - Traveling as: ${groupLabel}
@@ -66,12 +67,12 @@ Respond ONLY with valid JSON in this exact format:
   "title": "exciting trip title",
   "tagline": "short punchy tagline under 10 words",
   "budgetBreakdown": {
-    "flights": estimated round-trip flight cost as number,
-    "accommodation": total accommodation cost as number,
-    "food": total food cost as number,
-    "activities": total activities cost as number,
-    "transport": local transport cost as number,
-    "misc": miscellaneous as number
+    "flights": estimated round-trip flight cost as number (in ${currencyCode}),
+    "accommodation": total accommodation cost as number (in ${currencyCode}),
+    "food": total food cost as number (in ${currencyCode}),
+    "activities": total activities cost as number (in ${currencyCode}),
+    "transport": local transport cost as number (in ${currencyCode}),
+    "misc": miscellaneous as number (in ${currencyCode})
   },
   "flightNote": "specific flight advice — airlines, booking timing, rough cost from departure city if known, layover cities",
   "socialScore": number 1-10,

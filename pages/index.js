@@ -503,6 +503,49 @@ const FAQS = [
   { q: 'What if I want to change my itinerary?', a: 'Hit "Plan Another Trip," tweak your inputs, and regenerate. You can run as many plans as you want — totally free.' },
 ];
 
+const CURRENCIES = [
+  { code: 'USD', symbol: '$',    label: 'USD — US Dollar' },
+  { code: 'EUR', symbol: '€',    label: 'EUR — Euro' },
+  { code: 'GBP', symbol: '£',    label: 'GBP — British Pound' },
+  { code: 'AUD', symbol: 'A$',   label: 'AUD — Australian Dollar' },
+  { code: 'CAD', symbol: 'C$',   label: 'CAD — Canadian Dollar' },
+  { code: 'NZD', symbol: 'NZ$',  label: 'NZD — New Zealand Dollar' },
+  { code: 'SGD', symbol: 'S$',   label: 'SGD — Singapore Dollar' },
+  { code: 'HKD', symbol: 'HK$',  label: 'HKD — Hong Kong Dollar' },
+  { code: 'CHF', symbol: 'Fr',   label: 'CHF — Swiss Franc' },
+  { code: 'JPY', symbol: '¥',    label: 'JPY — Japanese Yen' },
+  { code: 'CNY', symbol: '¥',    label: 'CNY — Chinese Yuan' },
+  { code: 'KRW', symbol: '₩',   label: 'KRW — South Korean Won' },
+  { code: 'INR', symbol: '₹',   label: 'INR — Indian Rupee' },
+  { code: 'AED', symbol: 'AED', label: 'AED — UAE Dirham' },
+  { code: 'THB', symbol: '฿',   label: 'THB — Thai Baht' },
+  { code: 'IDR', symbol: 'Rp',  label: 'IDR — Indonesian Rupiah' },
+  { code: 'MYR', symbol: 'RM',  label: 'MYR — Malaysian Ringgit' },
+  { code: 'PHP', symbol: '₱',   label: 'PHP — Philippine Peso' },
+  { code: 'BRL', symbol: 'R$',  label: 'BRL — Brazilian Real' },
+  { code: 'MXN', symbol: 'MX$', label: 'MXN — Mexican Peso' },
+  { code: 'COP', symbol: 'COP$',label: 'COP — Colombian Peso' },
+  { code: 'ARS', symbol: 'AR$', label: 'ARS — Argentine Peso' },
+  { code: 'CLP', symbol: 'CLP$',label: 'CLP — Chilean Peso' },
+  { code: 'PEN', symbol: 'S/',  label: 'PEN — Peruvian Sol' },
+  { code: 'ZAR', symbol: 'R',   label: 'ZAR — South African Rand' },
+  { code: 'NGN', symbol: '₦',   label: 'NGN — Nigerian Naira' },
+  { code: 'KES', symbol: 'KSh', label: 'KES — Kenyan Shilling' },
+  { code: 'GHS', symbol: 'GH₵', label: 'GHS — Ghanaian Cedi' },
+  { code: 'EGP', symbol: 'E£',  label: 'EGP — Egyptian Pound' },
+  { code: 'TRY', symbol: '₺',   label: 'TRY — Turkish Lira' },
+  { code: 'ILS', symbol: '₪',   label: 'ILS — Israeli Shekel' },
+  { code: 'NOK', symbol: 'kr',  label: 'NOK — Norwegian Krone' },
+  { code: 'SEK', symbol: 'kr',  label: 'SEK — Swedish Krona' },
+  { code: 'DKK', symbol: 'kr',  label: 'DKK — Danish Krone' },
+  { code: 'PLN', symbol: 'zł',  label: 'PLN — Polish Zloty' },
+  { code: 'CZK', symbol: 'Kč',  label: 'CZK — Czech Koruna' },
+  { code: 'HUF', symbol: 'Ft',  label: 'HUF — Hungarian Forint' },
+  { code: 'RON', symbol: 'lei', label: 'RON — Romanian Leu' },
+];
+
+const MONTHS_ALL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
 const HOW_IT_WORKS = [
   { step: '01', emoji: '📍', title: 'Tell us where', desc: 'Pick your destination, set your budget, and tell us your vibe and travel style.' },
   { step: '02', emoji: '✨', title: 'We build your trip', desc: 'Real day-by-day itinerary. Real accommodation prices. Flights factored in. Zero tourist traps.' },
@@ -510,7 +553,7 @@ const HOW_IT_WORKS = [
 ];
 
 export default function Home() {
-  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '' });
+  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '', currency: 'USD' });
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
@@ -575,6 +618,30 @@ export default function Home() {
 
   const perDay = form.budget && form.days ? Math.round(Number(form.budget) / Number(form.days)) : null;
 
+  /* Currency helpers */
+  const currObj = CURRENCIES.find(c => c.code === form.currency) || CURRENCIES[0];
+  const sym = currObj.symbol;
+
+  /* Future-only dates */
+  const nowYear  = new Date().getFullYear();
+  const nowMonth = new Date().getMonth(); // 0-based
+  const availableYears  = [nowYear, nowYear + 1, nowYear + 2];
+  const availableMonths = (yearStr) => {
+    const y = Number(yearStr);
+    if (!y || y > nowYear) return MONTHS_ALL;
+    if (y === nowYear) return MONTHS_ALL.slice(nowMonth);
+    return [];
+  };
+  const handleYearChange = (year) => {
+    const y = Number(year);
+    const monthIdx = MONTHS_ALL.indexOf(form.travelMonth);
+    if (y === nowYear && monthIdx >= 0 && monthIdx < nowMonth) {
+      setForm(f => ({ ...f, travelYear: year, travelMonth: '' }));
+    } else {
+      setForm(f => ({ ...f, travelYear: year }));
+    }
+  };
+
   const toggleMulti = (field, id) => {
     setForm(f => ({
       ...f,
@@ -610,7 +677,7 @@ export default function Home() {
   };
 
   const handleShare = async () => {
-    const text = `${trip.title} — ${form.days} days in ${form.destination} for $${Number(form.budget).toLocaleString()}. Built on Voya 🌍`;
+    const text = `${trip.title} — ${form.days} days in ${form.destination} for ${sym}${Number(form.budget).toLocaleString()} ${form.currency}. Built on Voya 🌍`;
     if (navigator.share) {
       try { await navigator.share({ title: trip.title, text, url: window.location.href }); } catch {}
     } else {
@@ -1019,7 +1086,7 @@ export default function Home() {
               key={t.destination}
               className="sample-card"
               onClick={() => {
-                setForm({ destination: t.destination, budget: String(t.budget), days: String(t.days), vibe: ['mix'], accommodation: ['mix'], group: 'solo' });
+                setForm({ destination: t.destination, budget: String(t.budget), days: String(t.days), vibe: ['mix'], accommodation: ['mix'], group: 'solo', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '', currency: 'USD' });
                 scrollToPlanner();
               }}
               style={{
@@ -1389,13 +1456,13 @@ export default function Home() {
                 <div style={{ marginBottom: '16px' }}>
                   <label style={label}>📅 When? <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0, color: C.subtle }}>(optional)</span></label>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <select value={form.travelMonth} onChange={e => setForm({ ...form, travelMonth: e.target.value })} style={{ ...inputBase, color: form.travelMonth ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}>
+                    <select value={form.travelMonth} onChange={e => setForm(f => ({ ...f, travelMonth: e.target.value }))} style={{ ...inputBase, color: form.travelMonth ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}>
                       <option value="">Month</option>
-                      {['January','February','March','April','May','June','July','August','September','October','November','December'].map(m => <option key={m} value={m}>{m}</option>)}
+                      {availableMonths(form.travelYear).map(m => <option key={m} value={m}>{m}</option>)}
                     </select>
-                    <select value={form.travelYear} onChange={e => setForm({ ...form, travelYear: e.target.value })} style={{ ...inputBase, color: form.travelYear ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}>
+                    <select value={form.travelYear} onChange={e => handleYearChange(e.target.value)} style={{ ...inputBase, color: form.travelYear ? C.text : '#A8A29E', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px', cursor: 'pointer' }}>
                       <option value="">Year</option>
-                      {[2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
+                      {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
                     </select>
                   </div>
                 </div>
@@ -1429,11 +1496,25 @@ export default function Home() {
               <div style={{ marginBottom: '36px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
                   <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', margin: 0 }}>What's your budget?</h3>
-                  {perDay && <span style={{ fontSize: '14px', fontWeight: '700', color: C.brand }}>≈ ${perDay}/day</span>}
+                  {perDay && <span style={{ fontSize: '14px', fontWeight: '700', color: C.brand }}>≈ {sym}{perDay.toLocaleString()}/day</span>}
                 </div>
+
+                {/* Currency selector */}
+                <div style={{ marginBottom: '14px' }}>
+                  <select
+                    value={form.currency}
+                    onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
+                    style={{ ...inputBase, fontSize: '14px', padding: '11px 36px 11px 14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%239A8880\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', cursor: 'pointer', color: C.text }}
+                  >
+                    {CURRENCIES.map(c => (
+                      <option key={c.code} value={c.code}>{c.label}</option>
+                    ))}
+                  </select>
+                </div>
+
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
                   {[['🎒', 'Backpacker', '1000'], ['🏡', 'Standard', '2000'], ['✨', 'Comfort', '3500'], ['💎', 'Luxury', '6000']].map(([emoji, lbl, val]) => (
-                    <button key={val} type="button" onClick={() => setForm({ ...form, budget: val })} style={{
+                    <button key={val} type="button" onClick={() => setForm(f => ({ ...f, budget: val }))} style={{
                       flex: 1, padding: '14px 8px', borderRadius: '16px',
                       border: `2px solid ${form.budget === val ? C.brand : '#E7E5E4'}`,
                       background: form.budget === val ? C.brand : '#fff',
@@ -1447,8 +1528,8 @@ export default function Home() {
                   ))}
                 </div>
                 <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '15px', fontWeight: '700', color: C.muted }}>$</span>
-                  <input type="number" placeholder="Custom amount" value={form.budget} onChange={e => setForm({ ...form, budget: e.target.value })} style={{ ...inputBase, paddingLeft: '32px' }} />
+                  <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px', fontWeight: '700', color: C.muted, userSelect: 'none' }}>{sym}</span>
+                  <input type="number" placeholder="Enter amount" value={form.budget} onChange={e => setForm(f => ({ ...f, budget: e.target.value }))} style={{ ...inputBase, paddingLeft: sym.length > 2 ? '52px' : '36px' }} />
                 </div>
               </div>
 
@@ -1586,7 +1667,7 @@ export default function Home() {
               <div style={{ background: `linear-gradient(135deg, ${C.dark} 0%, ${C.dark2} 100%)`, borderRadius: '24px', padding: '32px', marginBottom: '14px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: '-10px', right: '-10px', fontSize: '110px', opacity: '0.06', lineHeight: 1 }}>✈️</div>
                 <span style={{ display: 'inline-block', background: `rgba(212,82,42,0.2)`, border: `1px solid rgba(212,82,42,0.4)`, borderRadius: '8px', padding: '4px 12px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px', color: '#F4A07A' }}>
-                  {form.days} Days · ${Number(form.budget).toLocaleString()}{form.travelMonth && form.travelYear ? ` · ${form.travelMonth} ${form.travelYear}` : ''}
+                  {form.days} Days · {sym}{Number(form.budget).toLocaleString()}{form.travelMonth && form.travelYear ? ` · ${form.travelMonth} ${form.travelYear}` : ''}
                 </span>
                 <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 5vw, 30px)', fontWeight: '900', lineHeight: '1.2', marginBottom: '8px' }}>{trip.title}</h2>
                 <p style={{ opacity: '0.65', fontSize: '15px', marginBottom: '22px' }}>{trip.tagline}</p>
@@ -1608,7 +1689,7 @@ export default function Home() {
                     <div key={key} style={{ marginBottom: '13px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
                         <span style={{ fontSize: '14px', textTransform: 'capitalize', color: C.muted, fontWeight: '500' }}>{key}</span>
-                        <span style={{ fontSize: '14px', fontWeight: '700' }}>${val}</span>
+                        <span style={{ fontSize: '14px', fontWeight: '700' }}>{sym}{typeof val === 'number' ? val.toLocaleString() : val}</span>
                       </div>
                       <div style={{ height: '5px', background: C.border, borderRadius: '3px' }}>
                         <div style={{ height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${C.brand}, ${C.brandLt})`, borderRadius: '3px' }} />
@@ -1618,7 +1699,7 @@ export default function Home() {
                 })}
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '18px', paddingTop: '14px', borderTop: `1px solid ${C.border}` }}>
                   <span style={{ fontSize: '14px', color: C.muted }}>Total Estimated</span>
-                  <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '800', color: C.brand }}>${totalSpend}</span>
+                  <span style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '800', color: C.brand }}>{sym}{totalSpend.toLocaleString()}</span>
                 </div>
               </div>
 
@@ -1672,7 +1753,7 @@ export default function Home() {
                       </div>
                     )}
                     <div style={{ textAlign: 'right', fontSize: '13px', color: C.subtle, marginTop: '10px' }}>
-                      Est. daily spend: <span style={{ color: C.brand, fontWeight: '700' }}>${trip.days[activeDay].cost}</span>
+                      Est. daily spend: <span style={{ color: C.brand, fontWeight: '700' }}>{sym}{(trip.days[activeDay].cost || 0).toLocaleString()}</span>
                     </div>
                   </div>
                 )}
@@ -1726,7 +1807,7 @@ export default function Home() {
                         <div style={{ fontSize: '13px', color: C.muted, lineHeight: '1.5' }}>{h.why}</div>
                       </div>
                       <div style={{ flexShrink: 0, background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '12px', padding: '10px 14px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '17px', fontWeight: '900', color: C.brand }}>${h.pricePerNight}</div>
+                        <div style={{ fontSize: '17px', fontWeight: '900', color: C.brand }}>{sym}{(h.pricePerNight || 0).toLocaleString()}</div>
                         <div style={{ fontSize: '10px', color: C.muted }}>/ night</div>
                       </div>
                     </div>
@@ -1777,7 +1858,7 @@ export default function Home() {
                         </div>
                         {act.price > 0 && (
                           <div style={{ flexShrink: 0, background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '10px', padding: '8px 12px', textAlign: 'center' }}>
-                            <div style={{ fontSize: '15px', fontWeight: '900', color: C.brand }}>${act.price}</div>
+                            <div style={{ fontSize: '15px', fontWeight: '900', color: C.brand }}>{sym}{(act.price || 0).toLocaleString()}</div>
                             <div style={{ fontSize: '10px', color: C.muted }}>per person</div>
                           </div>
                         )}
@@ -1829,7 +1910,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
+                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '', currency: 'USD' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
                 style={{ width: '100%', background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: '600', color: C.muted, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}
               >
                 ← Plan Another Trip
