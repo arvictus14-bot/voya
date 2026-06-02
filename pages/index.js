@@ -760,7 +760,7 @@ export default function Home() {
           </h1>
 
           <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 'clamp(16px, 2.5vw, 19px)', lineHeight: '1.65', maxWidth: '480px', margin: '0 auto 38px' }}>
-            Drop your destination and budget. Voya builds a real day-by-day itinerary — actual hostel prices, social scene ratings, zero tourist trap BS.
+            Drop your destination and budget. Voya builds a real day-by-day itinerary — actual hostel prices, social scene ratings, zero tourist traps.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
