@@ -562,6 +562,7 @@ export default function Home() {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const [shareMsg, setShareMsg] = useState('');
+  const [showShareCard, setShowShareCard] = useState(false);
   const [heroIdx, setHeroIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -1897,16 +1898,25 @@ export default function Home() {
 
               {/* Share */}
               <div style={{ background: C.dark, borderRadius: '20px', padding: '28px', textAlign: 'center', marginBottom: '14px' }}>
-                <div style={{ fontSize: '32px', marginBottom: '12px' }}>📸</div>
                 <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', color: '#fff', marginBottom: '6px' }}>Share your trip</div>
-                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: '1.5', marginBottom: '18px' }}>Let people know where you're headed</div>
-                <button onClick={handleShare} style={{
-                  background: C.brand, border: 'none', borderRadius: '12px',
-                  padding: '12px 28px', fontSize: '14px', fontWeight: '700',
-                  color: '#fff', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-                }}>
-                  {shareMsg || 'Share this trip 🔗'}
-                </button>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: '1.5', marginBottom: '20px' }}>Post it. Let people know where you're headed.</div>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <button onClick={() => setShowShareCard(true)} style={{
+                    background: C.brand, border: 'none', borderRadius: '12px',
+                    padding: '12px 22px', fontSize: '14px', fontWeight: '700',
+                    color: '#fff', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                  }}>
+                    🎴 Create Share Card
+                  </button>
+                  <button onClick={handleShare} style={{
+                    background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px',
+                    padding: '12px 22px', fontSize: '14px', fontWeight: '700',
+                    color: '#fff', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                  }}>
+                    {shareMsg || '🔗 Copy Link'}
+                  </button>
+                </div>
               </div>
 
               <button
@@ -1974,6 +1984,120 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* ── SHARE CARD MODAL ── */}
+      {showShareCard && trip && (
+        <div
+          onClick={() => setShowShareCard(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(0,0,0,0.92)',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            padding: '24px',
+          }}
+        >
+          {/* Instructions */}
+          <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+            <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '6px' }}>
+              Screenshot this card
+            </div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)' }}>
+              Mac: ⌘ + Shift + 4 &nbsp;·&nbsp; Windows: Win + Shift + S
+            </div>
+          </div>
+
+          {/* The Card */}
+          <div
+            id="voya-share-card"
+            onClick={e => e.stopPropagation()}
+            style={{
+              width: '340px',
+              background: C.dark,
+              borderRadius: '28px',
+              overflow: 'hidden',
+              border: '1px solid rgba(255,255,255,0.07)',
+              boxShadow: '0 40px 120px rgba(0,0,0,0.6)',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            {/* Card top accent */}
+            <div style={{ height: '4px', background: `linear-gradient(90deg, ${C.brand}, ${C.brandLt})` }} />
+
+            <div style={{ padding: '32px 28px' }}>
+              {/* Brand */}
+              <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '900', fontStyle: 'italic', color: C.brandLt, marginBottom: '28px', letterSpacing: '-0.5px' }}>voya</div>
+
+              {/* Destination */}
+              <div style={{ fontSize: '10px', fontWeight: '800', letterSpacing: '3px', color: 'rgba(212,82,42,0.6)', textTransform: 'uppercase', marginBottom: '6px' }}>Your trip to</div>
+              <h2 style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: 'clamp(32px, 8vw, 44px)',
+                fontWeight: '900', fontStyle: 'italic',
+                color: '#fff', lineHeight: '1',
+                letterSpacing: '-2px', marginBottom: '24px',
+              }}>
+                {form.destination.split(',')[0]}
+              </h2>
+
+              {/* Stats row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '28px' }}>
+                {[
+                  { val: `${form.days}`, label: 'days' },
+                  { val: `${sym}${Number(form.budget).toLocaleString()}`, label: 'budget' },
+                  { val: `${trip.socialScore}/10`, label: 'social' },
+                ].map(s => (
+                  <div key={s.label} style={{ background: 'rgba(212,82,42,0.1)', border: '1px solid rgba(212,82,42,0.2)', borderRadius: '12px', padding: '12px 8px', textAlign: 'center' }}>
+                    <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '900', color: C.brandLt, lineHeight: 1 }}>{s.val}</div>
+                    <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Tagline */}
+              <div style={{ borderLeft: `2px solid rgba(212,82,42,0.35)`, paddingLeft: '14px', marginBottom: '24px' }}>
+                <div style={{ fontSize: '13px', fontStyle: 'italic', color: 'rgba(255,255,255,0.5)', lineHeight: '1.6' }}>"{trip.tagline}"</div>
+              </div>
+
+              {/* Day 1 highlight */}
+              {trip.days?.[0] && (
+                <div style={{ marginBottom: '28px' }}>
+                  <div style={{ fontSize: '9px', fontWeight: '800', color: 'rgba(212,82,42,0.6)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>Day 1</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: '1.65', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {trip.days[0].morning}
+                  </div>
+                </div>
+              )}
+
+              {/* Pro tip */}
+              {trip.proTips?.[0] && (
+                <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '10px', padding: '12px 14px', marginBottom: '28px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ fontSize: '9px', fontWeight: '800', color: 'rgba(212,82,42,0.6)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '5px' }}>Insider tip</div>
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.38)', lineHeight: '1.6', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{trip.proTips[0]}</div>
+                </div>
+              )}
+
+              {/* CTA */}
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>Plan yours free</div>
+                <div style={{ fontSize: '14px', fontWeight: '800', color: C.brand, letterSpacing: '-0.3px' }}>govoya.travel</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Close */}
+          <button
+            onClick={() => setShowShareCard(false)}
+            style={{
+              marginTop: '20px', background: 'none', border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: '10px', padding: '10px 24px', fontSize: '13px', fontWeight: '600',
+              color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            Close
+          </button>
+        </div>
+      )}
     </>
   );
 }
