@@ -16,6 +16,9 @@ const C = {
   border:  '#EDE5D8',
   card:    '#FFFFFF',
   cream:   '#FFFCFA',
+  teal:    '#0F766E',
+  tealBg:  '#EAF7F4',
+  ink:     '#111827',
 };
 
 /* ── Rotating hero photos ─────────────────────────────────── */
@@ -499,6 +502,7 @@ const links = {
 const FAQS = [
   { q: 'Is Voya free?', a: 'Yes — the trip planner is completely free. We earn a small commission when you book accommodation or flights through our links, at zero extra cost to you.' },
   { q: 'Are the prices accurate?', a: 'Prices vary by season and availability. Treat estimates as a solid baseline — they reflect real-world costs for 18-30 travelers and are updated regularly.' },
+  { q: 'Do I book through Voya?', a: 'Voya helps you decide and then sends you to trusted booking/search partners for the final booking. Prices and availability can change, so always confirm on the partner page before paying.' },
   { q: 'Can I use this for group trips?', a: 'Squad features are coming soon — find others heading to the same destination at the same time. For now, build your plan and share the screenshot with your crew.' },
   { q: 'What if I want to change my itinerary?', a: 'Hit "Plan Another Trip," tweak your inputs, and regenerate. You can run as many plans as you want — totally free.' },
 ];
@@ -547,13 +551,30 @@ const CURRENCIES = [
 const MONTHS_ALL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 const HOW_IT_WORKS = [
-  { step: '01', emoji: '📍', title: 'Tell us where', desc: 'Pick your destination, set your budget, and tell us your vibe and travel style.' },
-  { step: '02', emoji: '✨', title: 'We build your trip', desc: 'Real day-by-day itinerary. Real accommodation prices. Flights factored in. Zero tourist traps.' },
-  { step: '03', emoji: '✈️', title: 'Go', desc: 'Screenshot your plan, pack your bag, and head out. Simple.' },
+  { step: '01', emoji: '📍', title: 'Tell us the constraints', desc: 'Destination or surprise me, departure city, trip length, budget, stay style, and the vibe you want.' },
+  { step: '02', emoji: '✨', title: 'We build the decision', desc: 'A day-by-day plan with budget tradeoffs, social fit, real stay ideas, flights, and what to skip.' },
+  { step: '03', emoji: '✈️', title: 'Book or share', desc: 'Use the partner links, screenshot the card, or regenerate until it feels like a trip you would actually take.' },
 ];
 
+const DECISION_SIGNALS = [
+  {
+    title: 'Budget-first',
+    text: 'Start with what you can actually spend, then shape the destination, stays, food, and activities around it.',
+  },
+  {
+    title: 'Social fit',
+    text: 'Every plan calls out whether the scene feels easy to meet people, better for couples, or more solo-heavy.',
+  },
+  {
+    title: 'Bookable next steps',
+    text: 'You leave with flight searches, stay options, map links, and activities instead of another vague bucket list.',
+  },
+];
+
+const plannerReset = { destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '', currency: 'USD' };
+
 export default function Home() {
-  const [form, setForm] = useState({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '', currency: 'USD' });
+  const [form, setForm] = useState(plannerReset);
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
@@ -618,6 +639,12 @@ export default function Home() {
     : [];
 
   const perDay = form.budget && form.days ? Math.round(Number(form.budget) / Number(form.days)) : null;
+  const selectedVibes = form.vibe.length
+    ? VIBES.filter(v => form.vibe.includes(v.id)).map(v => v.label).join(' + ')
+    : 'Any vibe';
+  const selectedStays = form.accommodation.length
+    ? ACCOMMODATION_TYPES.filter(a => form.accommodation.includes(a.id)).map(a => a.label).join(' + ')
+    : 'Flexible stays';
 
   /* Currency helpers */
   const currObj = CURRENCIES.find(c => c.code === form.currency) || CURRENCIES[0];
@@ -654,6 +681,10 @@ export default function Home() {
     e.preventDefault();
     if (!form.destination || !form.budget || !form.days || form.vibe.length === 0) {
       setError('Fill in destination, budget, days and at least one vibe to continue.');
+      return;
+    }
+    if (Number(form.budget) <= 0 || Number(form.days) <= 0) {
+      setError('Budget and trip length need to be real numbers.');
       return;
     }
     setError('');
@@ -693,7 +724,8 @@ export default function Home() {
     if (email.includes('@')) setEmailSubmitted(true);
   };
 
-  const totalSpend = trip ? Object.values(trip.budgetBreakdown).reduce((a, b) => a + b, 0) : 0;
+  const money = (value) => Number(value) || 0;
+  const totalSpend = trip ? Object.values(trip.budgetBreakdown || {}).reduce((a, b) => a + money(b), 0) : 0;
 
   const card = {
     background: '#fff',
@@ -729,8 +761,13 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Voya — Trip Planning for 18-30 Travelers</title>
-        <meta name="description" content="Real trip plans built for young solo travelers. Destination, budget, vibe — we handle the rest." />
+        <title>Voya — Budget-First Trip Planning for 18-30 Travelers</title>
+        <meta name="description" content="Tell Voya your budget, dates, and vibe. Get a real day-by-day trip plan with social scores, stay ideas, flight paths, and zero tourist traps." />
+        <meta property="og:title" content="Voya — Budget-First Trip Planning" />
+        <meta property="og:description" content="Your budget, dates, and vibe become a real trip plan for young travelers who actually go." />
+        <meta property="og:url" content="https://govoya.travel" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </Head>
@@ -760,11 +797,15 @@ export default function Home() {
         .sample-card:hover { transform: translateY(-5px); box-shadow: 0 24px 56px rgba(0,0,0,0.2) !important; }
         .sample-card:hover .sample-cta { background: #D4522A !important; color: #fff !important; border-color: #D4522A !important; }
         .hero-photo { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 1.4s ease; }
+        .decision-grid, .trip-proof-grid, .result-decision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .planner-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .result-snapshot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         @media (max-width: 700px) {
           .email-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .manifesto-cols { flex-direction: column !important; gap: 16px !important; }
           .how-it-works-grid { grid-template-columns: 1fr !important; }
           .how-it-works-grid > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 32px 0 !important; }
+          .decision-grid, .trip-proof-grid, .result-decision-grid, .planner-grid, .result-snapshot-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
@@ -814,7 +855,7 @@ export default function Home() {
             fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.55)',
             letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px',
           }}>
-            For the generation that actually goes
+            Budget-first trip planning for 18-30 travelers
           </p>
 
           <h1 style={{
@@ -823,12 +864,12 @@ export default function Home() {
             fontWeight: '900', lineHeight: '1.04', letterSpacing: '-2.5px',
             color: '#fff', marginBottom: '22px',
           }}>
-            Stop researching.<br />
-            <span style={{ color: C.brandLt, fontStyle: 'italic' }}>Start going.</span>
+            Your budget knows<br />
+            <span style={{ color: C.brandLt, fontStyle: 'italic' }}>where to go.</span>
           </h1>
 
           <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 'clamp(16px, 2.5vw, 19px)', lineHeight: '1.65', maxWidth: '480px', margin: '0 auto 38px' }}>
-            Drop your destination and budget. Voya builds a real day-by-day itinerary — actual hostel prices, social scene ratings, zero tourist traps.
+            Tell Voya your departure city, budget, dates, and vibe. Get a real day-by-day plan with stay ideas, social fit, booking paths, and zero tourist traps.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
@@ -840,9 +881,9 @@ export default function Home() {
               boxShadow: `0 8px 32px rgba(212,82,42,0.4)`,
               letterSpacing: '0.2px',
             }}>
-              Build my trip — it's free →
+              Find my trip — it's free →
             </button>
-            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>✓ Free &nbsp;·&nbsp; ✓ 10 seconds &nbsp;·&nbsp; ✓ No sign-up</p>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>✓ Free &nbsp;·&nbsp; ✓ 10 seconds &nbsp;·&nbsp; ✓ No sign-up &nbsp;·&nbsp; ✓ Built for social travel</p>
           </div>
         </div>
 
@@ -885,6 +926,44 @@ export default function Home() {
           ))}
         </div>
       </div>
+
+      {/* ── DECISION ENGINE ── */}
+      <section style={{ background: '#fff', borderBottom: `1px solid ${C.border}`, padding: '72px 24px' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px', flexWrap: 'wrap', marginBottom: '28px' }}>
+            <div>
+              <p style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '3px', color: C.teal, textTransform: 'uppercase', marginBottom: '10px' }}>
+                Decision engine
+              </p>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(30px, 4vw, 52px)', fontWeight: '900', color: C.text, letterSpacing: '-1.5px', lineHeight: 1.05 }}>
+                Not just where is cheap.<br />
+                <span style={{ color: C.brand, fontStyle: 'italic' }}>Where makes sense.</span>
+              </h2>
+            </div>
+            <p style={{ color: C.muted, fontSize: '15px', lineHeight: '1.65', maxWidth: '330px' }}>
+              Voya turns messy travel tabs into a clear call: what fits your budget, your dates, and the version of the trip you actually want.
+            </p>
+          </div>
+
+          <div className="decision-grid">
+            {DECISION_SIGNALS.map((item, i) => (
+              <div key={item.title} style={{
+                background: i === 1 ? C.tealBg : C.cream,
+                border: `1px solid ${i === 1 ? '#B8E4DA' : C.border}`,
+                borderRadius: '18px',
+                padding: '24px',
+                minHeight: '150px',
+              }}>
+                <div style={{ width: '34px', height: '34px', borderRadius: '11px', background: i === 1 ? C.teal : C.brand, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '900', marginBottom: '16px' }}>
+                  0{i + 1}
+                </div>
+                <h3 style={{ fontSize: '17px', fontWeight: '800', color: C.text, marginBottom: '8px', letterSpacing: '-0.2px' }}>{item.title}</h3>
+                <p style={{ fontSize: '14px', color: C.muted, lineHeight: '1.65' }}>{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── MANIFESTO ── */}
       <section style={{ padding: '100px 40px 96px', borderBottom: `1px solid ${C.border}` }}>
@@ -1232,9 +1311,9 @@ export default function Home() {
           </h2>
           <div style={{ borderTop: `1px solid ${C.border}` }}>
             {[
-              { num: '01', title: 'Real budgets, real plans', desc: "We don't suggest $400/night hotels. Every plan is built around what you actually have to spend — hostels, cheap eats, free activities included." },
-              { num: '02', title: 'The Social Score', desc: "Every trip gets a Social Score — how easy it is to meet other travelers at your destination. Know before you book whether you're headed somewhere electric or somewhere solo." },
-              { num: '03', title: 'Peer intelligence, not tourist traps', desc: "Recommendations filtered through what 18–30 travelers actually rate. Not TripAdvisor reviews from families looking for quiet restaurants." },
+              { num: '01', title: 'Real budgets, real plans', desc: "We don't suggest $400/night hotels when you are trying to make a $1,400 trip work. Hostels, cheap eats, free days, splurge moments, and flight tradeoffs all live in the same plan." },
+              { num: '02', title: 'The Social Score', desc: "Every trip gets a Social Score so you know whether the destination feels electric, easy to meet people, better with friends, or more solo-heavy before you book." },
+              { num: '03', title: 'Peer intelligence, not tourist traps', desc: "Recommendations are framed around what 18-30 travelers actually care about: neighborhoods, hostels, nightlife, transit friction, food, safety, and what to skip." },
             ].map(item => (
               <div key={item.num} style={{
                 display: 'grid', gridTemplateColumns: '72px 1fr',
@@ -1347,9 +1426,11 @@ export default function Home() {
           <div style={{ marginBottom: '48px' }}>
             <p style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '3px', color: C.brand, textTransform: 'uppercase', marginBottom: '14px' }}>Trip planner</p>
             <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(34px, 5vw, 52px)', fontWeight: '900', color: C.text, letterSpacing: '-2px', lineHeight: '1.05', marginBottom: '12px' }}>
-              Where are you going?
+              Build the trip your budget can actually handle.
             </h2>
-            <p style={{ color: C.muted, fontSize: '16px', lineHeight: '1.6' }}>Give us the details — we handle everything else.</p>
+            <p style={{ color: C.muted, fontSize: '16px', lineHeight: '1.6' }}>
+              Give us the constraints. Voya turns them into a realistic route, social scene read, stay ideas, and booking paths.
+            </p>
           </div>
 
           {!trip && !loading && (
@@ -1358,7 +1439,7 @@ export default function Home() {
               {/* ── Destination ── */}
               <div style={{ marginBottom: '36px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
-                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', margin: 0 }}>Where to?</h3>
+                  <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: '900', color: C.text, letterSpacing: '-0.5px', margin: 0 }}>Where are you thinking?</h3>
                   <button type="button" onClick={surpriseMe} style={{ background: 'none', border: `1.5px solid ${C.brand}`, borderRadius: '20px', padding: '4px 12px', fontSize: '12px', fontWeight: '700', color: C.brand, cursor: 'pointer' }}>🎲 Surprise me</button>
                 </div>
                 <div style={{ position: 'relative' }} ref={destRef}>
@@ -1679,18 +1760,54 @@ export default function Home() {
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>{trip.socialScoreLabel}</div>
                   </div>
                 </div>
+                {trip.decisionSummary && (
+                  <div className="result-decision-grid" style={{ marginTop: '14px' }}>
+                    {[
+                      ['Budget fit', trip.decisionSummary.budgetFit],
+                      ['Vibe fit', trip.decisionSummary.vibeFit],
+                      ['Watch out', trip.decisionSummary.watchOut],
+                    ].filter(([, text]) => text).map(([title, text], i) => (
+                      <div key={title} style={{ background: i === 1 ? 'rgba(15,118,110,0.22)' : 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '14px', padding: '14px' }}>
+                        <div style={{ fontSize: '10px', fontWeight: '800', color: i === 1 ? '#9DE4DA' : '#F4A07A', textTransform: 'uppercase', letterSpacing: '1.1px', marginBottom: '6px' }}>{title}</div>
+                        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.62)', lineHeight: '1.55' }}>{text}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Trip Snapshot */}
+              <div style={card}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>Trip Snapshot</h3>
+                <div className="result-snapshot-grid">
+                  {[
+                    ['From', form.departureCity || 'Flexible origin'],
+                    ['Daily budget', perDay ? `${sym}${perDay.toLocaleString()}/day` : 'Flexible'],
+                    ['Vibe', selectedVibes],
+                    ['Stay style', selectedStays],
+                  ].map(([title, value], i) => (
+                    <div key={title} style={{ background: i === 2 ? C.tealBg : C.cream, border: `1px solid ${i === 2 ? '#B8E4DA' : C.border}`, borderRadius: '14px', padding: '14px 16px' }}>
+                      <div style={{ fontSize: '10px', fontWeight: '800', color: i === 2 ? C.teal : C.brand, textTransform: 'uppercase', letterSpacing: '1.1px', marginBottom: '5px' }}>{title}</div>
+                      <div style={{ fontSize: '14px', fontWeight: '700', color: C.text, lineHeight: '1.35' }}>{value}</div>
+                    </div>
+                  ))}
+                </div>
+                <p style={{ marginTop: '14px', fontSize: '12px', color: C.subtle, lineHeight: '1.55' }}>
+                  Prices are planning estimates. Confirm final fares, stay availability, fees, and cancellation rules on the booking partner before paying.
+                </p>
               </div>
 
               {/* Budget */}
               <div style={card}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', marginBottom: '18px' }}>💰 Budget Breakdown</h3>
                 {Object.entries(trip.budgetBreakdown).map(([key, val]) => {
-                  const pct = Math.round((val / totalSpend) * 100);
+                  const numericVal = money(val);
+                  const pct = totalSpend ? Math.round((numericVal / totalSpend) * 100) : 0;
                   return (
                     <div key={key} style={{ marginBottom: '13px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
                         <span style={{ fontSize: '14px', textTransform: 'capitalize', color: C.muted, fontWeight: '500' }}>{key}</span>
-                        <span style={{ fontSize: '14px', fontWeight: '700' }}>{sym}{typeof val === 'number' ? val.toLocaleString() : val}</span>
+                        <span style={{ fontSize: '14px', fontWeight: '700' }}>{sym}{numericVal.toLocaleString()}</span>
                       </div>
                       <div style={{ height: '5px', background: C.border, borderRadius: '3px' }}>
                         <div style={{ height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${C.brand}, ${C.brandLt})`, borderRadius: '3px' }} />
@@ -1707,10 +1824,10 @@ export default function Home() {
               {/* Days */}
               <div style={card}>
                 <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>🗺️ Day by Day</h3>
-                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '14px', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
                   {trip.days.map((d, i) => (
                     <button key={i} onClick={() => setActiveDay(i)} style={{
-                      flexShrink: 0, padding: '7px 14px', borderRadius: '10px',
+                      padding: '7px 14px', borderRadius: '10px',
                       border: `1.5px solid ${activeDay === i ? C.brand : '#E7E5E4'}`,
                       background: activeDay === i ? C.brandBg : '#FAFAF9',
                       color: activeDay === i ? C.brand : C.muted,
@@ -1754,7 +1871,7 @@ export default function Home() {
                       </div>
                     )}
                     <div style={{ textAlign: 'right', fontSize: '13px', color: C.subtle, marginTop: '10px' }}>
-                      Est. daily spend: <span style={{ color: C.brand, fontWeight: '700' }}>{sym}{(trip.days[activeDay].cost || 0).toLocaleString()}</span>
+                      Est. daily spend: <span style={{ color: C.brand, fontWeight: '700' }}>{sym}{money(trip.days[activeDay].cost).toLocaleString()}</span>
                     </div>
                   </div>
                 )}
@@ -1808,7 +1925,7 @@ export default function Home() {
                         <div style={{ fontSize: '13px', color: C.muted, lineHeight: '1.5' }}>{h.why}</div>
                       </div>
                       <div style={{ flexShrink: 0, background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '12px', padding: '10px 14px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '17px', fontWeight: '900', color: C.brand }}>{sym}{(h.pricePerNight || 0).toLocaleString()}</div>
+                        <div style={{ fontSize: '17px', fontWeight: '900', color: C.brand }}>{sym}{money(h.pricePerNight).toLocaleString()}</div>
                         <div style={{ fontSize: '10px', color: C.muted }}>/ night</div>
                       </div>
                     </div>
@@ -1859,7 +1976,7 @@ export default function Home() {
                         </div>
                         {act.price > 0 && (
                           <div style={{ flexShrink: 0, background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '10px', padding: '8px 12px', textAlign: 'center' }}>
-                            <div style={{ fontSize: '15px', fontWeight: '900', color: C.brand }}>{sym}{(act.price || 0).toLocaleString()}</div>
+                            <div style={{ fontSize: '15px', fontWeight: '900', color: C.brand }}>{sym}{money(act.price).toLocaleString()}</div>
                             <div style={{ fontSize: '10px', color: C.muted }}>per person</div>
                           </div>
                         )}
@@ -1920,7 +2037,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => { setTrip(null); setForm({ destination: '', budget: '', days: '', vibe: [], accommodation: [], group: '', departureCity: '', travelMonth: '', travelYear: '', tripNotes: '', currency: 'USD' }); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
+                onClick={() => { setTrip(null); setForm(plannerReset); window.scrollTo({ top: plannerRef.current?.offsetTop - 100, behavior: 'smooth' }); }}
                 style={{ width: '100%', background: '#fff', border: `1.5px solid ${C.border}`, borderRadius: '14px', padding: '16px', fontSize: '15px', fontWeight: '600', color: C.muted, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}
               >
                 ← Plan Another Trip
@@ -1959,8 +2076,8 @@ export default function Home() {
               <div>
                 <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Follow</div>
                 {[
-                  { label: '@govoya on TikTok', href: 'https://tiktok.com/@govoya' },
-                  { label: '@govoya on Instagram', href: 'https://instagram.com/govoya' },
+                  { label: '@govoya.travel on TikTok', href: 'https://tiktok.com/@govoya.travel' },
+                  { label: '@govoya.travel on Instagram', href: 'https://instagram.com/govoya.travel' },
                 ].map(l => (
                   <div key={l.label} style={{ marginBottom: '10px' }}>
                     <a href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
