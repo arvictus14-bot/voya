@@ -6,12 +6,15 @@ const ACCOMMODATION_LABELS = {
   hostel:  'hostel dorms — shared rooms, social atmosphere, bunk beds',
   private: 'private rooms in hostels, guesthouses, or small B&Bs',
   hotel:   'budget hotels with private rooms and basic amenities',
+  airbnb:  'Airbnb apartments or rooms that still fit a young traveler budget',
+  camping: 'camping, cabins, or outdoor stays where they make sense',
   mix:     'a smart mix — dorms where social, private rooms when needed',
 };
 
 const GROUP_LABELS = {
   solo:   'solo traveler',
   couple: 'couple traveling together',
+  friends: 'friends traveling together',
   group:  'small group of 3–5 friends',
 };
 
@@ -56,6 +59,7 @@ Trip details:
 - Season: ${seasonContext}${notesContext}
 
 IMPORTANT RULES:
+- You MUST include EXACTLY ${days} day objects in the "days" array — one per day, no more, no fewer. If the trip is 7 days, output 7 day objects. If 14 days, output 14. Do not stop early.
 - Use REAL place names everywhere — real hostels, real hotels, real restaurants, real attractions
 - For keyPlaces: extract 2-4 real named places from each day's plan (specific enough to search on Google Maps)
 - For mustDoActivities: list 4-6 bookable experiences (tours, classes, excursions) with GetYourGuide-style names
@@ -75,6 +79,11 @@ Respond ONLY with valid JSON in this exact format:
     "misc": miscellaneous as number (in ${currencyCode})
   },
   "flightNote": "specific flight advice — airlines, booking timing, rough cost from departure city if known, layover cities",
+  "decisionSummary": {
+    "budgetFit": "one sentence on whether the budget is realistic and what tradeoffs matter",
+    "vibeFit": "one sentence on why this destination fits the selected vibe",
+    "watchOut": "one honest warning or planning watchout"
+  },
   "socialScore": number 1-10,
   "socialScoreLabel": "short label e.g. Incredible for meeting people",
   "days": [
@@ -125,6 +134,7 @@ Respond ONLY with valid JSON in this exact format:
       ],
       response_format: { type: 'json_object' },
       temperature: 0.8,
+      max_tokens: 8000,
     });
 
     const trip = JSON.parse(completion.choices[0].message.content);
