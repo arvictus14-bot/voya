@@ -59,7 +59,8 @@ Trip details:
 - Season: ${seasonContext}${notesContext}
 
 IMPORTANT RULES:
-- You MUST include EXACTLY ${days} day objects in the "days" array — one per day, no more, no fewer. If the trip is 7 days, output 7 day objects. If 14 days, output 14. Do not stop early.
+- You MUST include EXACTLY ${days} day objects in the "days" array — one per day, no more, no fewer. If the trip is 7 days, output 7 day objects. If 32 days, output 32. Do not stop early under any circumstances.
+- ${Number(days) > 10 ? `For this ${days}-day trip, keep morning/afternoon/evening descriptions SHORT (1-2 sentences each) to ensure all ${days} days fit in the response. Do not truncate — all ${days} days are required.` : 'Give detailed descriptions for each time of day.'}
 - Use REAL place names everywhere — real hostels, real hotels, real restaurants, real attractions
 - For keyPlaces: extract 2-4 real named places from each day's plan (specific enough to search on Google Maps)
 - For mustDoActivities: list 4-6 bookable experiences (tours, classes, excursions) with GetYourGuide-style names
@@ -134,7 +135,7 @@ Respond ONLY with valid JSON in this exact format:
       ],
       response_format: { type: 'json_object' },
       temperature: 0.8,
-      max_tokens: 8000,
+      max_tokens: 16000,
     });
 
     const trip = JSON.parse(completion.choices[0].message.content);

@@ -507,46 +507,58 @@ const FAQS = [
   { q: 'What if I want to change my itinerary?', a: 'Hit "Plan Another Trip," tweak your inputs, and regenerate. You can run as many plans as you want — totally free.' },
 ];
 
+// rate = approx units of this currency per 1 USD (for budget preset scaling)
 const CURRENCIES = [
-  { code: 'USD', symbol: '$',    label: 'USD — US Dollar' },
-  { code: 'EUR', symbol: '€',    label: 'EUR — Euro' },
-  { code: 'GBP', symbol: '£',    label: 'GBP — British Pound' },
-  { code: 'AUD', symbol: 'A$',   label: 'AUD — Australian Dollar' },
-  { code: 'CAD', symbol: 'C$',   label: 'CAD — Canadian Dollar' },
-  { code: 'NZD', symbol: 'NZ$',  label: 'NZD — New Zealand Dollar' },
-  { code: 'SGD', symbol: 'S$',   label: 'SGD — Singapore Dollar' },
-  { code: 'HKD', symbol: 'HK$',  label: 'HKD — Hong Kong Dollar' },
-  { code: 'CHF', symbol: 'Fr',   label: 'CHF — Swiss Franc' },
-  { code: 'JPY', symbol: '¥',    label: 'JPY — Japanese Yen' },
-  { code: 'CNY', symbol: '¥',    label: 'CNY — Chinese Yuan' },
-  { code: 'KRW', symbol: '₩',   label: 'KRW — South Korean Won' },
-  { code: 'INR', symbol: '₹',   label: 'INR — Indian Rupee' },
-  { code: 'AED', symbol: 'AED', label: 'AED — UAE Dirham' },
-  { code: 'THB', symbol: '฿',   label: 'THB — Thai Baht' },
-  { code: 'IDR', symbol: 'Rp',  label: 'IDR — Indonesian Rupiah' },
-  { code: 'MYR', symbol: 'RM',  label: 'MYR — Malaysian Ringgit' },
-  { code: 'PHP', symbol: '₱',   label: 'PHP — Philippine Peso' },
-  { code: 'BRL', symbol: 'R$',  label: 'BRL — Brazilian Real' },
-  { code: 'MXN', symbol: 'MX$', label: 'MXN — Mexican Peso' },
-  { code: 'COP', symbol: 'COP$',label: 'COP — Colombian Peso' },
-  { code: 'ARS', symbol: 'AR$', label: 'ARS — Argentine Peso' },
-  { code: 'CLP', symbol: 'CLP$',label: 'CLP — Chilean Peso' },
-  { code: 'PEN', symbol: 'S/',  label: 'PEN — Peruvian Sol' },
-  { code: 'ZAR', symbol: 'R',   label: 'ZAR — South African Rand' },
-  { code: 'NGN', symbol: '₦',   label: 'NGN — Nigerian Naira' },
-  { code: 'KES', symbol: 'KSh', label: 'KES — Kenyan Shilling' },
-  { code: 'GHS', symbol: 'GH₵', label: 'GHS — Ghanaian Cedi' },
-  { code: 'EGP', symbol: 'E£',  label: 'EGP — Egyptian Pound' },
-  { code: 'TRY', symbol: '₺',   label: 'TRY — Turkish Lira' },
-  { code: 'ILS', symbol: '₪',   label: 'ILS — Israeli Shekel' },
-  { code: 'NOK', symbol: 'kr',  label: 'NOK — Norwegian Krone' },
-  { code: 'SEK', symbol: 'kr',  label: 'SEK — Swedish Krona' },
-  { code: 'DKK', symbol: 'kr',  label: 'DKK — Danish Krone' },
-  { code: 'PLN', symbol: 'zł',  label: 'PLN — Polish Zloty' },
-  { code: 'CZK', symbol: 'Kč',  label: 'CZK — Czech Koruna' },
-  { code: 'HUF', symbol: 'Ft',  label: 'HUF — Hungarian Forint' },
-  { code: 'RON', symbol: 'lei', label: 'RON — Romanian Leu' },
+  { code: 'USD', symbol: '$',    label: 'USD — US Dollar',            rate: 1 },
+  { code: 'EUR', symbol: '€',    label: 'EUR — Euro',                 rate: 0.92 },
+  { code: 'GBP', symbol: '£',    label: 'GBP — British Pound',        rate: 0.79 },
+  { code: 'AUD', symbol: 'A$',   label: 'AUD — Australian Dollar',    rate: 1.55 },
+  { code: 'CAD', symbol: 'C$',   label: 'CAD — Canadian Dollar',      rate: 1.38 },
+  { code: 'NZD', symbol: 'NZ$',  label: 'NZD — New Zealand Dollar',   rate: 1.70 },
+  { code: 'SGD', symbol: 'S$',   label: 'SGD — Singapore Dollar',     rate: 1.35 },
+  { code: 'HKD', symbol: 'HK$',  label: 'HKD — Hong Kong Dollar',     rate: 7.80 },
+  { code: 'CHF', symbol: 'Fr',   label: 'CHF — Swiss Franc',          rate: 0.90 },
+  { code: 'JPY', symbol: '¥',    label: 'JPY — Japanese Yen',         rate: 150 },
+  { code: 'CNY', symbol: '¥',    label: 'CNY — Chinese Yuan',         rate: 7.25 },
+  { code: 'KRW', symbol: '₩',   label: 'KRW — South Korean Won',     rate: 1350 },
+  { code: 'INR', symbol: '₹',   label: 'INR — Indian Rupee',         rate: 83 },
+  { code: 'AED', symbol: 'AED', label: 'AED — UAE Dirham',            rate: 3.67 },
+  { code: 'THB', symbol: '฿',   label: 'THB — Thai Baht',            rate: 36 },
+  { code: 'IDR', symbol: 'Rp',  label: 'IDR — Indonesian Rupiah',    rate: 16000 },
+  { code: 'MYR', symbol: 'RM',  label: 'MYR — Malaysian Ringgit',    rate: 4.70 },
+  { code: 'PHP', symbol: '₱',   label: 'PHP — Philippine Peso',      rate: 57 },
+  { code: 'BRL', symbol: 'R$',  label: 'BRL — Brazilian Real',       rate: 5.10 },
+  { code: 'MXN', symbol: 'MX$', label: 'MXN — Mexican Peso',         rate: 17 },
+  { code: 'COP', symbol: 'COP$',label: 'COP — Colombian Peso',       rate: 4000 },
+  { code: 'ARS', symbol: 'AR$', label: 'ARS — Argentine Peso',       rate: 1000 },
+  { code: 'CLP', symbol: 'CLP$',label: 'CLP — Chilean Peso',         rate: 950 },
+  { code: 'PEN', symbol: 'S/',  label: 'PEN — Peruvian Sol',         rate: 3.75 },
+  { code: 'ZAR', symbol: 'R',   label: 'ZAR — South African Rand',   rate: 18.5 },
+  { code: 'NGN', symbol: '₦',   label: 'NGN — Nigerian Naira',       rate: 1600 },
+  { code: 'KES', symbol: 'KSh', label: 'KES — Kenyan Shilling',      rate: 130 },
+  { code: 'GHS', symbol: 'GH₵', label: 'GHS — Ghanaian Cedi',       rate: 15 },
+  { code: 'EGP', symbol: 'E£',  label: 'EGP — Egyptian Pound',       rate: 48 },
+  { code: 'TRY', symbol: '₺',   label: 'TRY — Turkish Lira',         rate: 34 },
+  { code: 'ILS', symbol: '₪',   label: 'ILS — Israeli Shekel',       rate: 3.70 },
+  { code: 'NOK', symbol: 'kr',  label: 'NOK — Norwegian Krone',      rate: 10.7 },
+  { code: 'SEK', symbol: 'kr',  label: 'SEK — Swedish Krona',        rate: 10.5 },
+  { code: 'DKK', symbol: 'kr',  label: 'DKK — Danish Krone',         rate: 6.90 },
+  { code: 'PLN', symbol: 'zł',  label: 'PLN — Polish Zloty',         rate: 4.05 },
+  { code: 'CZK', symbol: 'Kč',  label: 'CZK — Czech Koruna',         rate: 23 },
+  { code: 'HUF', symbol: 'Ft',  label: 'HUF — Hungarian Forint',     rate: 360 },
+  { code: 'RON', symbol: 'lei', label: 'RON — Romanian Leu',         rate: 4.60 },
 ];
+
+// Rounds a budget value to a clean number appropriate for its magnitude
+function roundBudget(val) {
+  if (val < 50)       return Math.round(val);
+  if (val < 500)      return Math.round(val / 10) * 10;
+  if (val < 5000)     return Math.round(val / 50) * 50;
+  if (val < 50000)    return Math.round(val / 500) * 500;
+  if (val < 500000)   return Math.round(val / 5000) * 5000;
+  if (val < 5000000)  return Math.round(val / 50000) * 50000;
+  return Math.round(val / 500000) * 500000;
+}
 
 const MONTHS_ALL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -1595,19 +1607,22 @@ export default function Home() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-                  {[['🎒', 'Backpacker', '1000'], ['🏡', 'Standard', '2000'], ['✨', 'Comfort', '3500'], ['💎', 'Luxury', '6000']].map(([emoji, lbl, val]) => (
-                    <button key={val} type="button" onClick={() => setForm(f => ({ ...f, budget: val }))} style={{
+                  {[['🎒', 'Backpacker', 1000], ['🏡', 'Standard', 2000], ['✨', 'Comfort', 3500], ['💎', 'Luxury', 6000]].map(([emoji, lbl, usdVal]) => {
+                    const localVal = String(roundBudget(usdVal * (currObj.rate || 1)));
+                    return (
+                    <button key={lbl} type="button" onClick={() => setForm(f => ({ ...f, budget: localVal }))} style={{
                       flex: 1, padding: '14px 8px', borderRadius: '16px',
-                      border: `2px solid ${form.budget === val ? C.brand : '#E7E5E4'}`,
-                      background: form.budget === val ? C.brand : '#fff',
-                      color: form.budget === val ? '#fff' : C.muted,
+                      border: `2px solid ${form.budget === localVal ? C.brand : '#E7E5E4'}`,
+                      background: form.budget === localVal ? C.brand : '#fff',
+                      color: form.budget === localVal ? '#fff' : C.muted,
                       fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'Inter, sans-serif',
                       textAlign: 'center', transition: 'all 0.15s', lineHeight: '1.4',
                     }}>
                       <div style={{ fontSize: '20px', marginBottom: '4px' }}>{emoji}</div>
                       {lbl}
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div style={{ position: 'relative' }}>
                   <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px', fontWeight: '700', color: C.muted, userSelect: 'none' }}>{sym}</span>
