@@ -880,8 +880,8 @@ export default function Home() {
             fontWeight: '900', lineHeight: '1.04', letterSpacing: '-2.5px',
             color: '#fff', marginBottom: '22px',
           }}>
-            Your budget knows<br />
-            <span style={{ color: C.brandLt, fontStyle: 'italic' }}>where to go.</span>
+            Stop researching.<br />
+            <span style={{ color: C.brandLt, fontStyle: 'italic' }}>Start going.</span>
           </h1>
 
           <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 'clamp(16px, 2.5vw, 19px)', lineHeight: '1.65', maxWidth: '480px', margin: '0 auto 38px' }}>
