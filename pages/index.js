@@ -2118,6 +2118,9 @@ export default function Home() {
               {' '}— Niklas Weiss, Charlie M, Jordan Steranka & more
             </p>
           </div>
+          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.1)', marginTop: '16px', lineHeight: '1.6' }}>
+            Some links on this site are affiliate links. We may earn a small commission if you book through them, at no extra cost to you.
+          </p>
         </div>
       </footer>
 
