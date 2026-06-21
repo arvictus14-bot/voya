@@ -1,4 +1,5 @@
 import destinations from '../data/destinations';
+import blogPosts from '../data/blogPosts';
 
 const SITE = 'https://govoya.travel';
 
@@ -10,6 +11,11 @@ function generateSitemap() {
       url: `/destinations/${d.slug}`,
       priority: '0.8',
       changefreq: 'weekly',
+    })),
+    ...blogPosts.map(p => ({
+      url: `/blog/${p.slug}`,
+      priority: '0.7',
+      changefreq: 'monthly',
     })),
   ];
 
