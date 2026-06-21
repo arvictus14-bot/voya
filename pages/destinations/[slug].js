@@ -40,8 +40,38 @@ export default function DestinationPage({ dest }) {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={metaDesc} />
         <meta property="og:image" content={dest.photo} />
+        <meta property="og:url" content={`https://govoya.travel/destinations/${dest.slug}`} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={metaDesc} />
+        <meta name="twitter:image" content={dest.photo} />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={`https://govoya.travel/destinations/${dest.slug}`} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'TouristDestination',
+                name: dest.name,
+                description: dest.description,
+                url: `https://govoya.travel/destinations/${dest.slug}`,
+                image: dest.photo,
+                touristType: { '@type': 'Audience', audienceType: '18-30 budget travelers' },
+              },
+              {
+                '@type': 'FAQPage',
+                mainEntity: dest.faqs.map(f => ({
+                  '@type': 'Question',
+                  name: f.q,
+                  acceptedAnswer: { '@type': 'Answer', text: f.a },
+                })),
+              },
+            ],
+          })}}
+        />
       </Head>
 
       <div style={{ fontFamily: "'Inter', sans-serif", background: C.cream, color: C.text, minHeight: '100vh' }}>

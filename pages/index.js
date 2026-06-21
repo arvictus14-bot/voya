@@ -778,8 +778,12 @@ export default function Home() {
         <meta property="og:title" content="Voya — Budget-First Trip Planning" />
         <meta property="og:description" content="Your budget, dates, and vibe become a real trip plan for young travelers who actually go." />
         <meta property="og:url" content="https://govoya.travel" />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Voya — Budget-First Trip Planning for 18-30 Travelers" />
+        <meta name="twitter:description" content="Tell Voya your budget, dates, and vibe. Get a real day-by-day trip plan with zero tourist traps." />
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </Head>
